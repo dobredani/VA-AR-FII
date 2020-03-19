@@ -1,0 +1,5 @@
+Bejan Valeriu           Iacob Cezar               Amihaesei Sergiu
+Hilote Maria            Vasile Alexandru          Prepelita Andrei
+                        Toderica Alexandru        Formagiu Miky
+-----------------       ------------------        ----------------
+Diagrame use case       Diagrame C3               Diagrame de clase

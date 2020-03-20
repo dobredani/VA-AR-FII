@@ -1,4 +1,4 @@
-#DoD – Backend TEAM
+# DoD – Backend TEAM
 
 • Research realizat despre alegerea tehnologiei din spatele bazei de date (avantaje, dezavantaje);
 

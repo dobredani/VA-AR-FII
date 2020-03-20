@@ -15,5 +15,3 @@ Medium:
 Low:
 - Generarea unui drum catre prieteni (alt utilizator)
 - Generarea unui drum catre urmatoarea sala la care utilizatorul are curs/seminar/laborator
-- Posibilitatea de a gasi telefonul pierdut de pe un alt dispozitiv
-- Recomandarea drumului in functie de aglomeratia din cladire

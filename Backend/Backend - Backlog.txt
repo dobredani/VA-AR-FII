@@ -6,12 +6,13 @@ High:
 
 
 Medium:
-- stocarea in baza de date a dozatoarelor, a aparatelor de cafea, a bibliotecii, a sediilor asociatiilor, a birourilor profesorilor (a unor puncte de interes, care nu sunt neaparat o sala de seminar/curs);
+- stocarea in baza de date a bibliotecii, a sediilor asociatiilor, a birourilor profesorilor (a unor puncte de interes, care nu sunt neaparat o sala de seminar/curs) pentru a putea permite aplicatiei sa te conduca la ele;
 - API-ul sa permita aducerea de modificari (create, read, update, delete) asupra bazei de date, primite de la modulul Desktop ce editeaza harti, astfel editand camere sau adaugand cladiri si informatii aferente;
 
 Low:
-- stocarea in baza de date a informatiilor privitoare la o sala (despre compania care a renovat-o daca este cazul, istoric), programul bibliotecii, despre sediul unei asociatii si despre asociatia respectiva;
+- stocarea in baza de date a dozatoarelor, a aparatelor de cafea (a unor puncte de interes, care nu sunt neaparat o sala de seminar/curs) pentru a putea permite aplicatiei sa te conduca la ele; 
 - accesarea orarului si transmiterea informatiilor cu privire la sala (cine are ora acolo, ce ora este, ce profesor tine ora, etc.);
-- stocarea de fotografii asupra unei sali, cu adnotari - informatii suplimentare asupra pozei;
+
+
 
 

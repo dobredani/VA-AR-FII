@@ -1,4 +1,4 @@
-#Componența echipei:
+# Componența echipei:
 
 Scrum Master: Florea Mădălin
 

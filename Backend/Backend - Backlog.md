@@ -1,16 +1,16 @@
 # Product Backlog - Backend
 
 ## High:
+1. creare baza de date;
+2. creare API conectat la baza de date;
+3. creare endpoint pentru inserarea in baza de date de noi cladiri;
+4. crearea unui serviciu de calculare a rutei minimale intre 2 puncte;
+5. crearea unui endpoint pentru transmiterea instructiunilor rutei intre 2 puncte;
 
-- realizarea unei baze de date care va stoca punctele de interes ale unei cladiri - camere, iesiri, scari, lifturi, holuri si dimensiunile lor;
-- realizarea unui API care interogheaza si prin care se pot prelua (citi) din baza de date punctele pentru realizarea traseelor posibile intre 2 puncte (punct de plecare, punct de destinatie si punctele intermediare);
-
-Medium:
-
-- stocarea in baza de date a bibliotecii, a sediilor asociatiilor, a birourilor profesorilor (a unor puncte de interes, care nu sunt neaparat o sala de seminar/curs) pentru a putea permite aplicatiei sa te conduca la ele;
-- API-ul sa permita aducerea de modificari (create, read, update, delete) asupra bazei de date, primite de la modulul Desktop ce editeaza harti, astfel editand camere sau adaugand cladiri si informatii aferente;
+## Medium:
+6. creare endpoint pentru a afla toate punctele de interes (ex.: biblioteca, sediu asociatie, dozatoare, automat cafea);
+7. crearea endpoint pentru updatarea unei cladiri existente;
 
 ## Low:
-
-- stocarea in baza de date a dozatoarelor, a aparatelor de cafea (a unor puncte de interes, care nu sunt neaparat o sala de seminar/curs) pentru a putea permite aplicatiei sa te conduca la ele;
-- accesarea orarului si transmiterea informatiilor cu privire la sala (cine are ora acolo, ce ora este, ce profesor tine ora, etc.);
+8. crearea de account & authentification system;
+9. crearea relatiilor intre useri;

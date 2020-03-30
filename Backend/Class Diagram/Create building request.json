@@ -1,0 +1,86 @@
+{
+  "name": "Building name",
+  "floors": [
+    {
+      "level": 0,
+      "wayPoints": [
+        //fiecare waypoint e conectat la celelalte 1-2 waypointuri cele mai apropiate lui
+        // pentru fiecare waypoint vecin trebuie specificat daca trebuie sa faca colt-ul (stanga sau dreapta) sau nu (straight)
+        //fiecare waypoint trebuie sa aiba vecini si trebuie la randul lui sa fie vecin
+        {
+          "name": "Stairs",
+          "type": "connector",
+          "neighbors": [
+            {
+              "name": "C210",
+              "direction": "left"
+            }
+          ]
+        },
+        {
+          "name": "C210",
+          "type": "classRoom",
+          "schedule": [
+            {
+              "group": "IIA3",
+              "course": "Ingineria programarii",
+              "dayOfWeek": "Monday",
+              "startTime": "12:00",
+              "finishTIme": "14:00"
+            },
+            {...}
+          ],
+          "neighbors": [
+            {
+              "name": "Stairs",
+              "direction": "right"
+            },
+            {
+              "name": "C209",
+              "direction": "left"
+            }
+          ]
+        },
+        {
+          "name": "C209",
+          "type": "office",
+          "professors": ["Varlan", "Patrut"],
+          "neighbors": [
+            {
+              "name": "C210",
+              "direction": "right"
+            },
+            {
+              "name": "C208",
+              "direction": "straight"
+            }
+          ]
+        },
+        {
+          "name": "C208",
+          "type": "office",
+          "neighbors": [
+            {
+              "name": "C209",
+              "direction": "straight"
+            },
+          ]
+        },
+      ]
+    },
+    {
+      "level": 1,
+      ...
+    },
+  ],
+  "connectors": [
+    {
+      "name": "Stairs",
+      "accesibleFloors": [0, 1]
+    }
+    {
+      "name": "Elevator",
+      "accesibleFloors": [0, 1, 2, 3, 4, 5, 6, 7,]
+    }
+  ]
+}

@@ -69,7 +69,7 @@ In this folder create a new file to define each view (endpoint).
 Here you can import a model from the models folder to use it for a GRest view or in a custom view.
 
 ```/views/example.py
-from grest import GREest
+from grest import GReest
 from models.example import ExampleNode
 
 class ExampleView(GRest):

@@ -5,8 +5,10 @@ import os
 
 import neomodel
 from flask import Flask
+import settings
+import models
+from rest_views import *
 
-import config
 
 def create_app():
     app = Flask(__name__)
@@ -15,18 +17,26 @@ def create_app():
     def index():
         return "Hello World"
 
-    neomodel.config.DATABASE_URL = config.DB_URL
-    neomodel.config.AUTO_INSTALL_LABELS = True
+    neomodel.config.DATABASE_URL = settings.DB_URL
+    neomodel.config.ENCRYPTED_CONNECTION = False
     neomodel.config.FORCE_TIMEZONE = True
 
     app.ext_logger = app.logger
+
+    # rest endpoints
+    BuildingRestView.register(
+        app, route_base="/building", trailing_slash=False)
+    FloorRestView.register(
+        app, route_base="/floor", trailing_slash=False)
+    # custom endpoints
 
     return app
 
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=config.DEBUG,
-            host=config.IP_ADDRESS,
-            port=config.PORT,
+    neomodel.install_all_labels()
+    app.run(debug=settings.DEBUG,
+            host=settings.IP_ADDRESS,
+            port=settings.PORT,
             threaded=True)

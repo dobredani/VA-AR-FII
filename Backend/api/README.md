@@ -8,14 +8,20 @@ gRest provides functionality for bulding REST APIs with Neo4j very quickly by au
 
 ## Install Neo4j
 
-The easiest way is to use docker with the provided image from neo4j
+We need neo4j version 3.3 for neomodel to work. To install that I recommend using docker.
 
 ```bash
-docker pull neo4j
-docker run -d --name neo4j --publish=7474:7474 --publish=7687:7687  --volume=$HOME/neo4j/data:/data neo4j
+cd neo4j
+sudo docker build -t neo4j3 .
+docker run -d --name neo4j --publish=7474:7474 --publish=7687:7687  --volume=$HOME/neo4j/data:/data neo4j3
 ```
 
-After installing make sure that the created container is running
+If you can't use docker and you are using windows you can easily install using chocolatey.
+https://chocolatey.org/packages/neo4j-community/3.3.1
+
+After installing make sure that the created container is running.
+
+If it is running you can access the Neo4j browser on http://localhost:7474/
 
 ```bash
 docker start neo4j
@@ -28,6 +34,7 @@ When the container is running you can access the neo4j browser by going to http:
 For installing dependencies, use the following command:
 
 ```bash
+pip install pygrest
 pip install -r requirements.txt
 ```
 
@@ -51,10 +58,10 @@ Define the model using neomodel and grest.models
 ```/models/example.py
 from neomodel import StringProperty, StructuredNode, UniqueIdProperty
 from webargs import fields
-from grest import models
+from grest.models import Node
 
 # noinspection PyAbstractClass
-class ExampleNode(StructuredNode, models.Node):
+class ExampleNode(StructuredNode, Node):
     """ExampleNode model"""
     __validation_rules__ = {
         "uid": fields.Str(),
@@ -63,29 +70,37 @@ class ExampleNode(StructuredNode, models.Node):
     uid = UniqueIdProperty()
 ```
 
-### views folder
+### rest_views folder
 
-In this folder create a new file to define each view (endpoint).
-Here you can import a model from the models folder to use it for a GRest view or in a custom view.
+In this folder we will create a new file to define a gRest views for all the models.
+Here you can import a model from the models folder to use it for a GRest view.
 
-```/views/example.py
-from grest import GReest
-from models.example import ExampleNode
+```/rest_views/example.py
+from grest import GRest
+from models import ExampleNode
 
 class ExampleView(GRest):
-    """Example View (/example)"""
+    """Example View (/rest/example)"""
     __model__ = {"primary": Example}
     __selection_field__ = {"primary": "uid"}
 ```
 
+### views folder
+
+In this folder we will create a new file to define a custom view.
+
+```/views/example.py
+
+```
+
 ### main.py
 
-This folder is responsible for setting up the config variables (database config), registering the views and starting the app.
-Import the creates views from the views folder and register them at the end of the `create_app` function.
+This folder is responsible for setting up the config variables (database config), installing all the labels from the models, registering the views and starting the app.
+Import the created views and register them at the end of the `create_app` function.
 
 ```main.py
 ...
-from views.example import ExampleView
+from views import ExampleView
 ...
 def create_app():
     ...

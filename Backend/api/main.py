@@ -8,6 +8,7 @@ from flask import Flask
 import settings
 import models
 from rest_views import *
+from views import *
 
 
 def create_app():
@@ -23,12 +24,15 @@ def create_app():
 
     app.ext_logger = app.logger
 
-    # rest endpoints
+    # /rest endpoints
     BuildingRestView.register(
         app, route_base="/building", trailing_slash=False)
     FloorRestView.register(
         app, route_base="/floor", trailing_slash=False)
+
     # custom endpoints
+    BuildingView.register(
+        app, route_base="/building", trailing_slash=False)
 
     return app
 

@@ -88,8 +88,30 @@ class ExampleView(GRest):
 ### views folder
 
 In this folder we will create a new file to define a custom view.
+For this use flask, flask_classful, webargs and marshmallow. The view should inherit from FlaskView from flask_classful.
+You can define normal methods which will wap to a HTTP method or create custom methods with custom routes using @route() from flask_classful.
+You can also define helper methods which will not correspond to any route, but be sure to include them in excluded_methods.
+To validate arguments from a request you can use @use_args from webargs.flaskparser and specify the fields using the fields from webargs or create a schema for the arguments using marshmallow and attach the schema to a method using use_args.
 
 ```/views/example.py
+rom flask_classful import FlaskView
+from webargs import fields
+from webargs.flaskparser import use_args
+
+class ExampleView(FlaskView):
+    base_args = ['args']
+    excluded_methods = [helperMethod]
+
+    # GET /route
+    def index(self):
+        return "Hello world", 200
+
+    # GET /route/:id
+    def get(self, id):
+        return "I will get it"
+
+    def helperMethod(self):
+        return "I help"
 
 ```
 

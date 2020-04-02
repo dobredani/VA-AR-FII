@@ -12,7 +12,7 @@ We need neo4j version 3.3 for neomodel to work. To install that I recommend usin
 
 ```bash
 cd neo4j
-sudo docker build -t neo4j3 .
+docker build -t neo4j3 .
 docker run -d --name neo4j --publish=7474:7474 --publish=7687:7687  --volume=$HOME/neo4j/data:/data neo4j3
 ```
 

@@ -4,6 +4,8 @@ from neomodel import StringProperty, IntegerProperty, StructuredNode, UniqueIdPr
 from webargs import fields
 from grest.models import Node
 
+from models import Floor
+
 
 class GoesTo(StructuredRel):
     DIRECTIONS = {'STRAIGHT': 'Straight', 'LEFT': 'Left', 'RIGHT': 'Right'}

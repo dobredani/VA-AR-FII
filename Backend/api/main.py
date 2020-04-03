@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import logging
-import os
-
-import neomodel
 from flask import Flask
+
 import settings
-import models
 from rest_views import *
 from views import *
 
@@ -16,7 +12,8 @@ def create_app():
 
     @app.route('/')
     def index():
-        return "Hello World"
+        
+        return "Hello World", 200
 
     neomodel.config.DATABASE_URL = settings.DB_URL
     neomodel.config.ENCRYPTED_CONNECTION = False

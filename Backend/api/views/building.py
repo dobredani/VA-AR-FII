@@ -15,10 +15,20 @@ class BuildingView(FlaskView):
     def index(self):
         return jsonify(list(map(lambda building: building.__properties__, Building.nodes.all()))), 200
 
-    def get(self, uid):  # trebuie schimbat sa returneze toate datele despre o cladire/ eventual cautand dupa nume
-        building = Building.nodes.get_or_none(uid=uid)
+    def get(self, name):  # trebuie schimbat sa returneze toate datele despre o cladire/ eventual cautand dupa nume
+        building = Building.nodes.get_or_none(name=name)
+        map = {"name": building.name, "uid": building.uid, "floors": []}
         if building:
-            return jsonify(building.__properties__)
+            for floor in building.floors:
+                map["floors"].append({"level": floor.level, "waypoints":[]})
+                for nodes in floor.waypoints:
+                    map["floors"][-1]["waypoints"].append({"uid": nodes.uid, "floorLevel": nodes.floorLevel, "name": nodes.name, "neighbors": []})
+                    for neighbor in nodes.neighbors:
+                        map["floors"][-1]["waypoints"][-1]["neighbors"].append({"name": neighbor.name})
+
+
+
+            return jsonify(map)
         else:
             return "Not Found", 404
 

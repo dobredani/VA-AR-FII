@@ -9,4 +9,3 @@ class Connector(Waypoint):
         super().__init__(*args, **kwargs)
         delattr(self, 'floor')
     floors = RelationshipFrom('models.Floor', 'HAS', cardinality=OneOrMore)
-    pass

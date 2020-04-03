@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from neomodel import StringProperty, IntegerProperty, StructuredNode, UniqueIdProperty, RelationshipTo, StructuredRel, RelationshipFrom, One
+from neomodel import StringProperty, IntegerProperty, StructuredNode, UniqueIdProperty, Relationship, StructuredRel, RelationshipFrom, One
 from webargs import fields
 from grest.models import Node
 
@@ -27,7 +27,7 @@ class Waypoint(StructuredNode, Node):
     floorLevel = IntegerProperty(required=True)
     building_unique_waypoint = StringProperty(required=True, unique_index=True)
     floor = RelationshipFrom('models.Floor', 'HAS', cardinality=One)
-    neighbors = RelationshipTo(
+    neighbors = Relationship(
         'Waypoint', 'GOES_TO', cardinality=One, model=GoesTo)
 
     def pre_save(self):

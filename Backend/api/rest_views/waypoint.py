@@ -5,6 +5,12 @@ from models import Waypoint
 
 class WaypointRestView(GRest):
     """Person's View (/rest/waypoint)"""
-    __model__ = {"primary": Waypoint}
-    __selection_field__ = {"primary": "name"}
+    __model__ = {"primary": Waypoint,
+                 "seconday": {
+                     "waypoints": Waypoint
+                 }}
+    __selection_field__ = {"primary": "uid",
+                           "secondary": {
+                               "waypoints": "uid"
+                           }}
     route_prefix = "/rest"

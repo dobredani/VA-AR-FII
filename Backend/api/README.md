@@ -50,6 +50,7 @@ To install the labels of the models defined in the model folder execute the inst
 python install_labels.py
 ```
 
+Execute this file if it's the first time running application.
 This file should be executed each time a model is created/updated to apply the changes to the neo4j database.
 
 ## Running application

@@ -24,10 +24,9 @@ class BuildingView(FlaskView):
 
     def get(self, name):  # trebuie schimbat sa returneze toate datele despre o cladire/ eventual cautand dupa nume
         building = Building.nodes.get_or_none(name=name)
-        map = {"name": building.name, "uid": building.uid, "floors": []}
+        map = {"name": building.name, "uid": building.uid, "floors": [], "connectors": []}
         if building:
             for floor in building.floors:
-
                 map["floors"].append({"level": floor.level, "waypoints": []})
                 for nodes in floor.waypoints:
                     map["floors"][-1]["waypoints"].append(
@@ -45,6 +44,12 @@ class BuildingView(FlaskView):
                                          "startTime": current.startTime, "finishTime": current.finishTime})
                     for neighbor in nodes.neighbors:
                         map["floors"][-1]["waypoints"][-1]["neighbors"].append({"name": neighbor.name})
+            for conn in Waypoint.nodes.all():
+                if conn.labels()[1] == "Connector":
+                    map["connectors"].append({"name": conn.name, "floors": []})
+                    for flrs in conn.floors:
+                        map["connectors"][-1]["floors"].append(flrs.level)
+
 
             return jsonify(map)
         else:

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from neomodel import IntegerProperty, StringProperty, StructuredNode, UniqueIdProperty, RelationshipTo, ZeroOrMore, RelationshipFrom, One
-from webargs import fields
 from grest.models import Node
 from models import Building
+from neomodel import IntegerProperty, StringProperty, StructuredNode, UniqueIdProperty, RelationshipTo, ZeroOrMore, \
+    RelationshipFrom, One
+from webargs import fields
 
 
 class Floor(StructuredNode, Node):

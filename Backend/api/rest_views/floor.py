@@ -1,4 +1,3 @@
-
 from grest import GRest
 from models import Floor, Waypoint
 
@@ -11,6 +10,6 @@ class FloorRestView(GRest):
                  }}
     __selection_field__ = {"primary": "uid",
                            "secondary": {
-                                "waypoints": "uid"
-    }}
+                               "waypoints": "uid"
+                           }}
     route_prefix = "/rest"

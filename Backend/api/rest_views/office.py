@@ -1,4 +1,3 @@
-
 from grest import GRest
 from models import Office
 

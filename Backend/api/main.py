@@ -1,12 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import logging
-import os
-
 import neomodel
 from flask import Flask
 import settings
-import models
 from rest_views import *
 from views import *
 

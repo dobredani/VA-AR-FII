@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+# env settings
+.env
+
 # C extensions
 *.so
 
@@ -49,7 +52,25 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+<<<<<<< HEAD
 #testing
 test.py
 prosTest.py
 vme
+=======
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+>>>>>>> 35a8ee3d8455c76a11876c2d841695b9b86fc1b4

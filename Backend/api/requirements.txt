@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 flask
+=======
+python-dotenv
+>>>>>>> 35a8ee3d8455c76a11876c2d841695b9b86fc1b4
 pygrest==1.4.0

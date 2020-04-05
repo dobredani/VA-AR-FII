@@ -29,21 +29,45 @@ docker start neo4j
 
 When the container is running you can access the neo4j browser by going to http://localhost:7474/
 
+## Python Version Compatibility
+
+Python 3.x onwards is necessary for everything to run correctly.
+Make sure you are using python 3.x by either running the application using python3 command or creating an alias.
+
+```bash
+alias python=python3
+```
+
 ## Install dependencies
 
 For installing dependencies, use the following command:
 
 ```bash
-pip install pygrest
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
+
+## Settings configuration
+
+For development configuration the dotenv package is used to read settings from .env file and use them in settings.py.
+So create an .env file with help of the .env.dist file.
+
+## Installing labels
+
+To install the labels of the models defined in the model folder execute the install_labels.py file.
+
+```bash
+python3 install_labels.py
+```
+
+Execute this file if it's the first time running application.
+This file should be executed each time a model is created/updated to apply the changes to the neo4j database.
 
 ## Running application
 
 For running the application, use the following command:
 
 ```bash
-python main.py
+python3 main.py
 ```
 
 The app will be accessible on http://localhost:PORT/, PORT being 5000 by default.

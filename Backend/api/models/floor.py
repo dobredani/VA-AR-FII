@@ -23,6 +23,7 @@ class Floor(StructuredNode, Node):
         'models.Waypoint', 'HAS', cardinality=ZeroOrMore)
 
     def pre_save(self):
+        Building.nodes.get(name=self.buildingName)
         self.building_unique_floor = f'building_{self.buildingName}_floor_level_{self.level}'
 
     def post_save(self):

@@ -42,6 +42,16 @@ pip install -r requirements.txt
 For development configuration the dotenv package is used to read settings from .env file and use them in settings.py.
 So create an .env file with help of the .env.dist file.
 
+## Installing labels
+
+To install the labels of the models defined in the model folder execute the install_labels.py file.
+
+```bash
+python install_labels.py
+```
+
+This file should be executed each time a model is created/updated to apply the changes to the neo4j database.
+
 ## Running application
 
 For running the application, use the following command:

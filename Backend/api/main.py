@@ -19,6 +19,7 @@ def create_app():
         return "Hello World"
 
     neomodel.config.DATABASE_URL = settings.DB_URL
+    neomodel.config.AUTO_INSTALL_LABELS = False
     neomodel.config.ENCRYPTED_CONNECTION = False
     neomodel.config.FORCE_TIMEZONE = True
 
@@ -39,7 +40,6 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    neomodel.install_all_labels()
     app.run(debug=settings.DEBUG,
             host=settings.IP_ADDRESS,
             port=settings.PORT,

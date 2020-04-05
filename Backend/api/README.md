@@ -34,9 +34,13 @@ When the container is running you can access the neo4j browser by going to http:
 For installing dependencies, use the following command:
 
 ```bash
-pip install pygrest
 pip install -r requirements.txt
 ```
+
+## Settings configuration
+
+For development configuration the dotenv package is used to read settings from .env file and use them in settings.py.
+So create an .env file with help of the .env.dist file.
 
 ## Running application
 

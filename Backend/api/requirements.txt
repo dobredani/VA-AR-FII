@@ -1,1 +1,2 @@
+python-dotenv
 pygrest==1.4.0

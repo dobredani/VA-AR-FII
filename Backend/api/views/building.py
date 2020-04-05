@@ -3,13 +3,20 @@ from flask import jsonify
 from webargs import fields
 from webargs.flaskparser import use_args
 # se poate folosi si marshmallow ca se se creeze o schema pentru args
-from models import Building
+from models import Building, Connector, Group, Waypoint, StudiesIn
 import neomodel
+
+
+def test():
+    A = Group(name='A3', buildingName='Building0').save()
+    B = Waypoint.nodes.get_or_none(name='testRoom3')
+    C = A.classes.connect(B, {'course': 'BD', 'dayOfWeek': 'Monday', 'startTime': '12:00', 'finishTime': '14:00'})
+    pass
 
 
 class BuildingView(FlaskView):
     base_args = ['args']
-    excluded_methods = []  # metode care nu corespund unei rute
+    excluded_methods = [test]  # metode care nu corespund unei rute
 
     # findAll
     def index(self):
@@ -20,13 +27,24 @@ class BuildingView(FlaskView):
         map = {"name": building.name, "uid": building.uid, "floors": []}
         if building:
             for floor in building.floors:
-                map["floors"].append({"level": floor.level, "waypoints":[]})
+
+                map["floors"].append({"level": floor.level, "waypoints": []})
                 for nodes in floor.waypoints:
-                    map["floors"][-1]["waypoints"].append({"uid": nodes.uid, "floorLevel": nodes.floorLevel, "name": nodes.name, "neighbors": []})
+                    map["floors"][-1]["waypoints"].append(
+                        {"uid": nodes.uid, "floorLevel": nodes.floorLevel, "name": nodes.name,
+                         "type": nodes.labels()[1], "neighbors": []})
+                    if nodes.labels()[1] == "ClassRoom":
+                        map["floors"][-1]["waypoints"][-1]["schedule"] = []
+                        for cclass in Group.nodes.has(classes=True):
+                            temp = cclass.classes.relationship(nodes)
+                            if isinstance(temp, StudiesIn):
+                                temp = cclass.classes.all_relationships(nodes)
+                                for current in temp:
+                                    map["floors"][-1]["waypoints"][-1]["schedule"].append(
+                                        {"group": cclass.name, "course": current.course, "dayOfWeek": current.dayOfWeek,
+                                         "startTime": current.startTime, "finishTime": current.finishTime})
                     for neighbor in nodes.neighbors:
                         map["floors"][-1]["waypoints"][-1]["neighbors"].append({"name": neighbor.name})
-
-
 
             return jsonify(map)
         else:

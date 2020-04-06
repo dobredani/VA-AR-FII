@@ -2,8 +2,48 @@ from flask_classful import FlaskView
 from flask import jsonify
 from webargs import fields
 from webargs.flaskparser import use_args
+from marshmallow import Schema
 from models import Building, Connector, Group, Waypoint, StudiesIn, Teacher, ClassRoom, Office
 import neomodel
+from neomodel import db
+from neomodel import Q
+
+
+class NeighborsSchema(Schema):
+    name: fields.Str(required=True)
+    direction: fields.Str(required=True)
+
+
+class ScheduleSchema(Schema):
+    group: fields.Str(required=True)
+    course: fields.Str(required=True)
+    dayOfWeek: fields.Str(required=True)
+    startTime: fields.Str(required=True)
+    finishTime: fields.Str(required=True)
+
+
+class WayPointSchema(Schema):
+    name: fields.Str(required=True)
+    type: fields.Str(required=False)
+    schedule: fields.List(fields.Nested(ScheduleSchema), required=False)
+    professors: fields.List(fields.Str, required=False)
+    neighbors: fields.List(fields.Nested(NeighborsSchema))
+
+
+class ConnectorSchema(Schema):
+    name: fields.Str(required=True)
+    accesibleFloors: fields.List(fields.Int, required=True)
+
+
+class FloorSchema(Schema):
+    level: fields.Int(required=True)
+    wayPoints: fields.List(fields.Nested(WayPointSchema), required=True)
+
+
+class BuildingSchema(Schema):
+    name: fields.Str(required=True)
+    floors: fields.List(fields.Nested(FloorSchema), required=True)
+    connectors: fields.List(fields.Nested(ConnectorSchema))
 
 
 class BuildingView(FlaskView):
@@ -57,13 +97,57 @@ class BuildingView(FlaskView):
         else:
             return "Not Found", 404
 
-    @use_args({"name": fields.Str(required=True)})
+    @use_args(BuildingSchema())
     def post(self, args):
+        db.begin()
         try:
             Building(name=args["name"]).save()
-            return "Building created successfully", 200
+            for floor in args["floors"]:
+                Floor(level=floor["level"],
+                      buildingName=args["name"]).save()
+                for wayPoint in floor["wayPoints"]:
+                    if (wayPoint["type"] == "classRoom"):
+                        classRoom = ClassRoom(
+                            name=wayPoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                        for orar in wayPoint["schedule"]:
+                            group = Group(name=orar["group"]).save()
+                            group.classes.connect(classRoom, {course: orar["course"],
+                                                              dayOfWeek: orar["dayOfWeek"],
+                                                              startTime: orar["startTime"],
+                                                              finishTime: orar["finishTime"]})
+                    elif (wayPoint["type"] == "connector"):
+                        Connector(
+                            name=wayPoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                    elif (wayPoint["type"] == "office"):
+                        office = Office(
+                            name=wayPoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                        for prof in wayPoint["professors"]:
+                            teacher = Teacher(
+                                name=professors["name"]).save()
+                            teacher.office.connect(office)
+                    else:
+                        Waypoint(
+                            name=wayPoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+
+            for floor in args["floor"]:
+                for wayPoint in floor["wayPoint"]:
+                    base = Waypoint.nodes.get(
+                        name=wayPoint["name"], buildingName=args["name"], floorLevel=floor["level"])
+                    for neighbour in wayPoint["neighbours"]:
+                        base.neighbors.connect(
+                            Waypoint.nodes.get(
+                                name=neighbour["name"], buildingName=args["name"], floorLevel=floor["level"]), direction=neighbour["direction"])
+            db.commit()
+            return self.get(args["name"]), 200
         except neomodel.UniqueProperty:
             return "Building already exists", 409
+        except Exception as e:
+            db.rollback()
+            print(e)
+            return str(e), 500
 
     def patch(self, args, uid):
-        return "Update a building"
+        if not args.is_json:
+            return jsonify({"err": "No JSON content received."}), 400
+        else:
+            return "Update a building"

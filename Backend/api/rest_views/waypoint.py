@@ -1,11 +1,11 @@
 from grest import GRest
-from models import Floor, Waypoint
+from models import Waypoint
 
 
-class FloorRestView(GRest):
-    """(/rest/floor)"""
-    __model__ = {"primary": Floor,
-                 "secondary": {
+class WaypointRestView(GRest):
+    """(/rest/waypoint)"""
+    __model__ = {"primary": Waypoint,
+                 "seconday": {
                      "waypoints": Waypoint
                  }}
     __selection_field__ = {"primary": "uid",

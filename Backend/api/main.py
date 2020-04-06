@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import logging
-import os
-
 import neomodel
 from flask import Flask
 import settings
-import models
 from rest_views import *
 from views import *
+import models
 
 
 def create_app():
@@ -29,7 +26,19 @@ def create_app():
     BuildingRestView.register(
         app, route_base="/building", trailing_slash=False)
     FloorRestView.register(
-        app, route_base="/floor", trailing_slash=False)
+        app, route_base="/floor", trailing_slash=False)    
+    WaypointRestView.register(
+        app, route_base="/waypoint", trailing_slash=False)    
+    ClassRoomRestView.register(
+        app, route_base="/classroom", trailing_slash=False)
+    ConnectorRestView.register(
+        app, route_base="/connector", trailing_slash=False)
+    OfficeRestView.register(
+        app, route_base="/office", trailing_slash=False)
+    GroupRestView.register(
+        app, route_base="/group", trailing_slash=False)
+    TeacherRestView.register(
+        app, route_base="/teacher", trailing_slash=False)
 
     # custom endpoints
     BuildingView.register(

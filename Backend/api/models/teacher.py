@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from grest.models import Node
 from neomodel import StringProperty, StructuredNode, UniqueIdProperty, RelationshipTo, One
 from webargs import fields
-from grest.models import Node
 
 
 class Teacher(StructuredNode, Node):

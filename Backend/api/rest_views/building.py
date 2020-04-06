@@ -1,10 +1,15 @@
-
 from grest import GRest
-from models import Building
+from models import Building, Floor
 
 
 class BuildingRestView(GRest):
-    """Person's View (/rest/building)"""
-    __model__ = {"primary": Building}
-    __selection_field__ = {"primary": "name"}
+    """(/rest/building)"""
+    __model__ = {"primary": Building,
+                 "secondary": {
+                     "floors": Floor
+                 }}
+    __selection_field__ = {"primary": "name",
+                           "secondary": {
+                               "floors": "uid"
+                           }}
     route_prefix = "/rest"

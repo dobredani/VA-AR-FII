@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from neomodel import StringProperty, IntegerProperty, StructuredNode, UniqueIdProperty, Relationship, StructuredRel, RelationshipFrom, One, ZeroOrMore
-from webargs import fields
 from grest.models import Node
+from neomodel import StringProperty, IntegerProperty, StructuredNode, UniqueIdProperty, Relationship, StructuredRel, \
+    RelationshipFrom, One
+from webargs import fields
 
 
 class GoesTo(StructuredRel):

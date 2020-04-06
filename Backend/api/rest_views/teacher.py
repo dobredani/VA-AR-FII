@@ -1,15 +1,15 @@
 from grest import GRest
-from models import Floor, Waypoint
+from models import Teacher, Office
 
 
-class FloorRestView(GRest):
-    """(/rest/floor)"""
-    __model__ = {"primary": Floor,
+class TeacherRestView(GRest):
+    """(/rest/teacher)"""
+    __model__ = {"primary": Teacher,
                  "secondary": {
-                     "waypoints": Waypoint
+                     "office": Office
                  }}
     __selection_field__ = {"primary": "uid",
                            "secondary": {
-                               "waypoints": "uid"
+                               "office": "uid"
                            }}
     route_prefix = "/rest"

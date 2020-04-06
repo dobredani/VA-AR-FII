@@ -1,10 +1,10 @@
-from flask_classful import FlaskView
+import neomodel
 from flask import jsonify
-from webargs import fields
-from webargs.flaskparser import use_args
+from flask_classful import FlaskView
 # se poate folosi si marshmallow ca se se creeze o schema pentru args
 from models import Building
-import neomodel
+from webargs import fields
+from webargs.flaskparser import use_args
 
 
 class BuildingView(FlaskView):

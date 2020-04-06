@@ -49,6 +49,8 @@ class BuildingView(FlaskView):
                             for office in teacher.office:
                                 if office.name == nodes.name:
                                    map["floors"][-1]["waypoints"][-1]["professors"].append(teacher.name)
+                    if "Connector" in nodes.labels():
+                        map["floors"][-1]["waypoints"][-1]["type"] = "Connector"
                     map["floors"][-1]["waypoints"][-1]["neighbors"] = []
                     for neighbor in nodes.neighbors:
                         map["floors"][-1]["waypoints"][-1]["neighbors"].append({"name": neighbor.name})

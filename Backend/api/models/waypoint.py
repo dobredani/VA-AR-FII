@@ -2,7 +2,7 @@
 
 from grest.models import Node
 from neomodel import StringProperty, IntegerProperty, StructuredNode, UniqueIdProperty, Relationship, StructuredRel, \
-    RelationshipFrom, One
+    RelationshipFrom, One, ZeroOrMore
 from webargs import fields
 
 

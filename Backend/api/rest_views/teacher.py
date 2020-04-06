@@ -3,7 +3,7 @@ from models import Teacher, Office
 
 
 class TeacherRestView(GRest):
-    """Person's View (/rest/teacher)"""
+    """(/rest/teacher)"""
     __model__ = {"primary": Teacher,
                  "secondary": {
                      "office": Office

@@ -3,7 +3,7 @@ from models import Floor, Waypoint
 
 
 class FloorRestView(GRest):
-    """Person's View (/rest/floor)"""
+    """(/rest/floor)"""
     __model__ = {"primary": Floor,
                  "secondary": {
                      "waypoints": Waypoint

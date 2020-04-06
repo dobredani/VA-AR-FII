@@ -3,7 +3,7 @@ from models import Building, Floor
 
 
 class BuildingRestView(GRest):
-    """Person's View (/rest/building)"""
+    """(/rest/building)"""
     __model__ = {"primary": Building,
                  "secondary": {
                      "floors": Floor

@@ -3,7 +3,7 @@ from flask import jsonify
 from webargs import fields
 from webargs.flaskparser import use_args
 # se poate folosi si marshmallow ca se se creeze o schema pentru args
-from models import Building, Connector, Group, Waypoint, StudiesIn
+from models import Building, Connector, Group, Waypoint, StudiesIn, Teacher
 import neomodel
 
 
@@ -30,26 +30,32 @@ class BuildingView(FlaskView):
                 map["floors"].append({"level": floor.level, "waypoints": []})
                 for nodes in floor.waypoints:
                     map["floors"][-1]["waypoints"].append(
-                        {"uid": nodes.uid, "floorLevel": nodes.floorLevel, "name": nodes.name,
-                         "type": nodes.labels()[1], "neighbors": []})
-                    if nodes.labels()[1] == "ClassRoom":
+                        {"uid": nodes.uid, "floorLevel": nodes.floorLevel, "name": nodes.name})
+                    if "ClassRoom" in nodes.labels():
+                        map["floors"][-1]["waypoints"][-1]["type"] = "ClassRoom"
                         map["floors"][-1]["waypoints"][-1]["schedule"] = []
-                        for cclass in Group.nodes.has(classes=True):
-                            classes = cclass.classes.relationship(nodes)
+                        for group in Group.nodes.has(classes=True):
+                            classes = group.classes.relationship(nodes)
                             if isinstance(classes, StudiesIn):
-                                classes = cclass.classes.all_relationships(nodes)
+                                classes = group.classes.all_relationships(nodes)
                                 for current in classes:
                                     map["floors"][-1]["waypoints"][-1]["schedule"].append(
-                                        {"group": cclass.name, "course": current.course, "dayOfWeek": current.dayOfWeek,
+                                        {"group": group.name, "course": current.course, "dayOfWeek": current.dayOfWeek,
                                          "startTime": current.startTime, "finishTime": current.finishTime})
+                    if "Office" in nodes.labels():
+                        map["floors"][-1]["waypoints"][-1]["type"] = "Office"
+                        map["floors"][-1]["waypoints"][-1]["professors"] = []
+                        for teacher in Teacher.nodes.has(office=True):
+                            for office in teacher.office:
+                                if office.name == nodes.name:
+                                   map["floors"][-1]["waypoints"][-1]["professors"].append(teacher.name)
+                    map["floors"][-1]["waypoints"][-1]["neighbors"] = []
                     for neighbor in nodes.neighbors:
                         map["floors"][-1]["waypoints"][-1]["neighbors"].append({"name": neighbor.name})
-            for conn in Waypoint.nodes.all():
-                if conn.labels()[1] == "Connector":
-                    map["connectors"].append({"name": conn.name, "floors": []})
-                    for flrs in conn.floors:
-                        map["connectors"][-1]["floors"].append(flrs.level)
-
+            for conn in Connector.nodes.all():
+                map["connectors"].append({"name": conn.name, "floors": []})
+                for floor in conn.floors:
+                    map["connectors"][-1]["floors"].append(floor.level)
 
             return jsonify(map)
         else:

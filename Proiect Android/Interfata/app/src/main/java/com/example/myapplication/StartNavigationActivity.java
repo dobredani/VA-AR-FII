@@ -3,12 +3,11 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -75,14 +74,14 @@ public class StartNavigationActivity extends AppCompatActivity {
             }
         });
 
-        /*ImageView openCamera = findViewById(R.id.cameraBtn);
+        Button openCamera = findViewById(R.id.navigationBtn);
         openCamera.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent launchActivity1= new Intent(StartNavigationActivity.this, CameraActivity.class);
                 startActivity(launchActivity1);
             }
-        });*/
+        });
 
     };
     @Override

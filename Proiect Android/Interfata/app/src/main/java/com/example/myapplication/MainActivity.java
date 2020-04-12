@@ -1,22 +1,18 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-/*import com.android.volley.Request;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley; */
+import com.android.volley.toolbox.Volley;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -33,11 +29,10 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(launchActivity1);
             }
         });
-
     }
 
 
-   /* public void getServerMessage(){
+    public void getServerMessage() {
         // the url is different for every computer.
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
@@ -62,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
 
         }
-*/
 }
 
 

@@ -19,8 +19,23 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/abstract_background"
+        android:background="@drawable/background_image1"
         >
+
+        <Button
+            android:id="@+id/navigationBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp"
+            android:width="200dp"
+            android:background="@drawable/custom_button"
+            android:text="Start Navigation"
+            android:textColor="#F3EEDA"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider3"
+            app:layout_constraintVertical_bias="1.0" />
 
         <EditText
             android:id="@+id/currentLocation"
@@ -56,22 +71,31 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Your Favourite Places"
-            android:textSize="24sp"
+            android:text="Suggested Places"
             android:textColor="@color/colorAccent"
-            app:layout_constraintBottom_toTopOf="@+id/_dynamic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/destination"
-            app:layout_constraintVertical_bias="0.938"
-            tools:ignore="UnknownId" />
-
-        <ListView
-            android:layout_width="409dp"
-            android:layout_height="418dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/destination"
+            app:layout_constraintVertical_bias="0.163"
+            tools:ignore="UnknownId" />
+
+
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="418dp"
+            android:focusableInTouchMode="false"
+            android:isScrollContainer="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </ListView>
 
         <ImageView
             android:id="@+id/cameraBtn"

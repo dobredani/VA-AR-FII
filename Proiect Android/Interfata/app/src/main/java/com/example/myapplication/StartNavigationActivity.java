@@ -58,23 +58,23 @@ public class StartNavigationActivity extends AppCompatActivity {
                 tv.setTextColor(Color.BLACK);
                 tv.setBackgroundColor(Color.rgb(243,237,218));
 
-        /*ImageView searchAruco = findViewById(R.id.cameraBtn);
+        ImageView searchAruco = findViewById(R.id.cameraBtn);
         searchAruco.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent launchActivity1= new Intent(StartNavigationActivity.this,ImageProcessing.class);
                 startActivity(launchActivity1);
             }
-        });*/
+        });
 
-        ImageView openCamera = findViewById(R.id.cameraBtn);
+        /*ImageView openCamera = findViewById(R.id.cameraBtn);
         openCamera.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent launchActivity1= new Intent(StartNavigationActivity.this, CameraActivity.class);
                 startActivity(launchActivity1);
             }
-        });
+        });*/
     }
 
                 // Generate ListView Item using TextView

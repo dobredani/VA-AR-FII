@@ -1,15 +1,15 @@
 package com.example.myapplication;
 
 import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,16 +36,16 @@ public class StartNavigationActivity extends AppCompatActivity {
         mToggle.syncState();
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         final ListView lv = (ListView) findViewById(R.id.listView);
-        String[] fruits = new String[] {
+        String[] locations = new String[] {
                 "C112",
                 "C2",
                 "C403",
                 "C909",
                 "Exit" };
 
-        List<String> fruits_list = new ArrayList<String>(Arrays.asList(fruits));
+        List<String> locationsList = new ArrayList<String>(Arrays.asList(locations));
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1, fruits_list){
+                (this, android.R.layout.simple_list_item_1, locationsList){
             @Override
             public View getView(int position, View convertView, ViewGroup parent){
                 // Get the Item from ListView
@@ -57,6 +57,25 @@ public class StartNavigationActivity extends AppCompatActivity {
                 // Set the text color of TextView (ListView Item)
                 tv.setTextColor(Color.BLACK);
                 tv.setBackgroundColor(Color.rgb(243,237,218));
+
+        /*ImageView searchAruco = findViewById(R.id.cameraBtn);
+        searchAruco.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent launchActivity1= new Intent(StartNavigationActivity.this,ImageProcessing.class);
+                startActivity(launchActivity1);
+            }
+        });*/
+
+        ImageView openCamera = findViewById(R.id.cameraBtn);
+        openCamera.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent launchActivity1= new Intent(StartNavigationActivity.this, CameraActivity.class);
+                startActivity(launchActivity1);
+            }
+        });
+    }
 
                 // Generate ListView Item using TextView
                 return view;

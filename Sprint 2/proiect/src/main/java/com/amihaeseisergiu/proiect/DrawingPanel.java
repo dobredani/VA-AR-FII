@@ -7,6 +7,7 @@ package com.amihaeseisergiu.proiect;
 
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 public class DrawingPanel extends HBox {
 
@@ -25,8 +27,10 @@ public class DrawingPanel extends HBox {
     private boolean wasInsideShape = false;
     private boolean wasInsideWouldBeShape = false;
     private ExtendedShape currentShape;
+    private ExtendedShape initialShape = null;
     private int type = 0;
     boolean isInCenter = false;
+    Graph graph = new Graph();
 
     public double calculateDistanceBetweenPoints(
             double x1,
@@ -48,9 +52,9 @@ public class DrawingPanel extends HBox {
     public DrawingPanel(MainFrame mf) {
         mainFrame = mf;
         shapes = new ArrayList<>();
-        this.setStyle("-fx-background-color: white");
         this.setAlignment(Pos.CENTER);
         resetCanvas();
+        canvas.setVisible(false);
     }
 
     public void setMainFrame(MainFrame mf) {
@@ -99,6 +103,60 @@ public class DrawingPanel extends HBox {
                 r.setWidth(Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
                 r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
                 shapes.add(r);
+                r.setName(String.valueOf(shapes.size()));
+                if (initialShape == null) {
+                    initialShape = r;
+                    graph.addInitialShape(initialShape);
+                } else {
+                    r.getRectangle().setWidth(r.getRectangle().getWidth() + 1);
+                    r.getRectangle().setHeight(r.getRectangle().getHeight() + 1);
+                    for (ExtendedShape sh : shapes) {
+                        if (sh != r) {
+                            boolean ok = false;
+                            if (sh instanceof ExtendedRectangle) {
+                                ((ExtendedRectangle) sh).getRectangle().setWidth(((ExtendedRectangle) sh).getRectangle().getWidth() + 1);
+                                ((ExtendedRectangle) sh).getRectangle().setHeight(((ExtendedRectangle) sh).getRectangle().getHeight() + 1);
+                                if (((ExtendedRectangle) sh).getRectangle().getLayoutBounds().intersects(r.getRectangle().getLayoutBounds())) {
+                                    String rToS = null;
+                                    String sToR = null;
+                                    if (sh.getCenterPoint().getX() == r.getCenterPoint().getX() + r.getWidth()) {
+                                        if (sh.getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() != r.getCenterPoint().getY() && r.getCenterPoint().getY() - r.getLength() != ((ExtendedRectangle) sh).getCenterPoint().getY()) {
+                                            rToS = "left";
+                                            sToR = "right";
+                                            ok = true;
+                                        }
+                                    } else if (sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() == r.getCenterPoint().getX()) {
+                                        if (sh.getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() != r.getCenterPoint().getY() && r.getCenterPoint().getY() - r.getLength() != ((ExtendedRectangle) sh).getCenterPoint().getY()) {
+                                            rToS = "right";
+                                            sToR = "left";
+                                            ok = true;
+                                        }
+                                    } else if (sh.getCenterPoint().getY() - r.getLength() == r.getCenterPoint().getY()) {
+                                        if (sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() != r.centerPoint.getX() && r.getCenterPoint().getX() - r.getWidth() != sh.getCenterPoint().getX()) {
+                                            rToS = "up";
+                                            sToR = "down";
+                                            ok = true;
+                                        }
+                                    } else if (sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() != r.centerPoint.getX() && r.getCenterPoint().getX() - r.getWidth() != sh.getCenterPoint().getX()) {
+                                        rToS = "down";
+                                        sToR = "up";
+                                        ok = true;
+                                    }
+                                    if (ok == true) {
+                                        Pair<ExtendedShape, String> p1 = new Pair(sh, sToR);
+                                        Pair<ExtendedShape, String> p2 = new Pair(r, rToS);
+                                        graph.addShape(r, p1);
+                                        graph.addShape(sh, p2);
+                                    }
+                                }
+                                ((ExtendedRectangle) sh).getRectangle().setWidth(((ExtendedRectangle) sh).getRectangle().getWidth() - 1);
+                                ((ExtendedRectangle) sh).getRectangle().setHeight(((ExtendedRectangle) sh).getRectangle().getHeight() - 1);
+                            }
+                        }
+                    }
+                    r.getRectangle().setWidth(r.getRectangle().getWidth() - 1);
+                    r.getRectangle().setHeight(r.getRectangle().getHeight() - 1);
+                }
             }
         }
     }
@@ -161,6 +219,52 @@ public class DrawingPanel extends HBox {
             r.setWidth(Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
             r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
             shapes.add(r);
+            r.setName(String.valueOf(shapes.size()));
+            r.getRectangle().setWidth(r.getRectangle().getWidth() + 1);
+            r.getRectangle().setHeight(r.getRectangle().getHeight() + 1);
+            for (ExtendedShape sh : shapes) {
+                if (sh != r) {
+                    boolean ok = false;
+                    if (sh instanceof ExtendedRectangle) {
+                        ((ExtendedRectangle) sh).getRectangle().setWidth(((ExtendedRectangle) sh).getRectangle().getWidth() + 1);
+                        ((ExtendedRectangle) sh).getRectangle().setHeight(((ExtendedRectangle) sh).getRectangle().getHeight() + 1);
+                        if (((ExtendedRectangle) sh).getRectangle().getLayoutBounds().intersects(r.getRectangle().getLayoutBounds())) {
+                            if ((sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() != r.getCenterPoint().getX() || sh.getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() != r.getCenterPoint().getY()) && (r.getCenterPoint().getX() + r.getWidth() != sh.getCenterPoint().getX() || sh.getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() != r.centerPoint.getY()) && (r.getCenterPoint().getX() + r.getWidth() != ((ExtendedRectangle) sh).centerPoint.getX() || r.getCenterPoint().getY() + r.getLength() != ((ExtendedRectangle) sh).centerPoint.getY()) && (sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() != r.getCenterPoint().getX() || r.getCenterPoint().getY() + r.getLength() != sh.getCenterPoint().getY())) {
+                                String rToS = null;
+                                String sToR = null;
+                                if (sh.getCenterPoint().getX() == r.getCenterPoint().getX() + r.getWidth()) {
+                                    rToS = "left";
+                                    sToR = "right";
+                                    ok = true;
+                                } else if (sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() == r.getCenterPoint().getX()) {
+                                    rToS = "right";
+                                    sToR = "left";
+                                    ok = true;
+                                } else if (sh.getCenterPoint().getY() - r.getLength() == r.getCenterPoint().getY()) {
+                                    rToS = "up";
+                                    sToR = "down";
+                                    ok = true;
+                                } else {
+                                    rToS = "down";
+                                    sToR = "up";
+                                    ok = true;
+                                }
+                                if (ok == true) {
+                                    Pair<ExtendedShape, String> p1 = new Pair(sh, sToR);
+                                    Pair<ExtendedShape, String> p2 = new Pair(r, rToS);
+                                    graph.addShape(r, p1);
+                                    graph.addShape(sh, p2);
+                                }
+                            }
+                        }
+                        ((ExtendedRectangle) sh).getRectangle().setWidth(((ExtendedRectangle) sh).getRectangle().getWidth() - 1);
+                        ((ExtendedRectangle) sh).getRectangle().setHeight(((ExtendedRectangle) sh).getRectangle().getHeight() - 1);
+                    }
+                }
+            }
+            r.getRectangle().setWidth(r.getRectangle().getWidth() - 1);
+            r.getRectangle().setHeight(r.getRectangle().getHeight() - 1);
+            System.out.println(graph);
         }
     }
 
@@ -174,6 +278,8 @@ public class DrawingPanel extends HBox {
 
     public void deleteShape(ExtendedShape s) {
         shapes.remove(s);
+        graph.deleteShape(s);
+        System.out.println(graph);
     }
 
     public void delete(double x, double y) {
@@ -213,7 +319,10 @@ public class DrawingPanel extends HBox {
                 for (ExtendedShape shape : shapes) {
                     if (shape instanceof ExtendedRectangle) {
                         if (isMouseInRectangle(shape, e.getX(), e.getY())) {
-                            popUpFrame = new UpdateShapePopUp(shape, e.getScreenX(), e.getScreenY());
+                            Bounds bounds = canvas.localToScreen(canvas.getBoundsInLocal());
+                            int x = (int) bounds.getMinX() + (int) ((ExtendedRectangle) shape).getRectangle().getX() + (int) ((ExtendedRectangle) shape).getRectangle().getWidth();
+                            int y = (int) bounds.getMinY() + (int) ((ExtendedRectangle) shape).getRectangle().getY() + (int) ((ExtendedRectangle) shape).getLength() / 2;
+                            popUpFrame = new UpdateShapePopUp(shape, x, y);
                             Stage stage = new Stage();
                             popUpFrame.start(stage);
                         }
@@ -382,9 +491,10 @@ public class DrawingPanel extends HBox {
         return false;
     }
 
+    
+    
     /* public void setDragListeners(final Shape block) {
         final Point dragDelta = new Point();
-
         block.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -414,18 +524,24 @@ public class DrawingPanel extends HBox {
     for (ExtendedShape static_bloc : shapes) {
       if ( ((ExtendedRectangle)static_bloc).getRectangle() != block) {
         static_bloc.setFill(Color.GREEN);
-
         Shape intersect = Shape.intersect(block, static_bloc);
         if (intersect.getBoundsInLocal().getWidth() != -1) {
           collisionDetected = true;
         }
       }
     }
-
     if (collisionDetected) {
       block.setFill(Color.BLUE);
     } else {
       block.setFill(Color.GREEN);
     }
   }*/
+
+    public List<ExtendedShape> getShapes() {
+        return shapes;
+    }
+
+    public void setShapes(List<ExtendedShape> shapes) {
+        this.shapes = shapes;
+    }
 }

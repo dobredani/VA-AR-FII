@@ -30,14 +30,18 @@ public class UpdateFloorPopUp extends Application {
     
     Scene scene;
     VBox panel;
+    MainFrame mainFrame;
     Button floor;
     AtomicBoolean popupOpen;
+    int nrFloor;
     Label nrFloorsLabel;
     double x;
     double y;
     
-    public UpdateFloorPopUp(VBox panel, Button floor, Label nrFloorsLabel, AtomicBoolean popupOpen, double x, double y)
+    public UpdateFloorPopUp(MainFrame mainFrame, int nrFloor, VBox panel, Button floor, Label nrFloorsLabel, AtomicBoolean popupOpen, double x, double y)
     {
+        this.mainFrame = mainFrame;
+        this.nrFloor = nrFloor;
         this.panel = panel;
         this.floor = floor;
         this.nrFloorsLabel = nrFloorsLabel;
@@ -58,7 +62,7 @@ public class UpdateFloorPopUp extends Application {
         topHBox.getChildren().addAll(info);
         topHBox.setAlignment(Pos.CENTER);
         topHBox.setPadding(new Insets(10, 10, 10, 10));
-
+        
         Label name = new Label("Name:");
         TextField nameField = new TextField(floor.getText());
         name.setMaxWidth(Double.MAX_VALUE);
@@ -97,7 +101,20 @@ public class UpdateFloorPopUp extends Application {
         
         deleteBtn.setOnAction(event -> {
             panel.getChildren().remove(floor);
+            mainFrame.building.getFloors().remove(nrFloor);
+            mainFrame.controlPanel.existingFloors.remove((Object) nrFloor);
             nrFloorsLabel.setText("Floors: " + panel.getChildren().size());
+            
+            if(mainFrame.building.getFloors().size() >= 1)
+            {
+                mainFrame.drawingPanel.canvas.setVisible(true);
+                mainFrame.drawingPanel.setStyle("-fx-background-color: white");
+            }
+            else 
+            {
+                mainFrame.drawingPanel.canvas.setVisible(false);
+                mainFrame.drawingPanel.setStyle("");
+            }
             popupOpen.set(false);
             stage.close();
         });

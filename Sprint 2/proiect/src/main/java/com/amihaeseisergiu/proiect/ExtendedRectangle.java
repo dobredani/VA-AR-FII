@@ -5,6 +5,8 @@
  */
 package com.amihaeseisergiu.proiect;
 
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -24,6 +26,15 @@ public class ExtendedRectangle extends ExtendedShape {
         super(p);
     }
 
+    public Point getCoordinates() {
+        Bounds bounds = rectangle.getLayoutBounds();
+        Point2D coordinates = rectangle.localToScene(bounds.getMinX(), bounds.getMinY());
+        int X = (int) coordinates.getX();
+        int Y = (int) coordinates.getY();
+        Point p = new Point(X, Y);
+        return p;
+    }
+    
     public Rectangle getRectangle() {
         return rectangle;
     }

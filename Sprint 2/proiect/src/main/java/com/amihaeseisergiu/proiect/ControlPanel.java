@@ -33,10 +33,13 @@ public class ControlPanel extends VBox {
     List<VBox> comboBoxItems;
     boolean erase;
     MainFrame frame;
+    List<Integer> existingFloors = new ArrayList<>();
+    Building building;
     
-    public ControlPanel(MainFrame frame)
+    public ControlPanel(MainFrame frame, Building building)
     {
         this.frame = frame;
+        this.building = building;
         
         eraserBtn = new Button("Eraser: Off");
         comboBox = new ComboBox();
@@ -67,27 +70,56 @@ public class ControlPanel extends VBox {
         comboBox.setMaxWidth(Double.MAX_VALUE);
         eraserBtn.setMaxWidth(Double.MAX_VALUE);
         
-        this.getChildren().addAll(eraserBtn, comboBox, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
+        Button jsonBuildingBtn = new Button("Print Json");
+        jsonBuildingBtn.setMaxWidth(Double.MAX_VALUE);
+        this.getChildren().addAll(eraserBtn, jsonBuildingBtn, comboBox, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10,10,10,10));
         this.setSpacing(10);
         
+        jsonBuildingBtn.setOnAction(event -> {
+            System.out.println(building.toJson());
+        });
+        
         addFloorBtn.setOnAction(event -> {
             AtomicBoolean popupOpen = new AtomicBoolean(false);
-            Button newFloorBtn = new Button("New Floor");
-
+            int nr = 0;
+            while(existingFloors.contains(nr)) {
+                nr++;
+            }
+            existingFloors.add(nr);
+            Button newFloorBtn = new Button("Floor " + nr);
+            Floor floor = new Floor();
+            frame.building.getFloors().put(nr, floor);
             newFloorBtn.setMaxWidth(Double.MAX_VALUE);
             addFloorVBox.getChildren().add(newFloorBtn);
             nrFloorsLabel.setText("Floors: " + (addFloorVBox.getChildren().size()));
             
+            if(addFloorVBox.getChildren().size() >= 1)
+            {
+                frame.drawingPanel.canvas.setVisible(true);
+                frame.drawingPanel.setStyle("-fx-background-color: white");
+            }
+            else 
+            {
+                frame.drawingPanel.canvas.setVisible(false);
+                frame.drawingPanel.setStyle("");
+            }
+            
             newFloorBtn.setOnMousePressed(event2 -> {
                 if(event2.isPrimaryButtonDown())
                 {
+                    String nrFloor = newFloorBtn.getText().substring(6, 7);
+                    Floor f = frame.building.getFloors().get(Integer.parseInt(nrFloor));
+                    frame.drawingPanel.graph = f.getGraph();
+                    frame.drawingPanel.setShapes(f.getShapes());
+                    frame.drawingPanel.resetCanvas();
+                    frame.drawingPanel.drawAll();
                 }
                 else if(event2.isSecondaryButtonDown() && !popupOpen.get())
                 {
                     popupOpen.set(true);
-                    UpdateFloorPopUp popup  = new UpdateFloorPopUp(addFloorVBox, newFloorBtn, nrFloorsLabel, popupOpen, event2.getScreenX(), event2.getScreenY());
+                    UpdateFloorPopUp popup  = new UpdateFloorPopUp(frame, Integer.parseInt(newFloorBtn.getText().substring(6, 7)), addFloorVBox, newFloorBtn, nrFloorsLabel, popupOpen, event2.getScreenX(), event2.getScreenY());
                     popup.start(new Stage());
                 }
             });

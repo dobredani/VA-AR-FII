@@ -20,14 +20,15 @@ public class MainFrame {
     DrawingPanel drawingPanel;
     ConfigPanel configPanel;
     ControlPanel controlPanel;
+    Building building;
     
     public MainFrame(Stage stage)
     {
         this.stage = stage;
-        
+        building = new Building();
         BorderPane pane = new BorderPane();
         configPanel = new ConfigPanel(this);
-        controlPanel = new ControlPanel(this);
+        controlPanel = new ControlPanel(this, building);
         drawingPanel = new DrawingPanel(this);
         
         pane.setTop(configPanel);

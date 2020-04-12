@@ -31,6 +31,7 @@
         </activity>
         <activity android:name=".StartNavigationActivity" />
         <activity android:name=".ImageProcessing"  android:screenOrientation="landscape"/>
+        <activity android:name=".CameraActivity"/>
     </application>
 
 </manifest>

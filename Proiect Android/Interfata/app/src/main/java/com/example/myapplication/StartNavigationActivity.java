@@ -28,23 +28,23 @@ public class StartNavigationActivity extends AppCompatActivity {
         mToggle.syncState();
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        /*ImageView searchAruco = findViewById(R.id.cameraBtn);
+        ImageView searchAruco = findViewById(R.id.cameraBtn);
         searchAruco.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent launchActivity1= new Intent(StartNavigationActivity.this,ImageProcessing.class);
                 startActivity(launchActivity1);
             }
-        });*/
+        });
 
-        ImageView openCamera = findViewById(R.id.cameraBtn);
+        /*ImageView openCamera = findViewById(R.id.cameraBtn);
         openCamera.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent launchActivity1= new Intent(StartNavigationActivity.this, CameraActivity.class);
                 startActivity(launchActivity1);
             }
-        });
+        });*/
     }
 
     @Override

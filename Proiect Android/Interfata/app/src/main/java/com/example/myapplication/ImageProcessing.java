@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -127,10 +130,38 @@ public class ImageProcessing  extends AppCompatActivity implements CameraBridgeV
      * @param ids
      */
     private void returnDetectedMarkers(Mat ids){
+        if (ids.rows() == 0){
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                ((TextView) findViewById(R.id.camera_view_overlay)).setText("");
+            }
+        });
+        }
+        else {
+            if ((int) ids.get(0, 0)[0] % 2 == 0) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextView) findViewById(R.id.camera_view_overlay)).setText("Turn Left");
+                        ((TextView) findViewById(R.id.camera_view_overlay)).bringToFront();
+                        ((TextView) findViewById(R.id.camera_view_overlay)).invalidate();
+                    }
+                });
+            } else {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((TextView) findViewById(R.id.camera_view_overlay)).setText("Turn Right");
+//                        getTextView(R.id.camera_view_overlay).invalidate();
+                    }
+                });
+            }
         for (int i = 0; i < ids.rows(); i++) {
             Log.i(TAG,"+++ Found marker ID " + Integer.toString((int)ids.get(0, 0)[0]));
         }
     }
+}
 
     public Mat detectMarkers() {
         detectedMarkers = new ArrayList<>();
@@ -146,4 +177,6 @@ public class ImageProcessing  extends AppCompatActivity implements CameraBridgeV
         Imgproc.cvtColor(inputFrame.rgba(), mRgb, Imgproc.COLOR_RGBA2RGB);
         return detectMarkers();
     }
+
+
 }

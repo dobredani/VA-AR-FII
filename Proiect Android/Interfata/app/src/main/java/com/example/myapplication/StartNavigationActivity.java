@@ -1,15 +1,17 @@
 package com.example.myapplication;
 
-import android.graphics.Color;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +60,12 @@ public class StartNavigationActivity extends AppCompatActivity {
                 tv.setTextColor(Color.BLACK);
                 tv.setBackgroundColor(Color.rgb(243,237,218));
 
+                // Generate ListView Item using TextView
+                return view;
+            }
+        };
+        lv.setAdapter(arrayAdapter);
+
         ImageView searchAruco = findViewById(R.id.cameraBtn);
         searchAruco.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -75,14 +83,6 @@ public class StartNavigationActivity extends AppCompatActivity {
                 startActivity(launchActivity1);
             }
         });*/
-    }
-
-                // Generate ListView Item using TextView
-                return view;
-            }
-    };
-        lv.setAdapter(arrayAdapter);
-
 
     };
     @Override

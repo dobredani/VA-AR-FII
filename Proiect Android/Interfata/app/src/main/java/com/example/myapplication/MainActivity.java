@@ -20,8 +20,6 @@ import com.android.volley.toolbox.Volley;
 
 public class MainActivity extends AppCompatActivity {
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 
     public void getServerMessage(){
         // the url is different for every computer.
@@ -65,5 +64,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
+}
 

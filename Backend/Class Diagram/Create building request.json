@@ -3,7 +3,7 @@
   "floors": [
     {
       "level": 0,
-      "wayPoints": [
+      "waypoints": [
         {
           "name": "Stairs",
           "type": "connector",
@@ -80,7 +80,7 @@
     },
     {
       "level": 1,
-      "wayPoints": [
+      "waypoints": [
         {
           "name": "Stairs",
           "type": "connector",

@@ -11,7 +11,7 @@ BuildingSchema = {
     'name': fields.Str(required=True),
     'floors': fields.List(fields.Nested({
         'level': fields.Int(required=True),
-        'wayPoints': fields.List(fields.Nested({
+        'waypoints': fields.List(fields.Nested({
             'name': fields.Str(required=True),
             'type': fields.Str(required=False),
             'schedule': fields.List(fields.Nested({
@@ -102,43 +102,43 @@ class BuildingView(FlaskView):
             for floor in args["floors"]:
                 Floor(level=floor["level"],
                       buildingName=args["name"]).save()
-                for wayPoint in floor["wayPoints"]:
-                    if ("type" in wayPoint):
-                        if (wayPoint["type"] == "classRoom"):
+                for waypoint in floor["waypoints"]:
+                    if ("type" in waypoint):
+                        if (waypoint["type"] == "classRoom"):
                             classRoom = ClassRoom(
-                                name=wayPoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
-                            for schedule in wayPoint["schedule"]:
+                                name=waypoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                            for schedule in waypoint["schedule"]:
                                 group = Group(
                                     name=schedule["group"], buildingName=args["name"]).save()
                                 group.classes.connect(classRoom, {'course': schedule["course"],
                                                                   'dayOfWeek': schedule["dayOfWeek"],
                                                                   'startTime': schedule["startTime"],
                                                                   'finishTime': schedule["finishTime"]})
-                        elif (wayPoint["type"] == "office"):
+                        elif (waypoint["type"] == "office"):
                             office = Office(
-                                name=wayPoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
-                            for prof in wayPoint["professors"]:
+                                name=waypoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                            for prof in waypoint["professors"]:
                                 teacher = Teacher(
                                     name=prof, buildingName=args["name"]).save()
                                 teacher.office.connect(office)
-                        elif (wayPoint["type"] == "connector"):
+                        elif (waypoint["type"] == "connector"):
                             connector = Connector.nodes.get_or_none(
-                                name=wayPoint["name"], buildingName=args["name"])
+                                name=waypoint["name"], buildingName=args["name"])
                             if connector is None:
                                 Connector(
-                                    name=wayPoint["name"], buildingName=args["name"]).save()
+                                    name=waypoint["name"], buildingName=args["name"]).save()
                         else:
                             Room(
-                                name=wayPoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                                name=waypoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
                     else:
                         Room(
-                            name=wayPoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                            name=waypoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
 
             for floor in args["floors"]:
-                for wayPoint in floor["wayPoints"]:
+                for waypoint in floor["waypoints"]:
                     base = Waypoint.nodes.get(
-                        name=wayPoint["name"], buildingName=args["name"])
-                    for neighbour in wayPoint["neighbors"]:
+                        name=waypoint["name"], buildingName=args["name"])
+                    for neighbour in waypoint["neighbors"]:
                         base.neighbors.connect(
                             Waypoint.nodes.get(
                                 name=neighbour["name"], buildingName=args["name"]), {'floorLevel': floor["level"],

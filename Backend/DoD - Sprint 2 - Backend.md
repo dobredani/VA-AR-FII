@@ -12,5 +12,3 @@
 5. Creare metoda pentru preluarea tuturor Building-urilor. 
 
 6. Creare metoda pentru preluarea unui singur Building cu toate informatiile necesare (acelasi json).
-
-7. Creare metoda pentru update unui Building.

@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from models import Waypoint
+from neomodel import RelationshipFrom, ZeroOrMore
+from models import Room
 
 
-class ClassRoom(Waypoint):
+class ClassRoom(Room):
     """ClassRoom model"""
-    pass
+
+    groups = RelationshipFrom(
+        'models.Group', 'STUDIES_IN', cardinality=ZeroOrMore)

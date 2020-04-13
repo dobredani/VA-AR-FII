@@ -3,6 +3,7 @@
 from grest.models import Node
 from neomodel import StringProperty, StructuredNode, UniqueIdProperty, RelationshipTo, One
 from webargs import fields
+from models import Building
 
 
 class Teacher(StructuredNode, Node):
@@ -20,4 +21,5 @@ class Teacher(StructuredNode, Node):
     office = RelationshipTo('models.Office', 'HAS', cardinality=One)
 
     def pre_save(self):
+        Building.nodes.get(name=self.buildingName)
         self.building_unique_teacher = f'building_{self.buildingName}_teacher_name_{self.name}'

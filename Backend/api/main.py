@@ -26,9 +26,9 @@ def create_app():
     BuildingRestView.register(
         app, route_base="/building", trailing_slash=False)
     FloorRestView.register(
-        app, route_base="/floor", trailing_slash=False)    
+        app, route_base="/floor", trailing_slash=False)
     WaypointRestView.register(
-        app, route_base="/waypoint", trailing_slash=False)    
+        app, route_base="/waypoint", trailing_slash=False)
     ClassRoomRestView.register(
         app, route_base="/classroom", trailing_slash=False)
     ConnectorRestView.register(

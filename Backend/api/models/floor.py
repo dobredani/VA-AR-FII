@@ -28,4 +28,4 @@ class Floor(StructuredNode, Node):
         self.building_unique_floor = f'building_{self.buildingName}_floor_level_{self.level}'
 
     def post_save(self):
-        self.building.connect(Building.nodes.get(name=self.buildingName))
+        Building.nodes.get(name=self.buildingName).floors.connect(self)

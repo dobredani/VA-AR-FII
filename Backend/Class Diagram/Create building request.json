@@ -1,19 +1,20 @@
 {
-  "name": "Building name",
+  "name": "FII",
   "floors": [
     {
       "level": 0,
       "wayPoints": [
-        //fiecare waypoint e conectat la celelalte 1-2 waypointuri cele mai apropiate lui
-        // pentru fiecare waypoint vecin trebuie specificat daca trebuie sa faca colt-ul (stanga sau dreapta) sau nu (straight)
-        //fiecare waypoint trebuie sa aiba vecini si trebuie la randul lui sa fie vecin
         {
           "name": "Stairs",
           "type": "connector",
           "neighbors": [
             {
               "name": "C210",
-              "direction": "left"
+              "direction": "Left"
+            },
+            {
+              "name": "Elevator",
+              "direction": "Right"
             }
           ]
         },
@@ -24,63 +25,179 @@
             {
               "group": "IIA3",
               "course": "Ingineria programarii",
-              "dayOfWeek": "Monday",
+              "dayOfWeek": "Luni",
               "startTime": "12:00",
-              "finishTIme": "14:00"
+              "finishTime": "14:00"
             },
-            {...}
+            {
+              "group": "IIA7",
+              "course": "Programare avansata",
+              "dayOfWeek": "Miercuri",
+              "startTime": "16:00",
+              "finishTime": "20:00"
+            }
           ],
           "neighbors": [
             {
               "name": "Stairs",
-              "direction": "right"
+              "direction": "Right"
             },
             {
-              "name": "C209",
-              "direction": "left"
+              "name": "exit",
+              "direction": "Left"
             }
           ]
         },
         {
           "name": "C209",
           "type": "office",
-          "professors": ["Varlan", "Patrut"],
+          "professors": ["Lacramioara Leonte", "Daniela Piriu"],
           "neighbors": [
             {
-              "name": "C210",
-              "direction": "right"
+              "name": "exit",
+              "direction": "Right"
             },
             {
-              "name": "C208",
-              "direction": "straight"
+              "name": "Elevator",
+              "direction": "Left"
             }
           ]
         },
         {
-          "name": "C208",
-          "type": "office",
+          "name": "exit",
           "neighbors": [
             {
               "name": "C209",
-              "direction": "straight"
+              "direction": "Left"
             },
+            {
+              "name": "C210",
+              "direction": "Right"
+            }
           ]
-        },
+        }
       ]
     },
     {
       "level": 1,
-      ...
-    },
+      "wayPoints": [
+        {
+          "name": "Stairs",
+          "type": "connector",
+          "neighbors": [
+            {
+              "name": "C306",
+              "direction": "Right"
+            },
+            {
+              "name": "C307",
+              "direction": "Left"
+            }
+          ]
+        },
+        {
+          "name": "C306",
+          "type": "office",
+          "professors": ["Florin Iacob", "Adrian Zalinescu"],
+          "neighbors": [
+            {
+              "name": "Elevator",
+              "direction": "Right"
+            },
+            {
+              "name": "Stairs",
+              "direction": "Left"
+            }
+          ]
+        },
+        {
+          "name": "C307",
+          "type": "office",
+          "professors": ["Ferucio Laurentiu Tiplea", "Ana-Maria Nica"],
+          "neighbors": [
+            {
+              "name": "Stairs",
+              "direction": "Right"
+            },
+            {
+              "name": "C308",
+              "direction": "Left"
+            }
+          ]
+        },
+        {
+          "name": "Elevator",
+          "type": "connector",
+          "neighbors": [
+            {
+              "name": "C306",
+              "direction": "Left"
+            }
+          ]
+        },
+        {
+          "name": "C308",
+          "type": "classRoom",
+          "schedule": [
+            {
+              "group": "IA5",
+              "course": "Logica",
+              "dayOfWeek": "Joi",
+              "startTime": "12:00",
+              "finishTime": "14:00"
+            },
+            {
+              "group": "IIIB2",
+              "course": "Machine Learning",
+              "dayOfWeek": "Vineri",
+              "startTime": "10:00",
+              "finishTime": "12:00"
+            }
+          ],
+          "neighbors": [
+            {
+              "name": "C307",
+              "direction": "Right"
+            }
+          ]
+        },
+        {
+          "name": "C310",
+          "type": "classRoom",
+          "schedule": [
+            {
+              "group": "IA1",
+              "course": "Matematica",
+              "dayOfWeek": "Luni",
+              "startTime": "8:00",
+              "finishTime": "10:00"
+            },
+            {
+              "group": "IIIB1",
+              "course": "Python",
+              "dayOfWeek": "Marti",
+              "startTime": "18:00",
+              "finishTime": "20:00"
+            }
+          ],
+          "neighbors": [
+            {
+              "name": "C308",
+              "direction": "Right"
+            }
+          ]
+        }
+      ]
+    }
   ],
   "connectors": [
     {
       "name": "Stairs",
-      "accesibleFloors": [0, 1]
-    }
+      "accessibleFloors": [0, 1]
+    },
     {
       "name": "Elevator",
-      "accesibleFloors": [0, 1, 2, 3, 4, 5, 6, 7,]
+      "accessibleFloors": [0, 1]
     }
   ]
 }

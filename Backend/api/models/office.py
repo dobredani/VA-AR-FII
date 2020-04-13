@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from models import Waypoint
+from neomodel import RelationshipFrom, ZeroOrMore
+from models import Room
 
 
-class Office(Waypoint):
+class Office(Room):
     """Office model"""
-    pass
+
+    teachers = RelationshipFrom(
+        'models.Teacher', 'HAS', cardinality=ZeroOrMore)

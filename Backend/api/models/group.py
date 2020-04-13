@@ -3,6 +3,7 @@
 from grest.models import Node
 from neomodel import StringProperty, StructuredNode, UniqueIdProperty, RelationshipTo, StructuredRel, ZeroOrMore
 from webargs import fields
+from models import Building
 
 
 class StudiesIn(StructuredRel):
@@ -28,4 +29,5 @@ class Group(StructuredNode, Node):
         'models.ClassRoom', 'STUDIES_IN', cardinality=ZeroOrMore, model=StudiesIn)
 
     def pre_save(self):
+        Building.nodes.get(name=self.buildingName)
         self.building_unique_group = f'building_{self.buildingName}_group_name_{self.name}'

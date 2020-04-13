@@ -1,10 +1,10 @@
 
 # DoD – Backend TEAM
 
-• Research despre baza de date (avantaje, dezavantaje);
+1. Research despre baza de date (avantaje, dezavantaje);
 
-• Research despre tehnologia pentru crearea unui API REST;
+2. Research despre tehnologia pentru crearea unui API REST;
 
-• Creare baza de date;
+3. Creare baza de date;
 
-• Creare API conectat la baza de date; 
+4. Creare API conectat la baza de date; 

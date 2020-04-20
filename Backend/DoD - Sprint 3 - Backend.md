@@ -10,3 +10,7 @@
 4. Creare metoda de update Building view.
 
 5. Crearea unei pagini API Docs utilizand Swagger pentru a documenta toate rutele.
+
+6. Unit testing.
+
+7. Adaugarea ID-ului in baza de date (necesar modulului Android).

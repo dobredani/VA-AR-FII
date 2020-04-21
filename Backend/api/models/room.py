@@ -13,7 +13,7 @@ class Room(Waypoint):
         **Waypoint.__validation_rules__
     }
 
-    markerId = IntegerProperty(required=True, unique_index=True)
+    markerId = IntegerProperty(required=True, index=True)
     floorLevel = IntegerProperty(required=True)
     floor = RelationshipFrom('models.Floor', 'HAS', cardinality=One)
 

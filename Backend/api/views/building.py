@@ -151,8 +151,8 @@ class BuildingView(FlaskView):
                 connector = Connector.nodes.get(
                     name=conn["name"], buildingName=args["name"])
                 for floorLevel in conn["accessibleFloors"]:
-                    Floor.nodes.get(
-                        level=floorLevel, buildingName=args["name"]).waypoints.connect(connector)
+                    connector.floors.connect(Floor.nodes.get(
+                        level=floorLevel, buildingName=args["name"]))
 
             db.commit()
             return self.get(args["name"]), 200

@@ -3,9 +3,7 @@ from flask import jsonify
 from webargs import fields
 from webargs.flaskparser import use_args
 from models import Building, Floor, Waypoint, Room, Connector, Group, Teacher, ClassRoom, Office
-import neomodel
 from neomodel import db
-from neomodel import Q
 
 BuildingSchema = {
     'name': fields.Str(required=True),

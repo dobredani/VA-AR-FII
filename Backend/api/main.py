@@ -43,6 +43,8 @@ def create_app():
     # custom endpoints
     BuildingView.register(
         app, route_base="/building", trailing_slash=False)
+    RouteView.register(
+        app, route_base="/route", trailing_slash=False)
 
     return app
 

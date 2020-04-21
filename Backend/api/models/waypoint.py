@@ -29,8 +29,8 @@ class Waypoint(StructuredNode, Node):
     }
 
     uid = UniqueIdProperty()
-    name = StringProperty(required=True)
-    buildingName = StringProperty(required=True)
+    name = StringProperty(required=True, index=True)
+    buildingName = StringProperty(required=True, index=True)
     building_unique_waypoint = StringProperty(required=True, unique_index=True)
     neighbors = RelationshipTo(
         'Waypoint', 'GOES_TO', cardinality=ZeroOrMore, model=GoesTo)

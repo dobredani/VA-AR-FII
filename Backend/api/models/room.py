@@ -13,12 +13,13 @@ class Room(Waypoint):
         **Waypoint.__validation_rules__
     }
 
+    markerId = IntegerProperty(required=True, unique_index=True)
     floorLevel = IntegerProperty(required=True)
     floor = RelationshipFrom('models.Floor', 'HAS', cardinality=One)
 
     def pre_save(self):
         Floor.nodes.get(buildingName=self.buildingName, level=self.floorLevel)
-        self.building_unique_waypoint = f'building_{self.buildingName}_waypoint_name_{self.name}'
+        self.building_unique_waypoint = f'building_{self.buildingName}_waypoint_name_{self.name}_marker_id_{self.markerId}'
 
     def post_save(self):
         Floor.nodes.get(buildingName=self.buildingName,

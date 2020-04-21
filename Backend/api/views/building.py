@@ -13,6 +13,7 @@ BuildingSchema = {
         'level': fields.Int(required=True),
         'waypoints': fields.List(fields.Nested({
             'name': fields.Str(required=True),
+            'markerId': fields.Int(required=False),
             'type': fields.Str(required=False),
             'schedule': fields.List(fields.Nested({
                 'group': fields.Str(required=True),
@@ -50,35 +51,37 @@ class BuildingView(FlaskView):
                     map["floors"].append(
                         {"level": floor.level, "waypoints": []})
                     for waypoint in floor.waypoints:
-                        map["floors"][-1]["waypoints"].append(
-                            {"name": waypoint.name})
-                        if ClassRoom.__name__ in waypoint.labels():
-                            map["floors"][-1]["waypoints"][-1]["type"] = "classRoom"
-                            map["floors"][-1]["waypoints"][-1]["schedule"] = []
-                            for group in [group for group in Group.nodes.filter(buildingName=name).has(classes=True) if group.classes.relationship(waypoint)]:
-                                classes = group.classes.all_relationships(
-                                    waypoint)
-                                for cclass in classes:
-                                    map["floors"][-1]["waypoints"][-1]["schedule"].append(
-                                        {"group": group.name, "course": cclass.course, "dayOfWeek": cclass.dayOfWeek,
-                                         "startTime": cclass.startTime, "finishTime": cclass.finishTime})
-                        elif Office.__name__ in waypoint.labels():
-                            map["floors"][-1]["waypoints"][-1]["type"] = "office"
-                            map["floors"][-1]["waypoints"][-1]["professors"] = []
-                            for teacher in [teacher for teacher in Teacher.nodes.filter(buildingName=name).has(office=True) if teacher.office.relationship(waypoint)]:
-                                for office in teacher.office:
-                                    if office.name == waypoint.name:
-                                        map["floors"][-1]["waypoints"][-1]["professors"].append(
-                                            teacher.name)
-                        elif Connector.__name__ in waypoint.labels():
-                            map["floors"][-1]["waypoints"][-1]["type"] = "connector"
-                        map["floors"][-1]["waypoints"][-1]["neighbors"] = []
-                        for neighbor in [neighbor for neighbor in waypoint.neighbors if waypoint.neighbors.relationship(
-                                neighbor).floorLevel == floor.level]:
-                            direction = waypoint.neighbors.relationship(
-                                neighbor).direction
-                            map["floors"][-1]["waypoints"][-1]["neighbors"].append(
-                                {"name": neighbor.name, "direction": direction})
+                        if Connector.__name__ in waypoint.labels():
+                            map["floors"][-1]["waypoints"].append(
+                                {"name": waypoint.name, "type": "connector"})
+                        else:
+                            map["floors"][-1]["waypoints"].append(
+                                {"name": waypoint.name, "markerId": waypoint.markerId})
+                            if ClassRoom.__name__ in waypoint.labels():
+                                map["floors"][-1]["waypoints"][-1]["type"] = "classRoom"
+                                map["floors"][-1]["waypoints"][-1]["schedule"] = []
+                                for group in [group for group in Group.nodes.filter(buildingName=name).has(classes=True) if group.classes.relationship(waypoint)]:
+                                    classes = group.classes.all_relationships(
+                                        waypoint)
+                                    for cclass in classes:
+                                        map["floors"][-1]["waypoints"][-1]["schedule"].append(
+                                            {"group": group.name, "course": cclass.course, "dayOfWeek": cclass.dayOfWeek,
+                                             "startTime": cclass.startTime, "finishTime": cclass.finishTime})
+                            elif Office.__name__ in waypoint.labels():
+                                map["floors"][-1]["waypoints"][-1]["type"] = "office"
+                                map["floors"][-1]["waypoints"][-1]["professors"] = []
+                                for teacher in [teacher for teacher in Teacher.nodes.filter(buildingName=name).has(office=True) if teacher.office.relationship(waypoint)]:
+                                    for office in teacher.office:
+                                        if office.name == waypoint.name:
+                                            map["floors"][-1]["waypoints"][-1]["professors"].append(
+                                                teacher.name)
+                            map["floors"][-1]["waypoints"][-1]["neighbors"] = []
+                            for neighbor in [neighbor for neighbor in waypoint.neighbors if waypoint.neighbors.relationship(
+                                    neighbor).floorLevel == floor.level]:
+                                direction = waypoint.neighbors.relationship(
+                                    neighbor).direction
+                                map["floors"][-1]["waypoints"][-1]["neighbors"].append(
+                                    {"name": neighbor.name, "direction": direction})
                 for conn in Connector.nodes.filter(buildingName=name):
                     map["connectors"].append(
                         {"name": conn.name, "accessibleFloors": []})
@@ -106,7 +109,7 @@ class BuildingView(FlaskView):
                     if ("type" in waypoint):
                         if (waypoint["type"] == "classRoom"):
                             classRoom = ClassRoom(
-                                name=waypoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                                name=waypoint["name"], markerId=waypoint["markerId"], buildingName=args["name"], floorLevel=floor["level"]).save()
                             for schedule in waypoint["schedule"]:
                                 group = Group(
                                     name=schedule["group"], buildingName=args["name"]).save()
@@ -116,7 +119,7 @@ class BuildingView(FlaskView):
                                                                   'finishTime': schedule["finishTime"]})
                         elif (waypoint["type"] == "office"):
                             office = Office(
-                                name=waypoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                                name=waypoint["name"], markerId=waypoint["markerId"], buildingName=args["name"], floorLevel=floor["level"]).save()
                             for prof in waypoint["professors"]:
                                 teacher = Teacher(
                                     name=prof, buildingName=args["name"]).save()
@@ -129,10 +132,10 @@ class BuildingView(FlaskView):
                                     name=waypoint["name"], buildingName=args["name"]).save()
                         else:
                             Room(
-                                name=waypoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                                name=waypoint["name"], markerId=waypoint["markerId"], buildingName=args["name"], floorLevel=floor["level"]).save()
                     else:
                         Room(
-                            name=waypoint["name"], buildingName=args["name"], floorLevel=floor["level"]).save()
+                            name=waypoint["name"], markerId=waypoint["markerId"], buildingName=args["name"], floorLevel=floor["level"]).save()
 
             for floor in args["floors"]:
                 for waypoint in floor["waypoints"]:

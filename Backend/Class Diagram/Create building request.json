@@ -20,6 +20,7 @@
         },
         {
           "name": "C210",
+          "markerId": 1,
           "type": "classRoom",
           "schedule": [
             {
@@ -50,6 +51,7 @@
         },
         {
           "name": "C209",
+          "markerId": 2,
           "type": "office",
           "professors": ["Lacramioara Leonte", "Daniela Piriu"],
           "neighbors": [
@@ -65,6 +67,7 @@
         },
         {
           "name": "exit",
+          "markerId": 3,
           "neighbors": [
             {
               "name": "C209",
@@ -97,6 +100,7 @@
         },
         {
           "name": "C306",
+          "markerId": 4,
           "type": "office",
           "professors": ["Florin Iacob", "Adrian Zalinescu"],
           "neighbors": [
@@ -112,6 +116,7 @@
         },
         {
           "name": "C307",
+          "markerId": 5,
           "type": "office",
           "professors": ["Ferucio Laurentiu Tiplea", "Ana-Maria Nica"],
           "neighbors": [
@@ -137,6 +142,7 @@
         },
         {
           "name": "C308",
+          "markerId": 6,
           "type": "classRoom",
           "schedule": [
             {
@@ -163,6 +169,7 @@
         },
         {
           "name": "C310",
+          "markerId": 7,
           "type": "classRoom",
           "schedule": [
             {

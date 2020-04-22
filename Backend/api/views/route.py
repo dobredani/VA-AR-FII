@@ -10,10 +10,15 @@ class RouteView(FlaskView):
     excluded_methods = ['findRoute', 'formatRoute']
 
     def findRoute(self, buildingName, startMarkerId, destinationMarkerId):
-        # startWaypoint = Room.nodes.get(
-        #     buildingName=buildingName, markerId=startMarkerId)
-        # destinationWaypoint = Room.nodes.get(
-        #     buildingName=buildingName, markerId=destinationMarkerId)
+        result, meta = db.cypher_query(
+            f"MATCH (start:Waypoint {{markerId:{startMarkerId}, buildingName: '{buildingName}'}}), (end:Waypoint {{markerId:{destinationMarkerId}, buildingName: '{buildingName}'}}), p=shortestPath((start)-[:GOES_TO*]-(end)) RETURN p")
+        waypoints = []
+        for record in result:
+            nodes = record[0].nodes
+            # Convert neo4j nodes to neomodel nodes
+            waypoints = [Waypoint.inflate(node) for node in nodes]
+
+        return waypoints
         pass
 
     def formatRoute(self, route):

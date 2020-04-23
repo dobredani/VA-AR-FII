@@ -3,7 +3,7 @@ from flask import jsonify
 from neomodel import db
 from webargs import fields
 from webargs.flaskparser import use_args
-from models import Building, Room, Waypoint
+from models import Building, Room, Waypoint, Connector
 
 
 class RouteView(FlaskView):
@@ -23,17 +23,30 @@ class RouteView(FlaskView):
         pass
 
     def formatRoute(self, route):
-        last_dir = 'null'
         formatted_route = []
-        for index in range(len(route) - 1):
-            # get the direction between the current node and the next
-            current_dir = route[index].neighbors.relationship(route[index + 1]).direction
-            # if the last direction and the current one aren't Straight
-            if (last_dir != 'Straight') or (current_dir != 'Straight'):
-                # add to the list of waypoints
-                formatted_route.append({route[index].name: current_dir})
-            last_dir = current_dir
-        return formatted_route
+        for index in range(len(route)):
+            if index != len(route) - 1:
+                current_dir = route[index].neighbors.relationship(route[index + 1]).direction
+                floor_level = route[index].neighbors.relationship(route[index + 1]).floorLevel
+            else:
+                room = Room.nodes.get(name=route[index].name, buildingName=route[index].buildingName)
+                formatted_route.append({'name': room.name, 'markerId': room.markerId})
+                return formatted_route
+            if Connector.__name__ in route[index].labels():
+                look_ahead = 0
+                while Connector.__name__ in route[index + look_ahead].labels():
+                    look_ahead += 1
+                room = Room.nodes.get_or_none(name=route[index + look_ahead].name,
+                                              buildingName=route[index + look_ahead].buildingName)
+                formatted_route.append({'name': route[index].name, 'direction': current_dir,
+                                        'floor': floor_level})
+            else:
+                room = Room.nodes.get(name=route[index].name, buildingName=route[index].buildingName)
+
+                formatted_route.append(
+                    {'name': room.name, 'markerId': room.markerId, 'direction': current_dir,
+                     'floor': floor_level})
+
         pass
 
     @route('<buildingName>')

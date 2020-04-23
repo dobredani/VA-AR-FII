@@ -23,6 +23,17 @@ class RouteView(FlaskView):
         pass
 
     def formatRoute(self, route):
+        last_dir = 'null'
+        formatted_route = []
+        for index in range(len(route) - 1):
+            # get the direction between the current node and the next
+            current_dir = route[index].neighbors.relationship(route[index + 1]).direction
+            # if the last direction and the current one aren't Straight
+            if (last_dir != 'Straight') or (current_dir != 'Straight'):
+                # add to the list of waypoints
+                formatted_route.append({route[index].name: current_dir})
+            last_dir = current_dir
+        return formatted_route
         pass
 
     @route('<buildingName>')

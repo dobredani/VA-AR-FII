@@ -1,8 +1,9 @@
 from flask_classful import FlaskView, route
 from flask import jsonify
+from neomodel import db
 from webargs import fields
 from webargs.flaskparser import use_args
-from models import Building, Room
+from models import Building, Room, Waypoint
 
 
 class RouteView(FlaskView):
@@ -29,7 +30,7 @@ class RouteView(FlaskView):
     def route(self, args, buildingName):
         building = Building.nodes.get_or_none(name=buildingName)
         if building is not None:
-            route = findRoute(buildingName, args['start'], args['destination'])
-            return jsonify(formatRoute(route)), 200
+            route = self.findRoute(buildingName, args['start'], args['destination'])
+            return jsonify(self.formatRoute(route)), 200
         else:
             return "Building not found", 404

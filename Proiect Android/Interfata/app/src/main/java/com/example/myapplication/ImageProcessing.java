@@ -5,8 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -17,6 +15,7 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.aruco.Aruco;
 import org.opencv.aruco.CharucoBoard;
 import org.opencv.aruco.Dictionary;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
@@ -32,7 +31,7 @@ public class ImageProcessing  extends AppCompatActivity implements CameraBridgeV
     private static final String     TAG = "ImageProcessing";
     private Size SIZE = new Size();
 
-    private Mat mRgba, mRgb;
+    private Mat mRgba, mRgb, mRgbT, mRgbF;
     private Dictionary dict;
     private List<Mat> detectedMarkers;
     private Mat                 ids, cameraMatrix, distCoeffs;
@@ -114,6 +113,8 @@ public class ImageProcessing  extends AppCompatActivity implements CameraBridgeV
 
     public void onCameraViewStarted(int width, int height) {
         mRgba = new Mat(height, width, CvType.CV_8UC4);
+        mRgbT = new Mat(width, width, CvType.CV_8UC3);
+        mRgbF = new Mat(height, width, CvType.CV_8UC3);
         mRgb = new Mat(height, width, CvType.CV_8UC3);
         SIZE = new Size(width, height);
     }
@@ -121,6 +122,8 @@ public class ImageProcessing  extends AppCompatActivity implements CameraBridgeV
     public void onCameraViewStopped() {
         mRgba.release();
         mRgb.release();
+        mRgbT.release();
+        mRgbF.release();
         SIZE = null;
     }
 
@@ -173,8 +176,12 @@ public class ImageProcessing  extends AppCompatActivity implements CameraBridgeV
     }
 
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+        mRgba = inputFrame.rgba();
+        Imgproc.cvtColor(mRgba, mRgb, Imgproc.COLOR_RGBA2RGB);
+        Core.transpose(mRgb, mRgbT);
+        Imgproc.resize(mRgbT, mRgbF, mRgbF.size(),0,0,0);
+        Core.flip(mRgbF, mRgb, 1);
 
-        Imgproc.cvtColor(inputFrame.rgba(), mRgb, Imgproc.COLOR_RGBA2RGB);
         return detectMarkers();
     }
 

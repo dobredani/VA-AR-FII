@@ -4,4 +4,7 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="FII">UAIC, Corp C</string>
+
+    <!-- set 'true' for debug mode -->
+    <string name="DEBUG_MODE">true</string>
 </resources>

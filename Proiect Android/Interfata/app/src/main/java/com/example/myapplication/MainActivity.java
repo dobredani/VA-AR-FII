@@ -1,12 +1,19 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
+<<<<<<< Updated upstream:Proiect Android/Interfata/app/src/main/java/com/example/myapplication/MainActivity.java
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+=======
 import android.util.Log;
+>>>>>>> Stashed changes:Proiect Android/app/src/main/java/com/example/myapplication/MainActivity.java
 import android.view.View;
 import android.widget.Button;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,20 +42,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button start = findViewById(R.id.startBtn);
-        start.setOnClickListener(new View.OnClickListener() {
+        start.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent launchActivity1 = new Intent(MainActivity.this, StartNavigationActivity.class);
+                Intent launchActivity1= new Intent(MainActivity.this,StartNavigationActivity.class);
                 startActivity(launchActivity1);
                 getBuildingData();
                 getBuildingList();
                 getWaypoints("2", "5");
             }
         });
+
     }
 
 
+<<<<<<< Updated upstream:Proiect Android/Interfata/app/src/main/java/com/example/myapplication/MainActivity.java
+    public void getServerMessage(){
+=======
     public void getBuildingList() {
+>>>>>>> Stashed changes:Proiect Android/app/src/main/java/com/example/myapplication/MainActivity.java
         // the url is different for every computer.
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
@@ -61,10 +73,10 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("JsonObject","Response: " + response.toString());
+                        Log.e("JsonObject","Response: " + response.toString());
                         List<String> buildingList = JsonParser.parseBuildingList(response);
                         applicationData.setBuildings(buildingList);
-                        Log.d("JsonObject", "Building List" + buildingList.toString());
+                        Log.e("JsonObject", "Building List" + buildingList.toString());
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -74,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         requestQueue.add(jsonObjectRequest);
-    }
+        }
+<<<<<<< Updated upstream:Proiect Android/Interfata/app/src/main/java/com/example/myapplication/MainActivity.java
+=======
 
 
     public void getBuildingData(){
@@ -82,9 +96,9 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.1.3:5000/building/";
+         String url = "http://192.168.1.3:5000/building/";
 //        Mock url until we implement function for picking building.
-        url = url.concat("FII");
+         url = url.concat("FII");
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -139,3 +153,8 @@ public class MainActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
     }
 }
+>>>>>>> Stashed changes:Proiect Android/app/src/main/java/com/example/myapplication/MainActivity.java
+
+    }
+}
+

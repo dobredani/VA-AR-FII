@@ -19,6 +19,14 @@ public class Building {
         return locations;
     }
 
+    public Location getLocation(String name){
+        for (Location location : locations)
+            if (location.getName().equals(name)) {
+                return location;
+            }
+        return null;
+    }
+
     public List<Location> getTopLocations(int howMany) {
         int locationsToReturn = Math.min(howMany, locations.size());
         return locations.subList(0, locationsToReturn + 1);

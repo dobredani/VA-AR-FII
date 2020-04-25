@@ -14,6 +14,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity implements AsyncQR {
 
@@ -21,7 +23,18 @@ public class MainActivity extends AppCompatActivity implements AsyncQR {
     public void onScanCompleted(String result) {
         Log.i("NavClass","Found code: " + result);
 
-        // Do something with the code
+        // Do something with the QR code
+
+        // Hide scanner
+        FragmentManager fm = getSupportFragmentManager();
+        Fragment scannerFragment = fm.findFragmentById(R.id.scanner_fragment);
+        if (scannerFragment.isVisible()) {
+            fm.beginTransaction()
+                    .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                    .hide(scannerFragment)
+                    .commit();
+        }
+
     }
 
     @Override
@@ -44,8 +57,24 @@ public class MainActivity extends AppCompatActivity implements AsyncQR {
             debugQR.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent launchActivity1 = new Intent(MainActivity.this, ScanQR.class);
-                    startActivity(launchActivity1);
+                    // Show/Hide QR scan fragment
+                    FragmentManager fm = getSupportFragmentManager();
+                    Fragment scannerFragment = fm.findFragmentById(R.id.scanner_fragment);
+                    if (scannerFragment.isVisible()) {
+                        fm.beginTransaction()
+                                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                .hide(scannerFragment)
+                                .commit();
+                    }
+                    else
+                    {
+                        fm.beginTransaction()
+                                .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                .show(scannerFragment)
+                                .commit();
+                        
+                        ((ScanQR) scannerFragment).resumeScan();
+                    }
                 }
             });
 

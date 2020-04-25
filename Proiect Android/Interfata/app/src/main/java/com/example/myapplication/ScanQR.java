@@ -61,4 +61,8 @@ public class ScanQR extends Fragment implements ZXingScannerView.ResultHandler {
         super.onPause();
         mScannerView.stopCamera();
     }
+
+    public void resumeScan() {
+        mScannerView.resumeCameraPreview(ScanQR.this);
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -27,9 +29,14 @@ public class StartNavigationActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
+
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.start_navigation);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
@@ -83,7 +90,26 @@ public class StartNavigationActivity extends AppCompatActivity {
             }
         });
 
+        // ----------- Incercare click listener pentru butonul de chooseBuilding
+        Button chooseBuildings = findViewById(R.id.chooseBuilding);
+        final String[] colors = {"red", "green", "blue", "black"};
+        chooseBuildings.setOnClickListener(new View.OnClickListener() { // java.lang.NullPointerException: Attempt to invoke virtual method 'void android.widget.Button.setOnClickListener(android.view.View$OnClickListener)' on a null object reference
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(StartNavigationActivity.this);
+                builder.setTitle("Choose a building");
+                builder.setItems(colors, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // the user clicked on colors[which]
+                    }
+                });
+                builder.show();
+            }
+        });
     };
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(mToggle.onOptionsItemSelected(item)){
@@ -91,5 +117,4 @@ public class StartNavigationActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

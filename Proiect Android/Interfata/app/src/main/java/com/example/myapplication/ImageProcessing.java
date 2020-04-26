@@ -8,6 +8,8 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
@@ -25,9 +27,7 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class ImageProcessing  extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
+public class ImageProcessing extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
     private static final String     TAG = "ImageProcessing";
     private Size SIZE = new Size();
 

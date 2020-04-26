@@ -6,16 +6,16 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 public class MainActivity extends AppCompatActivity implements AsyncQR {
 
@@ -87,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements AsyncQR {
                     startActivity(launchActivity1);
                 }
             });
-
         }
     }
 

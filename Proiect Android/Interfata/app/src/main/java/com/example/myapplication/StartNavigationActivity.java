@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -69,8 +70,9 @@ public class StartNavigationActivity extends AppCompatActivity {
         searchAruco.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent launchActivity1= new Intent(StartNavigationActivity.this,ImageProcessing.class);
-                startActivity(launchActivity1);
+                Intent launchActivity1 = new Intent(StartNavigationActivity.this, ScanLocationActivity.class);
+                launchActivity1.putExtra("test", 1);
+                startActivityForResult(launchActivity1, 1);
             }
         });
 
@@ -79,7 +81,6 @@ public class StartNavigationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent launchActivity1= new Intent(StartNavigationActivity.this, CameraActivity.class);
-                startActivity(launchActivity1);
             }
         });
 
@@ -90,6 +91,15 @@ public class StartNavigationActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            String msg = data.getStringExtra("returnedData");
+            EditText editText = findViewById(R.id.currentLocation);
+            editText.setText(msg);
+        }
     }
 
 }

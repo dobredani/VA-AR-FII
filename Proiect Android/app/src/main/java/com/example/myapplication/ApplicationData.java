@@ -7,7 +7,8 @@ import java.util.List;
 
 public class ApplicationData {
     List<String> buildings;
-    Building currentBuilding;
+    String currentBuilding;
+
     List<Waypoint> waypoints;
 
     public ApplicationData() {
@@ -22,11 +23,11 @@ public class ApplicationData {
         this.buildings = buildings;
     }
 
-    public Building getCurrentBuilding() {
+    public String getCurrentBuilding() {
         return currentBuilding;
     }
 
-    public void setCurrentBuilding(Building currentBuilding) {
+    public void setCurrentBuilding(String currentBuilding) {
         this.currentBuilding = currentBuilding;
     }
 

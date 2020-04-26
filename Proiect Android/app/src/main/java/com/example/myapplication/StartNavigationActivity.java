@@ -1,5 +1,9 @@
 package com.example.myapplication;
 
+<<<<<<< Updated upstream
+=======
+import android.app.AlertDialog;
+>>>>>>> Stashed changes
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;

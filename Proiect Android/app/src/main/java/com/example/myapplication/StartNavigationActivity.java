@@ -1,9 +1,8 @@
 package com.example.myapplication;
 
-<<<<<<< Updated upstream
-=======
+
+
 import android.app.AlertDialog;
->>>>>>> Stashed changes
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -22,7 +21,6 @@ import android.widget.Toolbar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -36,8 +34,6 @@ import java.util.Objects;
 public class StartNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-
-
 
 
     @Override
@@ -104,32 +100,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 startActivity(launchActivity1);
             }
         });
-
-<<<<<<< Updated upstream
-        // ----------- Incercare click listener pentru butonul de chooseBuilding
-        Button chooseBuildings = findViewById(R.id.chooseBuilding);
-        final String[] colors = {"red", "green", "blue", "black"};
-        chooseBuildings.setOnClickListener(new View.OnClickListener() { // java.lang.NullPointerException: Attempt to invoke virtual method 'void android.widget.Button.setOnClickListener(android.view.View$OnClickListener)' on a null object reference
-
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(StartNavigationActivity.this);
-                builder.setTitle("Choose a building");
-                builder.setItems(colors, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // the user clicked on colors[which]
-                    }
-                });
-                builder.show();
-            }
-        });
-    };
-=======
     }
-
-    ;
->>>>>>> Stashed changes
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -138,8 +109,6 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         }
         return super.onOptionsItemSelected(item);
     }
-<<<<<<< Updated upstream
-=======
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -164,5 +133,4 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         });
         builder.show();
     }
->>>>>>> Stashed changes
 }

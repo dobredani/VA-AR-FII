@@ -15,11 +15,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -34,6 +33,8 @@ import java.util.Objects;
 public class StartNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private ApplicationData appData=new ApplicationData();
+    private ActionBar actionBar;
 
 
     @Override
@@ -48,7 +49,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
@@ -120,14 +121,16 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     }
 
     private void showBuildings() {
-        String[] buildings = {"UAIC Corp A", "UAIC Corp B", "UAIC Corp C", "UAIC Corp D"};
+        final String[] buildings = {"UAIC Corp A", "UAIC Corp B", "UAIC Corp C", "UAIC Corp D"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Pick a building");
         builder.setItems(buildings, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                appData.setCurrentBuilding(buildings[which]);
+                actionBar=getSupportActionBar();
+                actionBar.setTitle(buildings[which]);
             }
 
         });

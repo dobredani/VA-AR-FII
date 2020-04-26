@@ -6,19 +6,20 @@ import com.example.myapplication.problem.Waypoint;
 import java.util.List;
 
 public class ApplicationData {
-    List<Building> buildings;
+    List<String> buildings;
     String currentBuilding;
+
     List<Waypoint> waypoints;
 
     public ApplicationData() {
 
     }
 
-    public List<Building> getBuildings() {
+    public List<String> getBuildings() {
         return buildings;
     }
 
-    public void setBuildings(List<Building> buildings) {
+    public void setBuildings(List<String> buildings) {
         this.buildings = buildings;
     }
 

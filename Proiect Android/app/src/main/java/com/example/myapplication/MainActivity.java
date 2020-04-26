@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent launchActivity1 = new Intent(MainActivity.this, StartNavigationActivity.class);
                 startActivity(launchActivity1);
-                getBuildingData();
-                getBuildingList();
-                getWaypoints("2", "5");
+                //getBuildingData();
+                //getBuildingList();
+                //getWaypoints("2", "5");
             }
         });
     }

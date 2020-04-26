@@ -128,7 +128,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         builder.setItems(buildings, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                appData.setCurrentBuilding(buildings[which]);
+                appData.setCurrentBuildingName(buildings[which]);
                 actionBar=getSupportActionBar();
                 actionBar.setTitle(buildings[which]);
             }

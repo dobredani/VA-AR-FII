@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,12 +22,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.navigation.NavigationView;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class StartNavigationActivity extends AppCompatActivity {
+public class StartNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
 
@@ -38,24 +42,31 @@ public class StartNavigationActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.start_navigation);
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open,R.string.close);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
+
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        navigationView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(this);
+
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         final ListView lv = (ListView) findViewById(R.id.listView);
-        String[] locations = new String[] {
+        String[] locations = new String[]{
                 "C112",
                 "C2",
                 "C403",
                 "C909",
-                "Exit" };
+                "Exit"};
 
         List<String> locationsList = new ArrayList<String>(Arrays.asList(locations));
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1, locationsList){
+                (this, android.R.layout.simple_list_item_1, locationsList) {
             @Override
-            public View getView(int position, View convertView, ViewGroup parent){
+            public View getView(int position, View convertView, ViewGroup parent) {
                 // Get the Item from ListView
                 View view = super.getView(position, convertView, parent);
 
@@ -64,7 +75,7 @@ public class StartNavigationActivity extends AppCompatActivity {
 
                 // Set the text color of TextView (ListView Item)
                 tv.setTextColor(Color.BLACK);
-                tv.setBackgroundColor(Color.rgb(243,237,218));
+                tv.setBackgroundColor(Color.rgb(243, 237, 218));
 
                 // Generate ListView Item using TextView
                 return view;
@@ -73,23 +84,24 @@ public class StartNavigationActivity extends AppCompatActivity {
         lv.setAdapter(arrayAdapter);
 
         ImageView searchAruco = findViewById(R.id.cameraBtn);
-        searchAruco.setOnClickListener(new View.OnClickListener(){
+        searchAruco.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchActivity1= new Intent(StartNavigationActivity.this,ImageProcessing.class);
+                Intent launchActivity1 = new Intent(StartNavigationActivity.this, ImageProcessing.class);
                 startActivity(launchActivity1);
             }
         });
 
         Button openCamera = findViewById(R.id.navigationBtn);
-        openCamera.setOnClickListener(new View.OnClickListener(){
+        openCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchActivity1= new Intent(StartNavigationActivity.this, CameraActivity.class);
+                Intent launchActivity1 = new Intent(StartNavigationActivity.this, CameraActivity.class);
                 startActivity(launchActivity1);
             }
         });
 
+<<<<<<< Updated upstream
         // ----------- Incercare click listener pentru butonul de chooseBuilding
         Button chooseBuildings = findViewById(R.id.chooseBuilding);
         final String[] colors = {"red", "green", "blue", "black"};
@@ -109,12 +121,44 @@ public class StartNavigationActivity extends AppCompatActivity {
             }
         });
     };
+=======
+    }
+
+    ;
+>>>>>>> Stashed changes
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(mToggle.onOptionsItemSelected(item)){
+        if (mToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+<<<<<<< Updated upstream
+=======
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.chooseBuilding) {
+            showBuildings();
+        }
+        return false;
+    }
+
+    private void showBuildings() {
+        String[] buildings = {"UAIC Corp A", "UAIC Corp B", "UAIC Corp C", "UAIC Corp D"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pick a building");
+        builder.setItems(buildings, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+
+        });
+        builder.show();
+    }
+>>>>>>> Stashed changes
 }

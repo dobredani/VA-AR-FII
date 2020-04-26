@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -96,7 +95,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     public TextView addTextViewOverlay(int id) {
-        final TextView t = findViewById(id);
+        TextView t = findViewById(id);
         return t;
     }
 
@@ -113,7 +112,7 @@ public class CameraActivity extends AppCompatActivity {
             preview = findViewById(R.id.camera_preview);
             preview.addView(mPreview);
             rotateCamera();
-            final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
+            TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
             drawTextView(helloTextView, "black", "Turn left", 90, 135);
             helloTextView.bringToFront();
             flashB = findViewById(R.id.flash);
@@ -195,7 +194,7 @@ public class CameraActivity extends AppCompatActivity {
         releaseCamera();
     }
 
-    private void releaseCamera() {
+    protected void releaseCamera() {
         if (mCamera != null) {
             preview.removeView(mPreview);
             mCamera.release();

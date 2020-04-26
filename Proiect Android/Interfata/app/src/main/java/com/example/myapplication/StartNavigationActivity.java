@@ -66,21 +66,22 @@ public class StartNavigationActivity extends AppCompatActivity {
         };
         lv.setAdapter(arrayAdapter);
 
-        ImageView searchAruco = findViewById(R.id.cameraBtn);
-        searchAruco.setOnClickListener(new View.OnClickListener(){
+        ImageView scanLocation = findViewById(R.id.cameraBtn);
+        scanLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchActivity1 = new Intent(StartNavigationActivity.this, ScanLocationActivity.class);
-                launchActivity1.putExtra("test", 1);
-                startActivityForResult(launchActivity1, 1);
+                Intent intent = new Intent(StartNavigationActivity.this, ScanLocationActivity.class);
+                intent.putExtra("test", 1);
+                startActivityForResult(intent, 1);
             }
         });
 
-        Button openCamera = findViewById(R.id.navigationBtn);
-        openCamera.setOnClickListener(new View.OnClickListener(){
+        Button startNavigation = findViewById(R.id.navigationBtn);
+        startNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchActivity1= new Intent(StartNavigationActivity.this, CameraActivity.class);
+                Intent intent = new Intent(StartNavigationActivity.this, NavigationActivity.class);
+                startActivity(intent);
             }
         });
 

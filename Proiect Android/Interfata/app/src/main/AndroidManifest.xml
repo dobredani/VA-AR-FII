@@ -34,6 +34,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
         <activity android:name=".ScanLocationActivity" />
+        <activity android:name=".NavigationActivity" />
         <activity android:name=".CameraActivity"/>
         <activity android:name=".ScanQR"/>
     </application>

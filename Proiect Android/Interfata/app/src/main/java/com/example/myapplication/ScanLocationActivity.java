@@ -16,11 +16,6 @@ public class ScanLocationActivity extends AppCompatActivity implements AsyncQR {
     public void onScanCompleted(String result) {
         Log.i("NavClass", "Found code: " + result);
 
-        // Do something with the QR code
-        //EditText editText = ((Activity)context).findViewById(R.id.currentLocation);
-        //System.out.println(context);
-        //editText.setText(result);
-
         // Hide scanner
         FragmentManager fm = getSupportFragmentManager();
         Fragment scannerFragment = fm.findFragmentById(R.id.scanner_fragment);

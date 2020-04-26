@@ -72,6 +72,17 @@ python3 main.py
 
 The app will be accessible on http://localhost:PORT/, PORT being 5000 by default.
 
+## Testing
+
+Each view should be tested in it's own file inside the tests folder.
+Each method from the view should be tested.
+
+To run the test execute the following command:
+
+```bash
+python3 -m pytest -p no:warnings tests/
+```
+
 ## Project structure
 
 ### models folder

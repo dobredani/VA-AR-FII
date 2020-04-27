@@ -7,10 +7,13 @@ import android.widget.TextView;
 
 public class NavigationActivity extends CameraActivity {
 
+    DisplayController displayController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        displayController = new DisplayController();
     }
 
     public void scanWaypoint(View view) {
@@ -21,12 +24,12 @@ public class NavigationActivity extends CameraActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == 1) {
-            String msg = data.getStringExtra("returnedData");
+            final String msg = data.getStringExtra("returnedData");
             System.out.println(msg);
-            TextView instructionTextView = findViewById(R.id.text_view_id);
-            instructionTextView.setText(msg);
-            instructionTextView.bringToFront();
-            //instructionTextView.invalidate();
+            final TextView instructionTextView = addTextViewOverlay(R.id.text_view_id);
+            final DisplayController displayController = new DisplayController();
+            displayController.removeOverlay(instructionTextView);
+            displayController.addOverlay(instructionTextView, "black", "white", msg, 90, 135);
         }
     }
 }

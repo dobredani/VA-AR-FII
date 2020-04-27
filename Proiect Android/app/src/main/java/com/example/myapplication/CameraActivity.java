@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,9 +14,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,6 +44,7 @@ public class CameraActivity extends AppCompatActivity {
     private FrameLayout preview;
     private ImageButton flashB;
     private boolean isFlashOn;
+    private Snackbar mySnackbar;
 
     private static boolean hasFlash() {
         camEffects = p.getSupportedColorEffects();
@@ -87,15 +90,8 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    public void drawTextView(TextView t, String colorText, String text, int height, int width) {
-        t.setTextColor(Color.parseColor(colorText));
-        t.setText(text);
-        t.setHeight(height);
-        t.setWidth(width);
-    }
-
     public TextView addTextViewOverlay(int id) {
-        TextView t = findViewById(id);
+        final TextView t = findViewById(id);
         return t;
     }
 
@@ -112,9 +108,29 @@ public class CameraActivity extends AppCompatActivity {
             preview = findViewById(R.id.camera_preview);
             preview.addView(mPreview);
             rotateCamera();
-            TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
-            drawTextView(helloTextView, "black", "Turn left", 90, 135);
-            helloTextView.bringToFront();
+
+
+            final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
+            DisplayController displayController = new DisplayController();
+
+            displayController.addOverlay(helloTextView, "black", "white", "Turn left", 90, 135);
+
+            mySnackbar = Snackbar.make(findViewById(R.id.lay), "", Snackbar.LENGTH_INDEFINITE);
+            mySnackbar.setAction("UNDO", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getApplicationContext(), "Pop up closed", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            displayController.addSnackBar(mySnackbar, "Wrong turn, return to the last checkpoint");
+
+
+            displayController.removeOverlay(helloTextView);
+
+            //String direction = getString(R.string.direction);
+            displayController.addOverlay(helloTextView, "", "", "left", 90, 135);
+
             flashB = findViewById(R.id.flash);
             flashB.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -174,27 +190,13 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    private void turnFlashOff() {
-        if (isFlashOn) {
-            p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-            isFlashOn = false;
-        }
-    }
-
-    private void turnFlashOn() {
-        if (isFlashOn) {
-            p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-            isFlashOn = true;
-        }
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
         releaseCamera();
     }
 
-    protected void releaseCamera() {
+    private void releaseCamera() {
         if (mCamera != null) {
             preview.removeView(mPreview);
             mCamera.release();

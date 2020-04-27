@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -84,21 +85,22 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         };
         lv.setAdapter(arrayAdapter);
 
-        ImageView searchAruco = findViewById(R.id.cameraBtn);
-        searchAruco.setOnClickListener(new View.OnClickListener() {
+        ImageView scanLocation = findViewById(R.id.cameraBtn);
+        scanLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchActivity1 = new Intent(StartNavigationActivity.this, ImageProcessing.class);
-                startActivity(launchActivity1);
+                Intent intent = new Intent(StartNavigationActivity.this, ScanLocationActivity.class);
+                intent.putExtra("test", 1);
+                startActivityForResult(intent, 1);
             }
         });
 
-        Button openCamera = findViewById(R.id.navigationBtn);
-        openCamera.setOnClickListener(new View.OnClickListener() {
+        Button startNavigation = findViewById(R.id.navigationBtn);
+        startNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchActivity1 = new Intent(StartNavigationActivity.this, CameraActivity.class);
-                startActivity(launchActivity1);
+                Intent intent = new Intent(StartNavigationActivity.this, NavigationActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -135,5 +137,14 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
         });
         builder.show();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            String msg = data.getStringExtra("returnedData");
+            EditText editText = findViewById(R.id.currentLocation);
+            editText.setText(msg);
+        }
     }
 }

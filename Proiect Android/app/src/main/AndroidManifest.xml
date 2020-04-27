@@ -30,10 +30,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".StartNavigationActivity" />
-        <activity android:name=".ImageProcessing"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen"/>
+        <activity android:name=".NavigationActivity" />
         <activity android:name=".CameraActivity"/>
+        <activity android:name=".ScanLocationActivity" />
+        <activity android:name=".ScanQR"/>
     </application>
 
 </manifest>

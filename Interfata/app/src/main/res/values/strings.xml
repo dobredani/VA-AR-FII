@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="first_description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin at aliquet purus. Donec sagittis varius eros eget porta. Donec nulla metus, blandit iaculis porttitor vitae, mattis et mauris. Fusce quis imperdiet ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vulputate vehicula vulputate. Duis a efficitur lectus.</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="FII">UAIC, Corp C</string>
+    <string name="pop_up">Fail, go to last checkpoint</string>
+    <string name="direction">Turn right</string>
+    <string name="undo_string">Exit</string>
+</resources>

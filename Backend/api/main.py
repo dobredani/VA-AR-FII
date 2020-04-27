@@ -6,12 +6,15 @@ import settings
 from rest_views import *
 from views import *
 import models
+from flasgger import Swagger, swag_from
 
 
 def create_app():
     app = Flask(__name__)
+    swagger = Swagger(app)
 
     @app.route('/')
+    @swag_from('swagger.yml')
     def index():
         return "Hello World"
 
@@ -54,4 +57,4 @@ if __name__ == '__main__':
     app.run(debug=settings.DEBUG,
             host=settings.IP_ADDRESS,
             port=settings.PORT,
-            threaded=True)
+            threaded=True) 

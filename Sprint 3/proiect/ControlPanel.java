@@ -6,12 +6,15 @@
 package com.amihaeseisergiu.proiect;
 
 /**
- *
  * @author Alex
  */
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,22 +26,21 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class ControlPanel extends VBox {
-    
+
     ComboBox comboBox;
     Button eraserBtn;
     boolean erase;
     MainFrame frame;
     List<Integer> existingFloors = new ArrayList<>();
     Building building;
-    
-    public ControlPanel(MainFrame frame, Building building)
-    {
+
+    public ControlPanel(MainFrame frame, Building building) {
         this.frame = frame;
         this.building = building;
-        
+
         eraserBtn = new Button("Eraser: Off");
         comboBox = new ComboBox();
-        
+
         ScrollPane addFloorScrollPane = new ScrollPane();
         Label nrFloorsLabel = new Label("Floors: 0");
         VBox addFloorVBox = new VBox();
@@ -49,76 +51,76 @@ public class ControlPanel extends VBox {
         addFloorScrollPane.setFitToWidth(true);
         addFloorVBox.setAlignment(Pos.TOP_CENTER);
         addFloorVBox.setSpacing(10);
-        
-        
+
+
         comboBox.setItems(FXCollections.observableArrayList(new String[]{"Class Room", "Hall Way", "Stairs", "Elevator"}));
         comboBox.getSelectionModel().select(0);
         comboBox.setMaxWidth(Double.MAX_VALUE);
         eraserBtn.setMaxWidth(Double.MAX_VALUE);
-        
+
         Button jsonBuildingBtn = new Button("Print Json");
         jsonBuildingBtn.setMaxWidth(Double.MAX_VALUE);
         this.getChildren().addAll(eraserBtn, jsonBuildingBtn, comboBox, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
         this.setAlignment(Pos.TOP_CENTER);
-        this.setPadding(new Insets(10,10,10,10));
+        this.setPadding(new Insets(10, 10, 10, 10));
         this.setSpacing(10);
-        
+
         jsonBuildingBtn.setOnAction(event -> {
-            System.out.println(building.toJson());
+            PrintWriter pw = null;
+            try {
+                pw = new PrintWriter("building.json");
+                pw.write(building.toJson().toJSONString());
+
+                pw.flush();
+                pw.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         });
-        
+
         addFloorBtn.setOnAction(event -> {
             AtomicBoolean popupOpen = new AtomicBoolean(false);
-            int nr = 0;
-            while(existingFloors.contains(nr)) {
-                nr++;
+            int level = 0;
+            while (existingFloors.contains(level)) {
+                level++;
             }
-            existingFloors.add(nr);
-            Button newFloorBtn = new Button("Floor " + nr);
-            Floor floor = new Floor();
-            frame.building.getFloors().put(nr, floor);
+            existingFloors.add(level);
+            Button newFloorBtn = new Button("Floor " + level);
+            Floor floor = new Floor(level);
+            frame.building.getFloors().put(level, floor);
             newFloorBtn.setMaxWidth(Double.MAX_VALUE);
             addFloorVBox.getChildren().add(newFloorBtn);
             nrFloorsLabel.setText("Floors: " + (addFloorVBox.getChildren().size()));
-            
-            if(addFloorVBox.getChildren().size() >= 1)
-            {
+
+            if (addFloorVBox.getChildren().size() >= 1) {
                 frame.drawingPanel.getCanvas().setVisible(true);
                 frame.drawingPanel.setStyle("-fx-background-color: white");
-            }
-            else 
-            {
+            } else {
                 frame.drawingPanel.getCanvas().setVisible(false);
                 frame.drawingPanel.setStyle("");
             }
-            
+
             newFloorBtn.setOnMousePressed(event2 -> {
-                if(event2.isPrimaryButtonDown())
-                {
+                if (event2.isPrimaryButtonDown()) {
                     String nrFloor = newFloorBtn.getText().substring(6, 7);
                     Floor f = frame.building.getFloors().get(Integer.parseInt(nrFloor));
                     frame.drawingPanel.setGraph(f.getGraph());
                     frame.drawingPanel.setShapes(f.getShapes());
                     frame.drawingPanel.deleteAllShapes();
                     frame.drawingPanel.drawAll();
-                }
-                else if(event2.isSecondaryButtonDown() && !popupOpen.get())
-                {
+                } else if (event2.isSecondaryButtonDown() && !popupOpen.get()) {
                     popupOpen.set(true);
-                    UpdateFloorPopUp popup  = new UpdateFloorPopUp(frame, Integer.parseInt(newFloorBtn.getText().substring(6, 7)), addFloorVBox, newFloorBtn, nrFloorsLabel, popupOpen, event2.getScreenX(), event2.getScreenY());
+                    UpdateFloorPopUp popup = new UpdateFloorPopUp(frame, Integer.parseInt(newFloorBtn.getText().substring(6, 7)), addFloorVBox, newFloorBtn, nrFloorsLabel, popupOpen, event2.getScreenX(), event2.getScreenY());
                     popup.start(new Stage());
                 }
             });
         });
-        
+
         eraserBtn.setOnAction(event -> {
-            if(erase)
-            {
+            if (erase) {
                 erase = false;
                 eraserBtn.setText("Eraser: Off");
-            }
-            else
-            {
+            } else {
                 erase = true;
                 eraserBtn.setText("Eraser: On");
             }

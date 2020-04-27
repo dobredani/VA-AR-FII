@@ -10,25 +10,25 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javafx.util.Pair;
 
 /**
- *
  * @author Alex
  */
 public class Graph {
 
-    Map<ExtendedShape, List< Pair<ExtendedShape, String>>> graph;
+    Map<ExtendedShape, List<Pair<ExtendedShape, String>>> graph;
 
     public Graph() {
         graph = new HashMap<>();
     }
 
-    public Map<ExtendedShape, List< Pair<ExtendedShape, String>>> getGraph() {
+    public Map<ExtendedShape, List<Pair<ExtendedShape, String>>> getGraph() {
         return graph;
     }
 
-    public void setGraph(Map<ExtendedShape, List< Pair<ExtendedShape, String>>> graph) {
+    public void setGraph(Map<ExtendedShape, List<Pair<ExtendedShape, String>>> graph) {
         this.graph = graph;
     }
 
@@ -49,7 +49,7 @@ public class Graph {
 
     public void deleteShapeFromGraph(ExtendedShape shape) {
         ExtendedShape s = null;
-        for (Map.Entry<ExtendedShape, List< Pair<ExtendedShape, String>>> entry : graph.entrySet()) {
+        for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : graph.entrySet()) {
             if (entry.getKey() == shape) {
                 s = entry.getKey();
                 break;
@@ -57,7 +57,7 @@ public class Graph {
         }
         graph.remove(s);
 
-        for (Map.Entry<ExtendedShape, List< Pair<ExtendedShape, String>>> entry : graph.entrySet()) {
+        for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : graph.entrySet()) {
             int[] indexes = new int[entry.getValue().size()];
             int contor = 0;
             for (Pair<ExtendedShape, String> p : entry.getValue()) {
@@ -72,7 +72,7 @@ public class Graph {
     }
 
     public void setOrder() {
-        for (Map.Entry<ExtendedShape, List< Pair<ExtendedShape, String>>> r : graph.entrySet()) {
+        for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> r : graph.entrySet()) {
             List<ExtendedShape> downs = new ArrayList<>();
             List<ExtendedShape> ups = new ArrayList<>();
             List<ExtendedShape> rights = new ArrayList<>();
@@ -114,8 +114,8 @@ public class Graph {
                         leftIndex++;
                     }
                 }
-                System.out.println(((ExtendedRectangle)r.getKey()).getId() + " " + r.getValue());
-                System.out.println(((ExtendedRectangle)r.getKey()).getId() + " " + newPairs);
+                System.out.println(((ExtendedRectangle) r.getKey()).getId() + " " + r.getValue());
+                System.out.println(((ExtendedRectangle) r.getKey()).getId() + " " + newPairs);
                 graph.replace(r.getKey(), newPairs);
                 //graph.replace((ExtendedShape) r, newPairs);
                 //   System.out.println(r.getId());
@@ -130,44 +130,12 @@ public class Graph {
     @Override
     public String toString() {
         String output = "Graph: \n";
-        for (Map.Entry<ExtendedShape, List< Pair<ExtendedShape, String>>> entry : graph.entrySet()) {
+        for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : graph.entrySet()) {
             output += ((ExtendedRectangle) entry.getKey()).getId() + "\n";
             for (Pair<ExtendedShape, String> p : entry.getValue()) {
                 output += ((ExtendedRectangle) p.getKey()).getId() + ":" + p.getValue() + "\n";
             }
         }
         return output;
-    }
-
-    public String toJson() {
-        String json = "[\n";
-        boolean first = true;
-        for (Map.Entry<ExtendedShape, List< Pair<ExtendedShape, String>>> entry : graph.entrySet()) {
-            if (first) {
-                json += "{\n";
-                first = false;
-            } else {
-                json += ",\n{\n";
-            }
-            json += "\"name\": \"" + ((ExtendedRectangle) entry.getKey()).getName() + "\",\n";
-            json += "\"type\": \"Rectangle\",\n"; //to be replaced when we add the types
-            json += "\"neighbors\": [\n";
-            first = true;
-            for (Pair<ExtendedShape, String> p : entry.getValue()) {
-                if (first) {
-                    json += "{\n";
-                    first = false;
-                } else {
-                    json += ",\n{\n";
-                }
-                json += "\"name\": \"" + ((ExtendedRectangle) p.getKey()).getName() + "\",\n";
-                json += "\"direction\": \"" + p.getValue() + "\"\n";
-                json += "}\n";
-            }
-            json += "]\n";
-            json += "}";
-        }
-        json += "\n]\n";
-        return json;
     }
 }

@@ -5,11 +5,14 @@
  */
 package com.amihaeseisergiu.proiect;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONObject;
+
 /**
- *
  * @author Alex
  */
 public class Building {
@@ -22,32 +25,18 @@ public class Building {
     public void setFloors(Map<Integer, Floor> floors) {
         this.floors = floors;
     }
-    
-    public String toJson()
-    {
-        String json = "{\n";
-        json += "\"name\": \"Building name\",\n"; //to be replaced when we add the option to add a name to a building
-        json += "\"floors\":\n";
-        json += "[\n";
-        boolean first = true;
-        for(var entry : floors.entrySet())
-        {
-            if(first)
-            {
-                first = false;
-                json += "{\n";
-            }
-            else
-            {
-                json += ",\n{\n";
-            }
-            json += "\"level\": " + entry.getKey() + ",\n";
-            json += "\"wayPoints\": \n";
-            json += entry.getValue().toJson();
+
+    public JSONObject toJson() {
+        JSONObject buildingJSON = new JSONObject();
+        buildingJSON.put("name", "future in progress");
+
+        List<JSONObject> floorList = new ArrayList<JSONObject>();
+        for (var floor : floors.entrySet()) {
+            floorList.add(floor.getValue().toJson());
         }
-        json += "]\n";
-        json += "}";
-        
-        return json;
+
+        buildingJSON.put("floors", floorList);
+
+        return buildingJSON;
     }
 }

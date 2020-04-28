@@ -3,6 +3,8 @@ package com.example.myapplication;
 import com.example.myapplication.problem.Building;
 import com.example.myapplication.problem.Waypoint;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ApplicationData {
@@ -46,6 +48,26 @@ public class ApplicationData {
 
     public void setCurrentBuildingName(String currentBuildingName) {
         this.currentBuildingName = currentBuildingName;
+    }
+
+    public ArrayList<String> getAllInstructions() {
+        ArrayList<String> instructions = new ArrayList<>();
+        instructions.add("Turn left");
+        instructions.add("Turn right");
+        instructions.add("Go upstairs");
+        //for (Waypoint waypoint:waypoints)
+            //instructions.add(waypoint.getInstruction());
+        return instructions;
+    }
+
+    public ArrayList<Integer> getAllCodesToScan() {
+        ArrayList<Integer> codes = new ArrayList<>();
+        codes.add(1);
+        codes.add(2);
+        codes.add(3);
+        //for (Waypoint waypoint:waypoints)
+            //codes.add(waypoint.getCode());
+        return codes;
     }
 
 }

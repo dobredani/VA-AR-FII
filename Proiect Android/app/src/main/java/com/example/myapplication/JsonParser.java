@@ -89,7 +89,7 @@ public class JsonParser {
                     if(i != 0){
 //                        Current waypoint waypoinyList.size()-1;
 //                        Add indication to the previous waypoint.
-                        waypointList.get(waypointList.size()-2).addIndication(" Scan " + object.getString("name"));
+                        waypointList.get(waypointList.size()-2).addInstruction(" Scan " + object.getString("name"));
                     }
                 }
                 else {
@@ -106,9 +106,9 @@ public class JsonParser {
                         //Last added waypoint
                         Waypoint waypoint = waypointList.get(waypointList.size()-1);
                         int floor = object.getInt("floor");
-                        waypoint.addIndication(" Take the stairs to floor " + Integer.toString(floor) + " ");
-                        waypoint.addIndication("Go ");
-                        waypoint.addIndication(object.getString("direction"));
+                        waypoint.addInstruction(" Take the stairs to floor " + Integer.toString(floor) + " ");
+                        waypoint.addInstruction("Go ");
+                        waypoint.addInstruction(object.getString("direction"));
 
                     }
                 }

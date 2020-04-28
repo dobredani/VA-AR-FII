@@ -100,6 +100,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StartNavigationActivity.this, NavigationActivity.class);
+                intent.putStringArrayListExtra("instructions", appData.getAllInstructions());
+                intent.putIntegerArrayListExtra("codesToScan", appData.getAllCodesToScan());
                 startActivity(intent);
             }
         });

@@ -115,7 +115,7 @@ public class CameraActivity extends AppCompatActivity {
 
             displayController.addOverlay(helloTextView, "black", "white", "Turn left", 90, 135);
 
-            mySnackbar = Snackbar.make(findViewById(R.id.lay), "", Snackbar.LENGTH_INDEFINITE);
+            /*mySnackbar = Snackbar.make(findViewById(R.id.lay), "", Snackbar.LENGTH_INDEFINITE);
             mySnackbar.setAction("UNDO", new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -123,8 +123,7 @@ public class CameraActivity extends AppCompatActivity {
                 }
             });
 
-            displayController.addSnackBar(mySnackbar, "Wrong turn, return to the last checkpoint");
-
+            displayController.addSnackBar(mySnackbar, "Wrong turn, return to the last checkpoint");*/
 
             displayController.removeOverlay(helloTextView);
 

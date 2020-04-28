@@ -5,6 +5,7 @@
  */
 package com.amihaeseisergiu.proiect;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,8 @@ import java.util.List;
  *
  * @author Alex
  */
-public class Classroom extends ExtendedRectangle {
-
+public class Classroom extends ExtendedRectangle implements Serializable {
+    
     private String[] schedule;
     private final static String shapeType = "closed";
     List<String> listaOraStartLuni = new ArrayList<>();

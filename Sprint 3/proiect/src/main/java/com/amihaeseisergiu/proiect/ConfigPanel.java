@@ -17,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -42,11 +43,11 @@ public class ConfigPanel extends HBox {
         heightSlider = new Slider(1, 200, 0.1);
         widthSlider.setMaxWidth(50);
         heightSlider.setMaxWidth(50);
-        widthTextField = new TextField();
-        heightTextField = new TextField();
+        widthTextField = new TextField("50");
+        heightTextField = new TextField("50");
         widthTextField.setMaxWidth(50);
         heightTextField.setMaxWidth(50);
-        colorPicker = new ColorPicker();
+        colorPicker = new ColorPicker(Color.BLACK);
         this.getChildren().addAll(widthLabel, widthTextField, widthSlider, heightLabel, heightTextField, heightSlider, colorPicker);
         this.setAlignment(Pos.CENTER);
         this.setPadding(new Insets(10, 10, 10, 10));
@@ -65,6 +66,10 @@ public class ConfigPanel extends HBox {
         heightSlider.valueProperty().addListener((obs, oldval, newVal) -> heightSlider.setValue(Math.round(newVal.intValue())));
 
         widthTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if(!widthTextField.getText().isBlank() && Integer.valueOf(widthTextField.getText()) % 2 != 0)
+            {
+                widthTextField.setText(String.valueOf(Integer.valueOf(widthTextField.getText()) + 1));
+            }
             if (!newValue.matches("\\d*")) {
                 widthTextField.setText(newValue.replaceAll("[^\\d]", ""));
             }
@@ -79,6 +84,10 @@ public class ConfigPanel extends HBox {
         });
 
         heightTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if(!heightTextField.getText().isBlank() && Integer.valueOf(heightTextField.getText()) % 2 != 0)
+            {
+                heightTextField.setText(String.valueOf(Integer.valueOf(heightTextField.getText()) + 1));
+            }
             if (!newValue.matches("\\d*")) {
                 heightTextField.setText(newValue.replaceAll("[^\\d]", ""));
             }

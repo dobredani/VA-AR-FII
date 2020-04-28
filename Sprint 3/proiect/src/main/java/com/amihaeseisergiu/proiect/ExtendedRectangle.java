@@ -7,14 +7,15 @@ package com.amihaeseisergiu.proiect;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Rectangle;
+import java.awt.Rectangle;
+import java.io.Serializable;
 
 /**
  *
  * @author Alex
  */
-public class ExtendedRectangle extends ExtendedShape {
-
+public class ExtendedRectangle extends ExtendedShape implements Serializable {
+    
     private double length = 100;
     private double width = 100;
     private String name;
@@ -27,11 +28,11 @@ public class ExtendedRectangle extends ExtendedShape {
     }
 
     public Point getCoordinates() {
-        Bounds bounds = rectangle.getLayoutBounds();
-        Point2D coordinates = rectangle.localToScene(bounds.getMinX(), bounds.getMinY());
-        int X = (int) coordinates.getX();
-        int Y = (int) coordinates.getY();
-        Point p = new Point(X, Y);
+      //  Bounds bounds = rectangle.getLayoutBounds();
+      //  Point2D coordinates = rectangle.localToScene(bounds.getMinX(), bounds.getMinY());
+       // int X = (int) coordinates.getX();
+       // int Y = (int) coordinates.getY();
+        Point p = new Point(250, 250);
         return p;
     }
     

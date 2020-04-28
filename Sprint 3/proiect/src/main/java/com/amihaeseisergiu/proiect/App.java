@@ -17,8 +17,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        MainFrame mainFrame = new MainFrame(stage);
-        mainFrame.init();
+        MainMenu menu = new MainMenu(stage);
         stage.setOnCloseRequest(event -> {
             System.exit(0);
         });

@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javafx.application.Platform;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -33,6 +34,7 @@ public class ControlPanel extends VBox {
     MainFrame frame;
     List<Integer> existingFloors = new ArrayList<>();
     Building building;
+    boolean initiateFloor;
 
     public ControlPanel(MainFrame frame, Building building) {
         this.frame = frame;
@@ -58,26 +60,11 @@ public class ControlPanel extends VBox {
         comboBox.setMaxWidth(Double.MAX_VALUE);
         eraserBtn.setMaxWidth(Double.MAX_VALUE);
 
-        Button jsonBuildingBtn = new Button("Print Json");
-        jsonBuildingBtn.setMaxWidth(Double.MAX_VALUE);
-        this.getChildren().addAll(eraserBtn, jsonBuildingBtn, comboBox, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
+        this.getChildren().addAll(eraserBtn, comboBox, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10, 10, 10, 10));
         this.setSpacing(10);
-
-        jsonBuildingBtn.setOnAction(event -> {
-            PrintWriter pw = null;
-            try {
-                pw = new PrintWriter("building.json");
-                pw.write(building.toJson().toJSONString());
-
-                pw.flush();
-                pw.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        });
-
+        
         addFloorBtn.setOnAction(event -> {
             AtomicBoolean popupOpen = new AtomicBoolean(false);
             int level = 0;
@@ -114,7 +101,71 @@ public class ControlPanel extends VBox {
                     popup.start(new Stage());
                 }
             });
+            
+            if(!initiateFloor)
+            {
+                initiateFloor = true;
+                Platform.runLater(() -> {
+                    Floor f = frame.building.getFloors().get(0);
+                    frame.drawingPanel.setGraph(f.getGraph());
+                    frame.drawingPanel.setShapes(f.getShapes());
+                    frame.drawingPanel.deleteAllShapes();
+                    frame.drawingPanel.drawAll();
+                });
+            }
         });
+        
+        if(!initiateFloor)
+        {
+            Platform.runLater(() -> {
+                addFloorBtn.fire();
+            });
+        }
+        
+        for(int i = 0; i < building.getFloors().size(); i++)
+        {
+            AtomicBoolean popupOpen = new AtomicBoolean(false);
+            existingFloors.add(i);
+            Button newFloorBtn = new Button("Floor " + i);
+            newFloorBtn.setMaxWidth(Double.MAX_VALUE);
+            addFloorVBox.getChildren().add(newFloorBtn);
+            nrFloorsLabel.setText("Floors: " + (addFloorVBox.getChildren().size()));
+
+            if (addFloorVBox.getChildren().size() >= 1) {
+                frame.drawingPanel.getCanvas().setVisible(true);
+                frame.drawingPanel.setStyle("-fx-background-color: white");
+            } else {
+                frame.drawingPanel.getCanvas().setVisible(false);
+                frame.drawingPanel.setStyle("");
+            }
+
+            newFloorBtn.setOnMousePressed(event2 -> {
+                if (event2.isPrimaryButtonDown()) {
+                    String nrFloor = newFloorBtn.getText().substring(6, 7);
+                    Floor f = frame.building.getFloors().get(Integer.parseInt(nrFloor));
+                    frame.drawingPanel.setGraph(f.getGraph());
+                    frame.drawingPanel.setShapes(f.getShapes());
+                    frame.drawingPanel.deleteAllShapes();
+                    frame.drawingPanel.drawAll();
+                } else if (event2.isSecondaryButtonDown() && !popupOpen.get()) {
+                    popupOpen.set(true);
+                    UpdateFloorPopUp popup = new UpdateFloorPopUp(frame, Integer.parseInt(newFloorBtn.getText().substring(6, 7)), addFloorVBox, newFloorBtn, nrFloorsLabel, popupOpen, event2.getScreenX(), event2.getScreenY());
+                    popup.start(new Stage());
+                }
+            });
+            
+            if(i == 0)
+            {
+                Platform.runLater(() -> {
+                    
+                    Floor f = frame.building.getFloors().get(0);
+                    frame.drawingPanel.setGraph(f.getGraph());
+                    frame.drawingPanel.setShapes(f.getShapes());
+                    frame.drawingPanel.deleteAllShapes();
+                    frame.drawingPanel.drawAll();
+                });
+            }
+        }
 
         eraserBtn.setOnAction(event -> {
             if (erase) {

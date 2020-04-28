@@ -5,11 +5,15 @@
  */
 package com.amihaeseisergiu.proiect;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Alex
  */
-public class Point {
+public class Point implements Serializable {
+    
+    static final long serialVersionUID = 1L;
 
     private double x;
     private double y;

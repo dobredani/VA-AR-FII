@@ -16,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -40,6 +41,7 @@ public class DrawingPanel extends HBox {
     private double initialX = 0;
     private double initialY = 0;
     private boolean isMouseInCenter = false;
+    private ExtendedShape draggedShape = null;
     private Map<String, List<Integer>> ids;
 
     public double areaOfTriangle(Point x, Point y, Point z) {
@@ -68,30 +70,49 @@ public class DrawingPanel extends HBox {
         ids.put("Bathroom", bathrooms);
         ids.put("Stairs", stairs);
         ids.put("Elevator", elevator);
+        
+        AnimatedZoomOperator zoomOperator = new AnimatedZoomOperator();
+
+        this.setOnScroll(new EventHandler<ScrollEvent>() {
+            @Override
+            public void handle(ScrollEvent event) {
+                double zoomFactor = 1.5;
+                if (event.getDeltaY() <= 0) {
+                    
+                    zoomFactor = 1 / zoomFactor;
+                }
+                zoomOperator.zoom(canvas, zoomFactor, event.getSceneX(), event.getSceneY());
+            }
+        });
     }
 
     public void setMainFrame(MainFrame mf) {
         this.mainFrame = mf;
     }
 
-    public boolean checkCollision(ExtendedRectangle r) {
+    public boolean checkCollision(ExtendedRectangle r, int add) {
+        r.getRectangle().setSize((int) r.getRectangle().getWidth() + add, (int) r.getRectangle().getHeight() + add);
         for (ExtendedShape shape : shapes) {
             if (r != shape) {
+                ((ExtendedRectangle) shape).getRectangle().setSize((int) ((ExtendedRectangle) shape).getRectangle().getWidth() + add, (int) ((ExtendedRectangle) shape).getRectangle().getHeight() + add);
                 if (shape instanceof ExtendedRectangle) {
-                    if (((ExtendedRectangle) shape).getRectangle().getLayoutBounds().intersects(r.getRectangle().getLayoutBounds())) {
+                    if (((ExtendedRectangle) shape).getRectangle().getBounds().intersects(r.getRectangle().getBounds())) {
+                        r.getRectangle().setSize((int) r.getRectangle().getWidth() - add, (int) r.getRectangle().getHeight() - add);
+                        ((ExtendedRectangle) shape).getRectangle().setSize((int) ((ExtendedRectangle) shape).getRectangle().getWidth() - add, (int) ((ExtendedRectangle) shape).getRectangle().getHeight() - add);
                         return true;
                     }
                 }
+                ((ExtendedRectangle) shape).getRectangle().setSize((int) ((ExtendedRectangle) shape).getRectangle().getWidth() - add, (int) ((ExtendedRectangle) shape).getRectangle().getHeight() - add);
             }
         }
+        r.getRectangle().setSize((int) r.getRectangle().getWidth() - add, (int) r.getRectangle().getHeight() - add);
         return false;
     }
 
     public void initRectangle(ExtendedRectangle r, double x, double y, double h, double w) {
-        r.getRectangle().setHeight(h);
-        r.getRectangle().setWidth(w);
-        r.getRectangle().setX(x);
-        r.getRectangle().setY(y);
+        // r.getRectangle().setSize((int)w, (int)h);
+        System.out.println("H: " + h + " W " + w);
+        r.getRectangle().setBounds((int) x, (int) y, (int) w, (int) h);
     }
 
     public void draw(double x, double y) {
@@ -112,8 +133,8 @@ public class DrawingPanel extends HBox {
                 r = new Elevator(new Point(x, y));
             }
 
-            initRectangle(r, x, y, Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) - 1, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) - 1);
-            if (checkCollision(r) == false) {
+            initRectangle(r, x, y, Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
+            if (checkCollision(r, 0) == false) {
                 gc.beginPath();
                 gc.setFill(mainFrame.getConfigPanel().getColorPicker().getValue());
                 gc.setStroke(mainFrame.getConfigPanel().getColorPicker().getValue());
@@ -134,31 +155,37 @@ public class DrawingPanel extends HBox {
                     setOrder();
                 }
                 System.out.println(graph);
-                //System.out.println("Graph: ");
-                //for (ExtendedShape s : shapes) {
-                  //  System.out.println(((ExtendedRectangle) s).getId());
-                //}
-                //System.out.println("");
             }
         }
     }
 
     public void addShapeToGraph(ExtendedRectangle r) {
-        r.getRectangle().setWidth(r.getRectangle().getWidth() + 1);
-        r.getRectangle().setHeight(r.getRectangle().getHeight() + 1);
+        // r.getRectangle().setWidth(r.getRectangle().getWidth() + 1);
+        // r.getRectangle().setHeight(r.getRectangle().getHeight() + 1);
+        //r.getRectangle().setS
+        // if(r.getName().equals("4")) {
+        //  System.out.println(r.getName() + " " + r.getRectangle().getX() + " " + r.getRectangle().getY() + " " + r.getWidth() + " " + r.getLength());
+        //  }
+        r.getRectangle().setSize((int) r.getRectangle().getWidth() + 1, (int) r.getRectangle().getHeight() + 1);
         for (ExtendedShape sh : shapes) {
             // sh == 1
             // r == 3
             if (sh != r) {
                 boolean ok = false;
                 if (sh instanceof ExtendedRectangle) {
-                    ((ExtendedRectangle) sh).getRectangle().setWidth(((ExtendedRectangle) sh).getRectangle().getWidth() + 1);
-                    ((ExtendedRectangle) sh).getRectangle().setHeight(((ExtendedRectangle) sh).getRectangle().getHeight() + 1);
-                    if (((ExtendedRectangle) sh).getRectangle().getLayoutBounds().intersects(r.getRectangle().getLayoutBounds())) {
+                    //((ExtendedRectangle) sh).getRectangle().setWidth(((ExtendedRectangle) sh).getRectangle().getWidth() + 1);
+                    // ((ExtendedRectangle) sh).getRectangle().setHeight(((ExtendedRectangle) sh).getRectangle().getHeight() + 1);
+                    ((ExtendedRectangle) sh).getRectangle().setSize((int) ((ExtendedRectangle) sh).getRectangle().getWidth() + 1, (int) ((ExtendedRectangle) sh).getRectangle().getHeight() + 1);
+
+                    if (((ExtendedRectangle) sh).getRectangle().getBounds().intersects(r.getRectangle().getBounds())) {
                         String rToS = null;
                         String sToR = null;
                         if (sh.getCenterPoint().getX() == r.getCenterPoint().getX() + r.getWidth()) {
+                            if (((ExtendedRectangle) sh).getName().equals("4") && r.getName().equals("2")) {
+                            }
                             if (sh.getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() != r.getCenterPoint().getY() && r.getCenterPoint().getY() + r.getLength() != ((ExtendedRectangle) sh).getCenterPoint().getY() && r.getCenterPoint().getY() + r.getLength() != sh.getCenterPoint().getY() && sh.getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() != r.getCenterPoint().getY()) {
+                                if (((ExtendedRectangle) sh).getName().equals("4") && r.getName().equals("2")) {
+                            }
                                 rToS = "left";
                                 sToR = "right";
                                 ok = true;
@@ -187,13 +214,15 @@ public class DrawingPanel extends HBox {
                             graph.addShape(sh, p2);
                         }
                     }
-                    ((ExtendedRectangle) sh).getRectangle().setWidth(((ExtendedRectangle) sh).getRectangle().getWidth() - 1);
-                    ((ExtendedRectangle) sh).getRectangle().setHeight(((ExtendedRectangle) sh).getRectangle().getHeight() - 1);
+                    // ((ExtendedRectangle) sh).getRectangle().setWidth(((ExtendedRectangle) sh).getRectangle().getWidth() - 1);
+                    //  ((ExtendedRectangle) sh).getRectangle().setHeight(((ExtendedRectangle) sh).getRectangle().getHeight() - 1);
+                    ((ExtendedRectangle) sh).getRectangle().setSize((int) ((ExtendedRectangle) sh).getRectangle().getWidth() - 1, (int) ((ExtendedRectangle) sh).getRectangle().getHeight() - 1);
                 }
             }
         }
-        r.getRectangle().setWidth(r.getRectangle().getWidth() - 1);
-        r.getRectangle().setHeight(r.getRectangle().getHeight() - 1);
+//        r.getRectangle().setWidth(r.getRectangle().getWidth() - 1);
+        //       r.getRectangle().setHeight(r.getRectangle().getHeight() - 1);
+        r.getRectangle().setSize((int) r.getRectangle().getWidth() - 1, (int) r.getRectangle().getHeight() - 1);
     }
 
     public void drawRectangle(ExtendedShape s) {
@@ -309,8 +338,8 @@ public class DrawingPanel extends HBox {
                 }
             }
         }
-        initRectangle(r, r.getCenterPoint().getX(), r.getCenterPoint().getY(), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) - 1, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) - 1);
-        if (checkCollision(r) == false) {
+        initRectangle(r, r.getCenterPoint().getX(), r.getCenterPoint().getY(), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
+        if (checkCollision(r, 0) == false) {
             gc.stroke();
             gc.fill();
             r.setLength(Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
@@ -322,11 +351,6 @@ public class DrawingPanel extends HBox {
             addShapeToGraph(r);
             setOrder();
             System.out.println(graph);
-        //    System.out.println("Graph: ");
-         //   for (ExtendedShape sh : shapes) {
-        //        System.out.println(((ExtendedRectangle) sh).getId());
-       //     }
-           // System.out.println("");
         }
     }
 
@@ -342,12 +366,7 @@ public class DrawingPanel extends HBox {
         shapes.remove(s);
         ids.get(((ExtendedRectangle) s).type).remove(Integer.valueOf(((ExtendedRectangle) s).getId().split(" ")[1]));
         graph.deleteShapeFromGraph(s);
-         System.out.println(graph);
-     //   System.out.println("Graph: ");
-    //    for (ExtendedShape sh : shapes) {
-    //        System.out.println(((ExtendedRectangle) sh).getId());
-     //   }
-      //  System.out.println("");
+        System.out.println(graph);
     }
 
     public void delete(double x, double y) {
@@ -419,13 +438,19 @@ public class DrawingPanel extends HBox {
                     initialY = mouseY;
                 }
                 event.setDragDetect(false);
-                ExtendedShape draggedShape = null;
-                isShapeBeingDragged = false;
                 ExtendedRectangle castedShape = null;
-                for (ExtendedShape s : shapes) {
-                    if (isMouseInRectangle(s, event.getX(), event.getY())) {
-                        isShapeBeingDragged = true;
-                        draggedShape = s;
+                if (isShapeBeingDragged == false) {
+                    for (ExtendedShape s : shapes) {
+                        if (isMouseInRectangle(s, event.getX(), event.getY())) {
+                            isShapeBeingDragged = true;
+                            draggedShape = s;
+                            castedShape = ((ExtendedRectangle) draggedShape);
+                        }
+                    }
+                } else {
+                    if (!isMouseInRectangle(draggedShape, event.getX(), event.getY())) {
+                        castedShape = null;
+                    } else {
                         castedShape = ((ExtendedRectangle) draggedShape);
                     }
                 }
@@ -438,8 +463,9 @@ public class DrawingPanel extends HBox {
                         if (getRectangleHalf(draggedShape, event.getX(), event.getY()) == false) {
                             castedShape.setLength(castedShape.getLength() + (event.getY() - initialY));
                             castedShape.setWidth(castedShape.getWidth() + (event.getX() - initialX));
-                            castedShape.getRectangle().setWidth(castedShape.getWidth() - 1);
-                            castedShape.getRectangle().setHeight(castedShape.getLength() - 1);
+//                            castedShape.getRectangle().setWidth(castedShape.getWidth() - 1);
+                            //                           castedShape.getRectangle().setHeight(castedShape.getLength() - 1);
+                              castedShape.getRectangle().setSize((int) castedShape.getWidth(), (int) castedShape.getLength());
                         } else {
                             castedShape.setLength(castedShape.getLength() - (event.getY() - initialY));
                             castedShape.setWidth(castedShape.getWidth() - (event.getX() - initialX));
@@ -447,34 +473,37 @@ public class DrawingPanel extends HBox {
                             castedShape.getCenterPoint().setY(castedShape.getCenterPoint().getY() + (event.getY() - initialY));
                             castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
                             castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
-                            castedShape.getRectangle().setX(castedShape.getCenterPoint().getX());
-                            castedShape.getRectangle().setY(castedShape.getCenterPoint().getY());
-                            castedShape.getRectangle().setWidth(castedShape.getWidth() - 1);
-                            castedShape.getRectangle().setHeight(castedShape.getLength() - 1);
+                            //              castedShape.getRectangle().setX(castedShape.getCenterPoint().getX());
+                            //             castedShape.getRectangle().setY(castedShape.getCenterPoint().getY());
+                            //           castedShape.getRectangle().setWidth(castedShape.getWidth() - 1);
+                            //          castedShape.getRectangle().setHeight(castedShape.getLength() - 1);
+                            castedShape.getRectangle().setBounds((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY(), (int) castedShape.getWidth(), (int) castedShape.getLength());
                         }
                         initialX = event.getX();
                         initialY = event.getY();
                     } else {
                         castedShape.getCenterPoint().setX(castedShape.getCenterPoint().getX() + (event.getX() - initialX));
                         castedShape.getCenterPoint().setY(castedShape.getCenterPoint().getY() + (event.getY() - initialY));
-                        castedShape.getRectangle().setX(castedShape.getCenterPoint().getX());
-                        castedShape.getRectangle().setY(castedShape.getCenterPoint().getY());
+                        //                       castedShape.getRectangle().setX(castedShape.getCenterPoint().getX());
+                        //                      castedShape.getRectangle().setY(castedShape.getCenterPoint().getY());
+                        castedShape.getRectangle().setLocation((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY());
                         castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
                         castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
                         initialX = event.getX();
                         initialY = event.getY();
                     }
-                    if (checkCollision(castedShape) == true) {
+                    if (checkCollision(castedShape, 0) == true) {
                         castedShape.setLength(beforeHeight);
                         castedShape.setWidth(beforeWidth);
                         castedShape.getCenterPoint().setX(beforeX);
                         castedShape.getCenterPoint().setY(beforeY);
                         castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
                         castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
-                        castedShape.getRectangle().setWidth(castedShape.getWidth() - 1);
-                        castedShape.getRectangle().setHeight(castedShape.getLength() - 1);
-                        castedShape.getRectangle().setX(castedShape.getCenterPoint().getX());
-                        castedShape.getRectangle().setY(castedShape.getCenterPoint().getY());
+                        //                      castedShape.getRectangle().setWidth(castedShape.getWidth() - 1);
+                        //                    castedShape.getRectangle().setHeight(castedShape.getLength() - 1);
+                        //                  castedShape.getRectangle().setX(castedShape.getCenterPoint().getX());
+                        //                castedShape.getRectangle().setY(castedShape.getCenterPoint().getY());
+                        castedShape.getRectangle().setBounds((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY(), (int) castedShape.getWidth(), (int) castedShape.getLength());
                     }
                     ExtendedRectangle oldShape = new ExtendedRectangle(new Point(beforeX, beforeY));
                     oldShape.setLength(beforeHeight);
@@ -486,18 +515,14 @@ public class DrawingPanel extends HBox {
                     setOrder();
                     setId((ExtendedRectangle) draggedShape);
                     drawAll();
-                     System.out.println(graph);
-                    //System.out.println("Graph: ");
-                    //for (ExtendedShape s : shapes) {
-                      //  System.out.println(((ExtendedRectangle) s).getId());
-                    //}
-                    //System.out.println("");
+                    System.out.println(graph);
                 }
             }
         });
         canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                draggedShape = null;
                 isShapeBeingDragged = false;
                 isMouseInCenter = false;
                 initialX = 0;
@@ -545,7 +570,7 @@ public class DrawingPanel extends HBox {
                             for (ExtendedShape s : shapes) {
                                 if (hasFoundShapeCenter == false) {
                                     if (s instanceof ExtendedRectangle) {
-                                        if (((e.getX() >= s.getCenterPoint().getX() && e.getX() <= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) || (e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) >= s.getCenterPoint().getX() && e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) <= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) || (e.getX() <= s.getCenterPoint().getX()) && e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) >= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) && e.getY() > s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) - 20 && e.getY() < s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) + 20) {
+                                        if (!mainFrame.getConfigPanel().getWidthTextField().getText().isEmpty() && ((e.getX() >= s.getCenterPoint().getX() && e.getX() <= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) || (e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) >= s.getCenterPoint().getX() && e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) <= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) || (e.getX() <= s.getCenterPoint().getX()) && e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) >= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) && e.getY() > s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) - 20 && e.getY() < s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) + 20) {
                                             type = 1;
                                             if (wasInsideWouldBeShape == true) {
                                                 deleteAllShapes();
@@ -568,7 +593,7 @@ public class DrawingPanel extends HBox {
                                             gc.stroke();
                                             gc.setStroke(Color.ORANGE);
                                         }
-                                        if (((e.getX() >= s.getCenterPoint().getX() && e.getX() <= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) || (e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) >= s.getCenterPoint().getX() && e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) <= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) || (e.getX() <= s.getCenterPoint().getX()) && e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) >= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) && e.getY() > s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength() - 20 && e.getY() < s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength() + 20) {
+                                        if (!mainFrame.getConfigPanel().getWidthTextField().getText().isEmpty() && !mainFrame.getConfigPanel().getHeightTextField().getText().isEmpty() && ((e.getX() >= s.getCenterPoint().getX() && e.getX() <= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) || (e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) >= s.getCenterPoint().getX() && e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) <= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) || (e.getX() <= s.getCenterPoint().getX()) && e.getX() + Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) >= s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth()) && e.getY() > s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength() - 20 && e.getY() < s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength() + 20) {
                                             type = 2;
                                             if (wasInsideWouldBeShape == true) {
                                                 deleteAllShapes();
@@ -590,7 +615,7 @@ public class DrawingPanel extends HBox {
                                             gc.rect(e.getX(), s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength(), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
                                             gc.stroke();
                                         }
-                                        if ((e.getX() < s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) + 20 && e.getX() > s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) - 20) && (((e.getY() >= s.getCenterPoint().getY()) && e.getY() <= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()) || ((e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) >= s.getCenterPoint().getY()) && e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) <= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()) || (e.getY() < s.getCenterPoint().getY() && e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) >= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()))) {
+                                        if (!mainFrame.getConfigPanel().getWidthTextField().getText().isEmpty() && !mainFrame.getConfigPanel().getHeightTextField().getText().isEmpty() && (e.getX() < s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) + 20 && e.getX() > s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) - 20) && (((e.getY() >= s.getCenterPoint().getY()) && e.getY() <= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()) || ((e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) >= s.getCenterPoint().getY()) && e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) <= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()) || (e.getY() < s.getCenterPoint().getY() && e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) >= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()))) {
                                             type = 3;
                                             if (wasInsideWouldBeShape == true) {
                                                 deleteAllShapes();
@@ -613,7 +638,7 @@ public class DrawingPanel extends HBox {
                                             //gc.strokeLine(this.getLayoutX(),this.getLayoutY(),this.getLayoutX() + 300,this.getLayoutY());
                                             gc.stroke();
                                         }
-                                        if ((e.getX() < s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth() + 20 && e.getX() > s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth() - 20) && (((e.getY() >= s.getCenterPoint().getY()) && e.getY() <= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()) || ((e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) >= s.getCenterPoint().getY()) && e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) <= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()) || (e.getY() <= s.getCenterPoint().getY() && e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) >= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()))) {
+                                        if (!mainFrame.getConfigPanel().getWidthTextField().getText().isEmpty() && !mainFrame.getConfigPanel().getHeightTextField().getText().isEmpty() && (e.getX() < s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth() + 20 && e.getX() > s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth() - 20) && (((e.getY() >= s.getCenterPoint().getY()) && e.getY() <= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()) || ((e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) >= s.getCenterPoint().getY()) && e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) <= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()) || (e.getY() <= s.getCenterPoint().getY() && e.getY() + Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) >= s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()))) {
                                             type = 4;
                                             if (wasInsideWouldBeShape == true) {
                                                 deleteAllShapes();
@@ -721,7 +746,7 @@ public class DrawingPanel extends HBox {
         ids.get(r.type).add(i);
         Collections.sort(ids.get(r.type));
         r.setId(r.type + " " + i);
-       // System.out.println(ids.get(r.type));
+        // System.out.println(ids.get(r.type));
     }
 
     public void setOrder() {

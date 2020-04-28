@@ -5,6 +5,7 @@
  */
 package com.amihaeseisergiu.proiect;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,7 +17,9 @@ import javafx.util.Pair;
 /**
  * @author Alex
  */
-public class Graph {
+public class Graph implements Serializable {
+    
+    static final long serialVersionUID = 1L;
 
     Map<ExtendedShape, List<Pair<ExtendedShape, String>>> graph;
 

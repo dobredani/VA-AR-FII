@@ -20,20 +20,24 @@ public class MainFrame {
     DrawingPanel drawingPanel;
     ConfigPanel configPanel;
     ControlPanel controlPanel;
+    SavePanel savePanel;
     Building building;
     
-    public MainFrame(Stage stage)
+    public MainFrame(Stage stage, Building build)
     {
         this.stage = stage;
-        building = new Building();
+        this.building = build;
+        
         BorderPane pane = new BorderPane();
         configPanel = new ConfigPanel(this);
-        controlPanel = new ControlPanel(this, building);
         drawingPanel = new DrawingPanel(this);
+        savePanel = new SavePanel(this);
+        controlPanel = new ControlPanel(this, building);
         
         pane.setTop(configPanel);
         pane.setLeft(controlPanel);
         pane.setCenter(drawingPanel);
+        pane.setBottom(savePanel);
         
         scene = new Scene(pane, 800, 600);
     }
@@ -83,6 +87,5 @@ public class MainFrame {
     public void setControlPanel(ControlPanel controlPanel) {
         this.controlPanel = controlPanel;
     }
-    
-    
+
 }

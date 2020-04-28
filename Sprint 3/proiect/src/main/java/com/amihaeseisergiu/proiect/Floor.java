@@ -5,6 +5,7 @@
  */
 package com.amihaeseisergiu.proiect;
 
+import java.io.Serializable;
 import javafx.util.Pair;
 import org.json.simple.JSONObject;
 
@@ -15,7 +16,10 @@ import java.util.Map;
 /**
  * @author Alex
  */
-public class Floor {
+public class Floor implements Serializable {
+    
+    static final long serialVersionUID = 1L;
+    
     private List<ExtendedShape> shapes = new ArrayList<>();
     private Graph graph = new Graph();
 

@@ -8,6 +8,7 @@ from views import *
 import models
 
 
+
 def create_app():
     app = Flask(__name__)
 

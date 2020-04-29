@@ -158,6 +158,7 @@ class BuildingView(FlaskView):
             db.rollback()
             return str(e), 500
 
+    # noinspection PyUnreachableCode
     @route('<buildingName>/waypoints')
     def waypoint(self, buildingName):
         building = Building.nodes.get_or_none(name=buildingName)
@@ -172,63 +173,50 @@ class BuildingView(FlaskView):
 
     @use_args(BuildingSchema)
     def patch(self, args):
+        self.delete(args)
+        self.post(args)
+
+    @use_args(BuildingSchema)
+    def delete(self, args):
         db.begin()
         building = Building.nodes.get_or_none(name=args["name"])
         if building is None:
             return "Building not found", 404
         else:
+            Building(name=args["name"]).delete()
             for floor in args["floors"]:
-                Floor.create_or_update({"level": floor["level"],
-                                        "name": args["name"]})
+                Floor(level=floor["level"],
+                      buildingName=args["name"]).delete()
                 for waypoint in floor["waypoints"]:
-                    if "type" in waypoint:
-                        if waypoint["type"] == "classRoom":
-                            classRoom = ClassRoom.create_or_update({"name": waypoint["name"],
-                                                                    "markerId": waypoint["markerId"],
-                                                                    "buildingName": args["name"],
-                                                                    "floorLevel": floor["level"]})
+                    if ("type" in waypoint):
+                        if (waypoint["type"] == "classRoom"):
+                            classRoom = ClassRoom(
+                                name=waypoint["name"], markerId=waypoint["markerId"], buildingName=args["name"],
+                                floorLevel=floor["level"]).delete()
                             for schedule in waypoint["schedule"]:
-                                group = Group.create_or_update({"name": schedule["group"],
-                                                                "buildingName": args["name"]})
-                                group.classes.connect(classRoom, {'course': schedule["course"],
-                                                                  'dayOfWeek': schedule["dayOfWeek"],
-                                                                  'startTime': schedule["startTime"],
-                                                                  'finishTime': schedule["finishTime"]})
-                        elif waypoint["type"] == "office":
-                            office = Office.create_or_update({"name": waypoint["name"],
-                                                              "markerId": waypoint["markerId"],
-                                                              "buildingName": args["name"],
-                                                              "floorLevel": floor["level"]})
+                                group = Group(
+                                    name=schedule["group"], buildingName=args["name"]).delete()
+                        elif (waypoint["type"] == "office"):
+                            office = Office(
+                                name=waypoint["name"], markerId=waypoint["markerId"], buildingName=args["name"],
+                                floorLevel=floor["level"]).delete()
                             for prof in waypoint["professors"]:
-                                teacher = Teacher.create_or_update({"name": prof,
-                                                                    "buildingName": args["name"]})
-                                teacher.office.connect(office)
-                        elif waypoint["type"] == "connector":
+                                teacher = Teacher(
+                                    name=prof, buildingName=args["name"]).delete()
+                        elif (waypoint["type"] == "connector"):
                             connector = Connector.nodes.get_or_none(
                                 name=waypoint["name"], buildingName=args["name"])
                             if connector is None:
-                                Connector.create_or_update({"name": waypoint["name"], "buildingName": args["name"]})
+                                Connector(
+                                    name=waypoint["name"], buildingName=args["name"]).delete()
                         else:
-                            Room.create_or_update({"name": waypoint["name"], "markerId": waypoint["markerId"],
-                                                   "buildingName": args["name"], "floorLevel": floor["level"]})
+                            Room(
+                                name=waypoint["name"], markerId=waypoint["markerId"], buildingName=args["name"],
+                                floorLevel=floor["level"]).delete()
                     else:
-                        Room.create_or_update({"name": waypoint["name"], "markerId": waypoint["markerId"],
-                                               "buildingName": args["name"], "floorLevel": floor["level"]})
-            for floor in args["floors"]:
-                for waypoint in floor["waypoints"]:
-                    base = Waypoint.nodes.get(
-                        name=waypoint["name"], buildingName=args["name"])
-                    for neighbour in waypoint["neighbors"]:
-                        base.neighbors.connect(
-                            Waypoint.nodes.get(
-                                name=neighbour["name"], buildingName=args["name"]), {'floorLevel': floor["level"],
-                                                                                     'direction': neighbour[
-                                                                                         "direction"]})
-            for conn in args["connectors"]:
-                connector = Connector.nodes.get(
-                    name=conn["name"], buildingName=args["name"])
-                for floorLevel in conn["accessibleFloors"]:
-                    connector.floors.connect(Floor.nodes.get(
-                        level=floorLevel, buildingName=args["name"]))
-            db.commit()
-            return "The building has been updated", 200
+                        Room(
+                            name=waypoint["name"], markerId=waypoint["markerId"], buildingName=args["name"],
+                            floorLevel=floor["level"]).delete()
+        db.commit()
+        if self.get_or_none(args["name"]) is None:
+            return "The building was removed", 200

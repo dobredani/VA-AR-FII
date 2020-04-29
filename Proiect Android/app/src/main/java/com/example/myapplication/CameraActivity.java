@@ -45,6 +45,7 @@ public class CameraActivity extends AppCompatActivity {
     private ImageButton flashB;
     private boolean isFlashOn;
     private Snackbar mySnackbar;
+    protected String currentInstruction;
 
     private static boolean hasFlash() {
         camEffects = p.getSupportedColorEffects();
@@ -109,26 +110,9 @@ public class CameraActivity extends AppCompatActivity {
             preview.addView(mPreview);
             rotateCamera();
 
-
             final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
             DisplayController displayController = new DisplayController();
-
-            displayController.addOverlay(helloTextView, "black", "white", "Turn left", 90, 135);
-
-            /*mySnackbar = Snackbar.make(findViewById(R.id.lay), "", Snackbar.LENGTH_INDEFINITE);
-            mySnackbar.setAction("UNDO", new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(getApplicationContext(), "Pop up closed", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            displayController.addSnackBar(mySnackbar, "Wrong turn, return to the last checkpoint");*/
-
-            displayController.removeOverlay(helloTextView);
-
-            //String direction = getString(R.string.direction);
-            displayController.addOverlay(helloTextView, "", "", "left", 90, 135);
+            displayController.addOverlay(helloTextView, "black", "white", currentInstruction, 90, 135);
 
             flashB = findViewById(R.id.flash);
             flashB.setOnClickListener(new View.OnClickListener() {

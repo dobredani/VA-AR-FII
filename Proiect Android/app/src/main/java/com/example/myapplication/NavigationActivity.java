@@ -29,17 +29,23 @@ public class NavigationActivity extends CameraActivity {
         codesToScan = intent.getIntegerArrayListExtra("codesToScan");
 
         snackbar = Snackbar.make(findViewById(R.id.lay), "", Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction("Restart", new View.OnClickListener() {
+        snackbar.setAction("Close", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), "Pop up closed", Toast.LENGTH_SHORT).show();
             }
         });
+
+        currentInstruction = instructions.get(0);
     }
 
     public void scanWaypoint(View view) {
         Intent intent = new Intent(NavigationActivity.this, ScanLocationActivity.class);
         startActivityForResult(intent, 1);
+    }
+
+    public void restartNavigation() {
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -50,11 +56,11 @@ public class NavigationActivity extends CameraActivity {
             try {
                 codeScanned = Integer.parseInt(msg);
             } catch (NumberFormatException e) {
-                displayController.addSnackBar(snackbar, "Wrong turn, do you want to restart navigation?");
+                displayController.addSnackBar(snackbar, "Wrong turn, if you are lost press Restart Navigation.");
                 codeScanned = -1;
             }
             if (codeScanned != codesToScan.get(currentIndex))
-                displayController.addSnackBar(snackbar, "Wrong turn, do you want to restart navigation?");
+                displayController.addSnackBar(snackbar, "Wrong turn, if you are lost press Restart Navigation.");
             else {
                 currentIndex++;
                 if (currentIndex == instructions.size()) {
@@ -62,13 +68,8 @@ public class NavigationActivity extends CameraActivity {
                     Button button = findViewById(R.id.scanWaypointButton);
                     button.setActivated(false);
                 }
-                else {
-                    System.out.println(instructions.get(currentIndex));
-                    final TextView instructionTextView = addTextViewOverlay(R.id.text_view_id);
-                    final DisplayController displayController = new DisplayController();
-                    displayController.removeOverlay(instructionTextView);
-                    displayController.addOverlay(instructionTextView, "black", "white", instructions.get(currentIndex), 90, 135);
-                }
+                else
+                    currentInstruction = instructions.get(currentIndex);
             }
         }
     }

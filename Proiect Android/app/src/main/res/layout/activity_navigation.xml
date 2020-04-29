@@ -43,10 +43,18 @@
 
         <ImageButton
             android:id="@+id/flash"
-            android:layout_width="match_parent"
+            android:layout_width="84dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:src="@drawable/ic_flash" />
+
+        <Button
+            android:id="@+id/restartNavigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="restartNavigation"
+            android:text="Restart Navigation" />
     </LinearLayout>
 
 </LinearLayout>

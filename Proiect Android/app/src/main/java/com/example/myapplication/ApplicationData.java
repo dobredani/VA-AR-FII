@@ -6,11 +6,11 @@ import com.example.myapplication.problem.Waypoint;
 import java.util.List;
 
 public class ApplicationData {
-    List<String> buildings;
-    Building currentBuilding;
-    String currentBuildingName;
+    static List<String> buildings;
+    static Building currentBuilding;
+    static String currentBuildingName;
 
-    List<Waypoint> waypoints;
+    static List<Waypoint> waypoints;
 
     public ApplicationData() {
 

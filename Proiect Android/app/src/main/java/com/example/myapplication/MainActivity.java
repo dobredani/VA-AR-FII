@@ -34,15 +34,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getBuildingData();
+        getBuildingList();
+        getWaypoints("2", "5");
+
         Button start = findViewById(R.id.startBtn);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent launchActivity1 = new Intent(MainActivity.this, StartNavigationActivity.class);
                 startActivity(launchActivity1);
-                //getBuildingData();
-                //getBuildingList();
-                //getWaypoints("2", "5");
             }
         });
     }
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        final String url = "http://192.168.1.3:5000/rest/building";
+        final String url = "http://192.168.1.142:5000/rest/building";
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.1.3:5000/building/";
+        String url = "http://192.168.1.142:5000/building/";
 //        Mock url until we implement function for picking building.
         url = url.concat("FII");
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.e("check", applicationData.getCurrentBuilding().getName());
 //                        for ( Location location : applicationData.getCurrentBuilding().getLocations())
 //                            Log.e("location", location.getName());
+                        //System.out.println(applicationData.getCurrentBuilding().getName());
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -115,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.1.3:5000/route/FII?start=2&destination=5";
+        String url = "http://192.168.1.142:5000/route/FII?start=2&destination=5";
 //        url = url.concat("start=" + start + "&" + "destination=" + destination);
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 

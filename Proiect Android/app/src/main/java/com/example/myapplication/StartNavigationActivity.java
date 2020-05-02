@@ -24,6 +24,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.myapplication.problem.Building;
+import com.example.myapplication.problem.Location;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
@@ -44,7 +46,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
 
         setContentView(R.layout.start_navigation);
-
+        actionBar=getSupportActionBar();
+        actionBar.setTitle(appData.getCurrentBuilding().getName());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
@@ -56,13 +59,90 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         navigationView.setNavigationItemSelectedListener(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+
+        ImageView scanLocation = findViewById(R.id.cameraBtn);
+        scanLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StartNavigationActivity.this, ScanLocationActivity.class);
+                intent.putExtra("test", 1);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        Button startNavigation = findViewById(R.id.navigationBtn);
+        startNavigation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StartNavigationActivity.this, NavigationActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        generateSuggestedPlaces(5);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (mToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.chooseBuilding) {
+            showBuildings();
+        }
+        return false;
+    }
+
+    private void showBuildings() {
+        List<String> buildingNames = appData.getBuildings();
+        final String[] buildings = new String[buildingNames.size()];
+        int i = 0;
+        for(String temp : buildingNames) {
+            buildings[i] = temp;
+            i++;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Pick a building");
+        builder.setItems(buildings, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                appData.setCurrentBuildingName(buildings[which]);
+                generateSuggestedPlaces(5);
+                actionBar=getSupportActionBar();
+                actionBar.setTitle(buildings[which]);
+            }
+
+        });
+        builder.show();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == 1) {
+            String msg = data.getStringExtra("returnedData");
+            EditText editText = findViewById(R.id.currentLocation);
+            editText.setText(msg);
+        }
+    }
+
+    private void generateSuggestedPlaces(int howMany) {
         final ListView lv = (ListView) findViewById(R.id.listView);
-        String[] locations = new String[]{
-                "C112",
-                "C2",
-                "C403",
-                "C909",
-                "Exit"};
+        List<Location> topLocations = appData.getCurrentBuilding().getTopLocations(howMany);
+        String[] locations = new String[howMany+1];
+        int i = 0;
+        for(Location temp : topLocations) {
+            locations[i] = temp.getName();
+            i++;
+        }
 
         List<String> locationsList = new ArrayList<String>(Arrays.asList(locations));
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
@@ -84,67 +164,5 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             }
         };
         lv.setAdapter(arrayAdapter);
-
-        ImageView scanLocation = findViewById(R.id.cameraBtn);
-        scanLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StartNavigationActivity.this, ScanLocationActivity.class);
-                intent.putExtra("test", 1);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        Button startNavigation = findViewById(R.id.navigationBtn);
-        startNavigation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StartNavigationActivity.this, NavigationActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.chooseBuilding) {
-            showBuildings();
-        }
-        return false;
-    }
-
-    private void showBuildings() {
-        final String[] buildings = {"UAIC Corp A", "UAIC Corp B", "UAIC Corp C", "UAIC Corp D"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Pick a building");
-        builder.setItems(buildings, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                appData.setCurrentBuildingName(buildings[which]);
-                actionBar=getSupportActionBar();
-                actionBar.setTitle(buildings[which]);
-            }
-
-        });
-        builder.show();
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK && requestCode == 1) {
-            String msg = data.getStringExtra("returnedData");
-            EditText editText = findViewById(R.id.currentLocation);
-            editText.setText(msg);
-        }
     }
 }

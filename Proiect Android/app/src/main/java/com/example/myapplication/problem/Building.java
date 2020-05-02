@@ -19,7 +19,7 @@ public class Building {
         return locations;
     }
 
-    public Location getLocation(String name){
+    public Location getLocation(String name) {
         for (Location location : locations)
             if (location.getName().equals(name)) {
                 return location;

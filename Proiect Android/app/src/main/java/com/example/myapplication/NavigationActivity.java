@@ -37,6 +37,8 @@ public class NavigationActivity extends CameraActivity {
         });
 
         currentInstruction = instructions.get(0);
+        System.out.println(instructions);
+        System.out.println(codesToScan);
     }
 
     public void scanWaypoint(View view) {
@@ -45,7 +47,7 @@ public class NavigationActivity extends CameraActivity {
     }
 
     public void restartNavigation() {
-
+        finish();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

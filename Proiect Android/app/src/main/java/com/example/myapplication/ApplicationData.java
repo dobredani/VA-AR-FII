@@ -8,15 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ApplicationData {
-    List<String> buildings;
-    Building currentBuilding;
-    String currentBuildingName;
-
-    List<Waypoint> waypoints;
-
-    public ApplicationData() {
-
-    }
+    static List<String> buildings = new ArrayList<>();
+    static Building currentBuilding;
+    static String currentBuildingName;
+    static List<Waypoint> waypoints = new ArrayList<>();
 
     public List<String> getBuildings() {
         return buildings;
@@ -52,21 +47,23 @@ public class ApplicationData {
 
     public ArrayList<String> getAllInstructions() {
         ArrayList<String> instructions = new ArrayList<>();
-        instructions.add("Turn left");
+        /*instructions.add("Turn left");
         instructions.add("Turn right");
-        instructions.add("Go upstairs");
-        //for (Waypoint waypoint:waypoints)
-            //instructions.add(waypoint.getInstruction());
+        instructions.add("Go upstairs");*/
+        for (Waypoint waypoint:waypoints) {
+            instructions.add(waypoint.getInstruction());
+            System.out.println("!");
+        }
         return instructions;
     }
 
     public ArrayList<Integer> getAllCodesToScan() {
         ArrayList<Integer> codes = new ArrayList<>();
-        codes.add(1);
+        /*codes.add(1);
         codes.add(2);
-        codes.add(3);
-        //for (Waypoint waypoint:waypoints)
-            //codes.add(waypoint.getCode());
+        codes.add(3);*/
+        for (Waypoint waypoint:waypoints)
+            codes.add(waypoint.getCode());
         return codes;
     }
 

@@ -11,11 +11,6 @@ public class Waypoint {
         this.instruction = indication;
     }
 
-    public Waypoint(Location location) {
-        this.location = location;
-        this.instruction = "";
-    }
-
     public void addInstruction(String string){
         this.instruction = this.instruction.concat(string);
     }
@@ -26,5 +21,13 @@ public class Waypoint {
 
     public String print(){
         return this.instruction;
+    }
+
+    @Override
+    public String toString() {
+        return "Waypoint{" +
+                "location=" + location +
+                ", instruction='" + instruction + '\'' +
+                '}';
     }
 }

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from neomodel import RelationshipFrom, ZeroOrMore
-from models import Room
+from models import Waypoint
 
 
-class ClassRoom(Room):
+class ClassRoom(Waypoint):
     """ClassRoom model"""
 
     groups = RelationshipFrom(

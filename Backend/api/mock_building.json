@@ -6,6 +6,7 @@
       "waypoints": [
         {
           "name": "Stairs",
+          "markerId": 1,
           "type": "connector",
           "neighbors": [
             {
@@ -20,7 +21,7 @@
         },
         {
           "name": "C210",
-          "markerId": 1,
+          "markerId": 2,
           "type": "classRoom",
           "schedule": [
             {
@@ -51,7 +52,7 @@
         },
         {
           "name": "C209",
-          "markerId": 2,
+          "markerId": 3,
           "type": "office",
           "professors": ["Lacramioara Leonte", "Daniela Piriu"],
           "neighbors": [
@@ -67,7 +68,7 @@
         },
         {
           "name": "exit",
-          "markerId": 3,
+          "markerId": 4,
           "neighbors": [
             {
               "name": "C209",
@@ -75,6 +76,21 @@
             },
             {
               "name": "C210",
+              "direction": "Right"
+            }
+          ]
+        },
+        {
+          "name": "Elevator",
+          "markerId": 5,
+          "type": "connector",
+          "neighbors": [
+            {
+              "name": "Stairs",
+              "direction": "Left"
+            },
+            {
+              "name": "C209",
               "direction": "Right"
             }
           ]
@@ -86,6 +102,7 @@
       "waypoints": [
         {
           "name": "Stairs",
+          "markerId": 6,
           "type": "connector",
           "neighbors": [
             {
@@ -100,7 +117,7 @@
         },
         {
           "name": "C306",
-          "markerId": 4,
+          "markerId": 7,
           "type": "office",
           "professors": ["Florin Iacob", "Adrian Zalinescu"],
           "neighbors": [
@@ -116,7 +133,7 @@
         },
         {
           "name": "C307",
-          "markerId": 5,
+          "markerId": 8,
           "type": "office",
           "professors": ["Ferucio Laurentiu Tiplea", "Ana-Maria Nica"],
           "neighbors": [
@@ -132,6 +149,7 @@
         },
         {
           "name": "Elevator",
+          "markerId": 9,
           "type": "connector",
           "neighbors": [
             {
@@ -142,7 +160,7 @@
         },
         {
           "name": "C308",
-          "markerId": 6,
+          "markerId": 10,
           "type": "classRoom",
           "schedule": [
             {
@@ -169,7 +187,7 @@
         },
         {
           "name": "C310",
-          "markerId": 7,
+          "markerId": 11,
           "type": "classRoom",
           "schedule": [
             {
@@ -195,16 +213,6 @@
           ]
         }
       ]
-    }
-  ],
-  "connectors": [
-    {
-      "name": "Stairs",
-      "accessibleFloors": [0, 1]
-    },
-    {
-      "name": "Elevator",
-      "accessibleFloors": [0, 1]
     }
   ]
 }

@@ -2,7 +2,6 @@
 from .building import *
 from .floor import *
 from .waypoint import *
-from .room import *
 from .connector import *
 from .classroom import *
 from .office import *

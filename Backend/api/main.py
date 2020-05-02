@@ -15,7 +15,7 @@ def create_app():
     @app.route('/')
     def index():
         return "Hello World"
-    
+
     @app.route('/static/<path:path>')
     def send_static(path):
         return send_from_directory('static', path)
@@ -29,7 +29,7 @@ def create_app():
             'app_name': "IP-A3-2020-Orientation-mobile-APP"
         }
     )
-    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL) 
+    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
     neomodel.config.DATABASE_URL = settings.DB_URL
     neomodel.config.AUTO_INSTALL_LABELS = False

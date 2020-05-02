@@ -16,7 +16,7 @@ public class NavigationActivity extends CameraActivity {
     DisplayController displayController;
     List<String> instructions;
     List<Integer> codesToScan;
-    int currentIndex = 0;
+    int currentIndex = 1;
     Snackbar snackbar;
 
     @Override
@@ -67,11 +67,12 @@ public class NavigationActivity extends CameraActivity {
                 currentIndex++;
                 if (currentIndex == instructions.size()) {
                     displayController.addSnackBar(snackbar, "Congratulations, you have reached your destination!");
+                    currentInstruction = instructions.get(currentIndex - 1);
                     Button button = findViewById(R.id.scanWaypointButton);
                     button.setActivated(false);
                 }
                 else
-                    currentInstruction = instructions.get(currentIndex);
+                    currentInstruction = instructions.get(currentIndex - 1);
             }
         }
     }

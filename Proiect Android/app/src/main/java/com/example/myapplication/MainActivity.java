@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,20 +29,27 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     final static ApplicationData applicationData = new ApplicationData();
+    Button start;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button start = findViewById(R.id.startBtn);
+        start = findViewById(R.id.startBtn);
+        progressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
+
+        start.setVisibility(View.GONE);
+        getBuildingList();
+
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent launchActivity1 = new Intent(MainActivity.this, StartNavigationActivity.class);
                 startActivity(launchActivity1);
                 getBuildingData();
-                //getBuildingList();
+
             }
         });
     }
@@ -52,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        final String url = "http://192.168.0.147:5000/rest/building";
+        final String url = "http://192.168.1.3:5000/rest/building";
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -60,16 +68,21 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONObject response) {
+
                         Log.d("JsonObject","Response: " + response.toString());
                         List<String> buildingList = JsonParser.parseBuildingList(response);
                         applicationData.setBuildings(buildingList);
                         Log.d("JsonObject", "Building List" + buildingList.toString());
+                        start.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
                         Log.e("JsonError","Error on get JSON request!");
+                        start.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
         requestQueue.add(jsonObjectRequest);
@@ -81,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.0.147:5000/building/";
+        String url = "http://192.168.1.3:5000/building/";
 //        Mock url until we implement function for picking building.
         url = url.concat("FII");
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);

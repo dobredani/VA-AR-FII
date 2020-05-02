@@ -167,7 +167,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.0.147:5000/route/FII?";
+        String url = "http://192.168.1.3:5000/route/FII?";
         url = url.concat("start=" + start + "&" + "destination=" + destination);
         final RequestQueue requestQueue = Volley.newRequestQueue(StartNavigationActivity.this);
 

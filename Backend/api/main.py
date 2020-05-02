@@ -70,4 +70,4 @@ if __name__ == '__main__':
     app.run(debug=settings.DEBUG,
             host=settings.IP_ADDRESS,
             port=settings.PORT,
-            threaded=True) 
+            threaded=True)

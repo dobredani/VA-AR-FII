@@ -156,7 +156,9 @@ class BuildingView(FlaskView):
 
     @use_args(BuildingSchema)
     def patch(self, args):
-        self.delete(args["name"])
+        res, status_code = self.delete(args["name"])
+        if (status_code != 200):
+            return res, status_code
         return self.createBuilding(args)
 
     @route('<buildingName>/waypoints')

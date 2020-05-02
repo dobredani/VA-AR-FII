@@ -1,0 +1,439 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "description": "An application developed during IP classes, at the Faculty of Computer Science, from UAIC Iasi, in collaboration with prof. dr. Mihai-Alex Moruz. Please force refresh your browser to visualise your Swagger file - CTRL+F5 on Windows, Apple + R or command + R on Mac, F5 on Linux.",
+      "version": "1.0.0",
+      "title": "Mobile application to orient in a building (with Desktop interface to edit the maps)",
+      "license": {
+        "name": "MIT GitHub license",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "servers": [
+      {
+        "url": "/"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Building View Request",
+        "description": "Example API for requesting and returning building requests."
+      }
+    ],
+    "paths": {
+      "/building": {
+        "get": {
+          "tags": [
+            "Building View Request"
+          ],
+          "summary": "Returns buildings' names stored in database",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/BuildingRequests"
+              }
+            },
+            "204": {
+              "description": "The server successfully processed the request and is not returning any content.",
+              "schema": {
+                "$ref": "#/components/schemas/BuildingRequests"
+             }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Building Request"
+          ],
+          "summary": "Create a new Building request system",
+          "requestBody": {
+            "description": "Building Request Post Object",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequestPostBody"
+                }
+              }
+            }
+          },
+          "produces": [
+            "application/json"
+          ],
+          "responses": {
+            "201": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/id"
+              }
+            },
+            "400": {
+              "description": "Failed. Bad post data."
+            }
+          }
+        }
+      },
+      "/rest/building": {
+        "get": {
+            "tags": [
+              "Building View Request"
+            ],
+            "summary": "Returns buildings' names and UIDs stored in database",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                }
+              },
+            "204": {
+              "description": "The server successfully processed the request and is not returning any content.",
+              "schema": {
+                "$ref": "#/components/schemas/BuildingRequests"
+                }
+              }
+            }
+          }
+      },
+      "/rest/classroom": {
+        "get": {
+            "tags": [
+              "Building View Request"
+            ],
+            "summary": "Returns classrooms' markerIDs, names, buildingNames and floorLevels stored in database",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                }
+              },
+            "204": {
+              "description": "The server successfully processed the request and is not returning any content.",
+              "schema": {
+                "$ref": "#/components/schemas/BuildingRequests"
+                }
+              }
+            }
+          }
+      },
+      "/rest/connector": {
+        "get": {
+            "tags": [
+              "Building View Request"
+            ],
+            "summary": "Returns connectors' names stored in database",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                }
+              },
+              "204": {
+                "description": "The server successfully processed the request and is not returning any content.",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                  }
+                }
+            }
+          }
+      },
+      "/rest/floor": {
+        "get": {
+            "tags": [
+              "Building View Request"
+            ],
+            "summary": "Returns floors' buildingNamed, levels and UIDs stored in database",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                }
+              },
+              "204": {
+                "description": "The server successfully processed the request and is not returning any content.",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                  }
+                }
+            }
+          }
+      },
+      "/rest/group": {
+        "get": {
+            "tags": [
+              "Building View Request"
+            ],
+            "summary": "Returns groups' names stored in database",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                }
+              },
+              "204": {
+                "description": "The server successfully processed the request and is not returning any content.",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                  }
+                }
+            }
+          }
+      },
+      "/rest/office": {
+        "get": {
+            "tags": [
+              "Building View Request"
+            ],
+            "summary": "Returns offices' markerIDs, names and floorLevel stored in database",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                }
+              },
+              "204": {
+                "description": "The server successfully processed the request and is not returning any content.",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                  }
+                }
+            }
+          }
+      },
+      "/rest/teacher": {
+        "get": {
+            "tags": [
+              "Building View Request"
+            ],
+            "summary": "Returns teachers' names and their office buildingName stored in database",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                }
+              },
+              "204": {
+                "description": "The server successfully processed the request and is not returning any content.",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                  }
+                }
+            }
+          }
+      },
+      "/rest/waypoint": {
+        "get": {
+            "tags": [
+              "Building View Request"
+            ],
+            "summary": "Returns waypoints' markerIDs, names, floorLevels and their buildingName stored in database",
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                }
+              },
+              "204": {
+                "description": "The server successfully processed the request and is not returning any content.",
+                "schema": {
+                  "$ref": "#/components/schemas/BuildingRequests"
+                  }
+                }
+            }
+          }
+      },
+      "/rest/building?name={name}": {
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "Name of the building that is stored in database",
+            "type": "string"
+          }
+        ],
+        "get": {
+          "tags": [
+            "Building View Request with parameter"
+          ],
+          "summary": "Get building info with given name",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "name",
+              "required": true,
+              "description": "Building name",
+              "schema": {
+                "$ref": "#/components/schemas/BuildingName"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/components/schemas/BuildingName"
+              }
+            },
+            "400": {
+              "description": "Failed. Misunderstood Request."
+            },
+            "404": {
+              "description": "Failed. Building request not found."
+                }
+            }
+          }
+        },
+        "/building/{name}": {
+          "parameters": [
+            {
+              "name": "name",
+              "in": "path",
+              "required": true,
+              "description": "Get the entire building that is stored in database",
+              "type": "string"
+            }
+          ],
+          "get": {
+            "tags": [
+              "Building View Request with parameter"
+            ],
+            "summary": "Get entire building info with given name",
+            "parameters": [
+              {
+                "in": "path",
+                "name": "name",
+                "required": true,
+                "description": "Entire building name",
+                "schema": {
+                  "$ref": "#/components/schemas/EntireBuilding"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/EntireBuilding"
+                }
+              },
+              "400": {
+                "description": "Failed. Misunderstood Request."
+              },
+              "404": {
+                "description": "Failed. Building request not found."
+                  }
+              }
+            }
+        },
+        "/route/{name}?start={id}&destination={id}": {
+          "parameters": [
+            {
+              "name": "name",
+              "in": "path",
+              "required": true,
+              "description": "Get the route from a building.",
+              "type": "string"
+            },
+            {
+                "name": "id-1",
+                "in": "path",
+                "required": true,
+                "description": "Starting point ID.",
+                "type": "string"
+            },
+            {
+                "name": "id-2",
+                "in": "path",
+                "required": true,
+                "description": "Ending point ID.",
+                "type": "string"
+            }
+          ],
+          "get": {
+            "tags": [
+              "Building View Request with parameter"
+            ],
+            "summary": "Get entire building info with given name",
+            "parameters": [
+              {
+                "in": "path",
+                "name": "name",
+                "required": true,
+                "description": "Entire building name",
+                "schema": {
+                  "$ref": "#/components/schemas/EntireBuilding"
+                }
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "OK",
+                "schema": {
+                  "$ref": "#/components/schemas/EntireBuilding"
+                }
+              },
+              "400": {
+                "description": "Failed. Misunderstood Request."
+              },
+              "404": {
+                "description": "Failed. Building request not found."
+                  }
+              }
+            }
+        }
+    },
+    "components": {
+      "schemas": {
+        "BuildingName": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "format": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        },
+        "BuildingRequests": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "format": "string"
+            },
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "number"
+            }
+          }
+        },
+        "EntireBuilding": {
+          "type": "object",
+          "properties": {
+            "BuildingRequest": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/components/schemas/EntireBuilding"
+              }
+            }
+          }
+        }
+      }
+    }
+  }

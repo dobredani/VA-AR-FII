@@ -6,17 +6,30 @@ import settings
 from rest_views import *
 from views import *
 import models
-from flasgger import Swagger, swag_from
+from flask_swagger_ui import get_swaggerui_blueprint
 
 
 def create_app():
     app = Flask(__name__)
-    swagger = Swagger(app)
 
     @app.route('/')
-    @swag_from('swagger.yml')
     def index():
         return "Hello World"
+    
+    @app.route('/static/<path:path>')
+    def send_static(path):
+        return send_from_directory('static', path)
+
+    SWAGGER_URL = '/swagger'
+    API_URL = '/static/swagger.json'
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URL,
+        config={
+            'app_name': "IP-A3-2020-Orientation-mobile-APP"
+        }
+    )
+    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL) 
 
     neomodel.config.DATABASE_URL = settings.DB_URL
     neomodel.config.AUTO_INSTALL_LABELS = False

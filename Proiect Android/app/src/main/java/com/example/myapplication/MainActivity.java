@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         start.setVisibility(View.GONE);
         getBuildingList();
 
+        Button start = findViewById(R.id.startBtn);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         // for device, run ipconfig in cmd and get ipv4 address
 
         final String url = "http://192.168.0.147:5000/rest/building";
+
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
+
         String url = "http://192.168.0.147:5000/building/";
 //        Mock url until we implement function for picking building.
         url = url.concat("FII");
@@ -107,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
                         Building building = JsonParser.parseBuilding(response);
                         applicationData.setCurrentBuilding(building);
                         Log.e("check", applicationData.getCurrentBuilding().getName());
-
+//                        for ( Location location : applicationData.getCurrentBuilding().getLocations())
+//                            Log.e("location", location.getName());
+                        //System.out.println(applicationData.getCurrentBuilding().getName());
                     }
                 }, new Response.ErrorListener() {
                     @Override

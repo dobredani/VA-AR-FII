@@ -33,6 +33,10 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.problem.Location;
 import com.example.myapplication.problem.Waypoint;
+
+import com.example.myapplication.problem.Building;
+import com.example.myapplication.problem.Location;
+
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
@@ -53,7 +57,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.start_navigation);
-
+        actionBar=getSupportActionBar();
+        actionBar.setTitle(appData.getCurrentBuilding().getName());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
@@ -65,34 +70,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         navigationView.setNavigationItemSelectedListener(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        final ListView lv = (ListView) findViewById(R.id.listView);
-        String[] locations = new String[]{
-                "C112",
-                "C2",
-                "C403",
-                "C909",
-                "Exit"};
 
-        List<String> locationsList = new ArrayList<String>(Arrays.asList(locations));
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1, locationsList) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                // Get the Item from ListView
-                View view = super.getView(position, convertView, parent);
-
-                // Initialize a TextView for ListView each Item
-                TextView tv = (TextView) view.findViewById(android.R.id.text1);
-
-                // Set the text color of TextView (ListView Item)
-                tv.setTextColor(Color.BLACK);
-                tv.setBackgroundColor(Color.rgb(243, 237, 218));
-
-                // Generate ListView Item using TextView
-                return view;
-            }
-        };
-        lv.setAdapter(arrayAdapter);
 
         ImageView scanLocation = findViewById(R.id.cameraBtn);
         scanLocation.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +93,9 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
             }
         });
+
+        generateSuggestedPlaces(5);
+
     }
 
     @Override
@@ -135,7 +116,13 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     }
 
     private void showBuildings() {
-        final String[] buildings = {"UAIC Corp A", "UAIC Corp B", "UAIC Corp C", "UAIC Corp D"};
+        List<String> buildingNames = appData.getBuildings();
+        final String[] buildings = new String[buildingNames.size()];
+        int i = 0;
+        for(String temp : buildingNames) {
+            buildings[i] = temp;
+            i++;
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Pick a building");
@@ -143,6 +130,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 appData.setCurrentBuildingName(buildings[which]);
+                generateSuggestedPlaces(5);
                 actionBar=getSupportActionBar();
                 actionBar.setTitle(buildings[which]);
             }
@@ -195,5 +183,37 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                     }
                 });
         requestQueue.add(jsonObjectRequest);
+    }
+  
+    private void generateSuggestedPlaces(int howMany) {
+        final ListView lv = (ListView) findViewById(R.id.listView);
+        List<Location> topLocations = appData.getCurrentBuilding().getTopLocations(howMany);
+        String[] locations = new String[howMany+1];
+        int i = 0;
+        for(Location temp : topLocations) {
+            locations[i] = temp.getName();
+            i++;
+        }
+
+        List<String> locationsList = new ArrayList<String>(Arrays.asList(locations));
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
+                (this, android.R.layout.simple_list_item_1, locationsList) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                // Get the Item from ListView
+                View view = super.getView(position, convertView, parent);
+
+                // Initialize a TextView for ListView each Item
+                TextView tv = (TextView) view.findViewById(android.R.id.text1);
+
+                // Set the text color of TextView (ListView Item)
+                tv.setTextColor(Color.BLACK);
+                tv.setBackgroundColor(Color.rgb(243, 237, 218));
+
+                // Generate ListView Item using TextView
+                return view;
+            }
+        };
+        lv.setAdapter(arrayAdapter);
     }
 }

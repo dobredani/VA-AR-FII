@@ -8,10 +8,15 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ApplicationData {
+
     static List<String> buildings = new ArrayList<>();
     static Building currentBuilding;
     static String currentBuildingName;
     static List<Waypoint> waypoints = new ArrayList<>();
+
+    public ApplicationData() {
+
+    }
 
     public List<String> getBuildings() {
         return buildings;

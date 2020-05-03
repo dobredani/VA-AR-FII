@@ -99,7 +99,6 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StartNavigationActivity.this, ScanLocationActivity.class);
-                intent.putExtra("test", 1);
                 startActivityForResult(intent, 1);
             }
         });
@@ -111,10 +110,9 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 String startName = ((TextView)findViewById(R.id.currentLocation)).getText().toString();
                 String destinationName = ((TextView)findViewById(R.id.destination)).getText().toString();
                 System.out.println(appData.currentBuilding);
-                Location start = appData.currentBuilding.getLocation("C209");
-                Location destination = appData.currentBuilding.getLocation("C310");
+                Location start = appData.currentBuilding.getLocation(startName);
+                Location destination = appData.currentBuilding.getLocation(destinationName);
                 getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
-                //getWaypoints("2", "5");
             }
         });
     }
@@ -157,8 +155,9 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == 1) {
             String msg = data.getStringExtra("returnedData");
+            Location location =appData.getCurrentBuilding().getLocationById(Integer.parseInt(msg));
             EditText editText = findViewById(R.id.currentLocation);
-            editText.setText(msg);
+            editText.setText(location.getName());
         }
     }
 
@@ -167,8 +166,9 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.1.3:5000/route/FII?";
+        String url = "http://192.168.0.147:5000/route/FII?";
         url = url.concat("start=" + start + "&" + "destination=" + destination);
+        System.out.println(url);
         final RequestQueue requestQueue = Volley.newRequestQueue(StartNavigationActivity.this);
 
         JsonArrayRequest jsonObjectRequest = new JsonArrayRequest

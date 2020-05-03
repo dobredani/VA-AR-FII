@@ -37,8 +37,6 @@ public class NavigationActivity extends CameraActivity {
         });
 
         currentInstruction = instructions.get(0);
-        System.out.println(instructions);
-        System.out.println(codesToScan);
     }
 
     public void scanWaypoint(View view) {
@@ -69,7 +67,7 @@ public class NavigationActivity extends CameraActivity {
                     displayController.addSnackBar(snackbar, "Congratulations, you have reached your destination!");
                     currentInstruction = instructions.get(currentIndex - 1);
                     Button button = findViewById(R.id.scanWaypointButton);
-                    button.setActivated(false);
+                    button.setClickable(false);
                 }
                 else
                     currentInstruction = instructions.get(currentIndex - 1);

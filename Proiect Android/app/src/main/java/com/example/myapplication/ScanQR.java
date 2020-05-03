@@ -52,7 +52,7 @@ public class ScanQR extends Fragment implements ZXingScannerView.ResultHandler {
 
     @Override
     public void handleResult(Result rawResult) {
-        Toast.makeText(getActivity(), "Contents = " + rawResult.getText() , Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Contents = " + rawResult.getText() , Toast.LENGTH_SHORT).show();
         if (listener != null) listener.onScanCompleted(rawResult.getText());
     }
 

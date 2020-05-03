@@ -83,7 +83,10 @@ To run the test execute the following command:
 python3 -m pytest -p no:warnings tests/
 ```
 ## SwaggerUI API documentation
-![Image of API documentation](https://octodex.github.com/images/yaktocat.png)
+
+After running the apllication, consult the documentation at https://localhost:PORT/swagger.
+
+![Image of API documentation](https://github.com/dobredani/VA-AR-FII/blob/Backend/Backend/api/SwaggerUI%20API%20documentation.PNG)
 
 ## Project structure
 

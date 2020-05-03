@@ -3,14 +3,16 @@ package com.example.myapplication;
 import com.example.myapplication.problem.Building;
 import com.example.myapplication.problem.Waypoint;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ApplicationData {
-    static List<String> buildings;
+
+    static List<String> buildings = new ArrayList<>();
     static Building currentBuilding;
     static String currentBuildingName;
-
-    static List<Waypoint> waypoints;
+    static List<Waypoint> waypoints = new ArrayList<>();
 
     public ApplicationData() {
 
@@ -40,12 +42,22 @@ public class ApplicationData {
         this.waypoints = waypoints;
     }
 
-    public String getCurrentBuildingName() {
-        return currentBuildingName;
-    }
-
     public void setCurrentBuildingName(String currentBuildingName) {
         this.currentBuildingName = currentBuildingName;
+    }
+
+    public ArrayList<String> getAllInstructions() {
+        ArrayList<String> instructions = new ArrayList<>();
+        for (Waypoint waypoint:waypoints)
+            instructions.add(waypoint.getInstruction());
+        return instructions;
+    }
+
+    public ArrayList<Integer> getAllCodesToScan() {
+        ArrayList<Integer> codes = new ArrayList<>();
+        for (Waypoint waypoint:waypoints)
+            codes.add(waypoint.getCode());
+        return codes;
     }
 
 }

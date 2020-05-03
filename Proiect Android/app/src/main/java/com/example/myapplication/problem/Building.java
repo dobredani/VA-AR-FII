@@ -19,11 +19,17 @@ public class Building {
         return locations;
     }
 
-    public Location getLocation(String name){
+    public Location getLocation(String name) {
         for (Location location : locations)
-            if (location.getName().equals(name)) {
+            if (location.getName().equals(name))
                 return location;
-            }
+        return null;
+    }
+
+    public Location getLocationById(int id) {
+        for (Location location : locations)
+            if (location.getId() == id)
+                return location;
         return null;
     }
 

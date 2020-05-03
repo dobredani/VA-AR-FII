@@ -4,26 +4,30 @@ import android.util.Log;
 
 public class Waypoint {
     Location location;
-    String indication;
-//    WaypointType locationType;
+    String instruction;
 
     public Waypoint(Location location, String indication) {
         this.location = location;
-        this.indication = indication;
-//        this.locationType = locationType;
+        this.instruction = indication;
     }
 
-    public Waypoint(Location location) {
-        this.location = location;
-//        this.locationType = locationType;
-        this.indication = "";
+    public void addInstruction(String string){
+        this.instruction = this.instruction.concat(string);
     }
 
-    public void addIndication(String string){
-        this.indication = this.indication.concat(string);
-    }
+    public String getInstruction() {return this.instruction; }
+
+    public int getCode() {return this.location.id; }
 
     public String print(){
-        return this.indication;
+        return this.instruction;
+    }
+
+    @Override
+    public String toString() {
+        return "Waypoint{" +
+                "location=" + location +
+                ", instruction='" + instruction + '\'' +
+                '}';
     }
 }

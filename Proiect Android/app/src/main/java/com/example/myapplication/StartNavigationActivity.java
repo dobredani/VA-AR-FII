@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +25,21 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.myapplication.problem.Location;
+import com.example.myapplication.problem.Waypoint;
+
 import com.example.myapplication.problem.Building;
 import com.example.myapplication.problem.Location;
+
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,14 +49,12 @@ import java.util.Objects;
 public class StartNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    private ApplicationData appData=new ApplicationData();
+    private ApplicationData appData = new ApplicationData();
     private ActionBar actionBar;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         setContentView(R.layout.start_navigation);
         actionBar=getSupportActionBar();
@@ -66,7 +77,6 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(StartNavigationActivity.this, ScanLocationActivity.class);
-                intent.putExtra("test", 1);
                 startActivityForResult(intent, 1);
             }
         });
@@ -75,8 +85,12 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         startNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartNavigationActivity.this, NavigationActivity.class);
-                startActivity(intent);
+                String startName = ((TextView)findViewById(R.id.currentLocation)).getText().toString();
+                String destinationName = ((TextView)findViewById(R.id.destination)).getText().toString();
+                System.out.println(appData.currentBuilding);
+                Location start = appData.currentBuilding.getLocation(startName);
+                Location destination = appData.currentBuilding.getLocation(destinationName);
+                getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
             }
         });
 
@@ -129,11 +143,48 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == 1) {
             String msg = data.getStringExtra("returnedData");
+            Location location =appData.getCurrentBuilding().getLocationById(Integer.parseInt(msg));
             EditText editText = findViewById(R.id.currentLocation);
-            editText.setText(msg);
+            editText.setText(location.getName());
         }
     }
 
+    public void getWaypoints(String start, String destination) {
+        // the url is different for every computer.
+        // for emulator use 10.0.0.2:5000/
+        // for device, run ipconfig in cmd and get ipv4 address
+
+        String url = "http://192.168.0.147:5000/route/FII?";
+        url = url.concat("start=" + start + "&" + "destination=" + destination);
+        System.out.println(url);
+        final RequestQueue requestQueue = Volley.newRequestQueue(StartNavigationActivity.this);
+
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("JsonObject","Response: " + response.toString());
+
+                        List<Waypoint> waypointList = JsonParser.parseRoute(response);
+                        for (Waypoint waypoint:waypointList)
+                            System.out.println(waypoint);
+                        appData.setWaypoints(waypointList);
+                        Intent intent = new Intent(StartNavigationActivity.this, NavigationActivity.class);
+                        intent.putStringArrayListExtra("instructions", appData.getAllInstructions());
+                        intent.putIntegerArrayListExtra("codesToScan", appData.getAllCodesToScan());
+                        startActivity(intent);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Log.e("JsonError","Error on get JSON request!");
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
+    }
+  
     private void generateSuggestedPlaces(int howMany) {
         final ListView lv = (ListView) findViewById(R.id.listView);
         List<Location> topLocations = appData.getCurrentBuilding().getTopLocations(howMany);

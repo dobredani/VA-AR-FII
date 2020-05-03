@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -33,10 +31,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.problem.Location;
 import com.example.myapplication.problem.Waypoint;
-
-import com.example.myapplication.problem.Building;
-import com.example.myapplication.problem.Location;
-
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;

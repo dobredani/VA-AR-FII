@@ -13,18 +13,12 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.problem.Building;
-import com.example.myapplication.problem.Location;
-import com.example.myapplication.problem.Waypoint;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
 
         start.setVisibility(View.GONE);
+        getBuildingData();
         getBuildingList();
 
         Button start = findViewById(R.id.startBtn);
@@ -50,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent launchActivity1 = new Intent(MainActivity.this, StartNavigationActivity.class);
                 startActivity(launchActivity1);
-                getBuildingData();
             }
         });
     }

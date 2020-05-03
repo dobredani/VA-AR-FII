@@ -121,7 +121,7 @@ public class MainMenu {
                 {
                     Building build = new Building();
                     build.name = buildName.getText();
-                    MainFrame mainFrame = new MainFrame(stage, build);
+                    MainFrame mainFrame = new MainFrame(stage, build, true);
                     mainFrame.init();
                 }
             });
@@ -189,7 +189,7 @@ public class MainMenu {
                         editBtn.setOnAction(ev -> {
 
                             build.name = buildName.getText();
-                            MainFrame mainFrame = new MainFrame(stage, build);
+                            MainFrame mainFrame = new MainFrame(stage, build, false);
                             mainFrame.init();
                         });
 

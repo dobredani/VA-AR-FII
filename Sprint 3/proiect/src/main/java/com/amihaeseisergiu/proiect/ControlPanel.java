@@ -36,7 +36,7 @@ public class ControlPanel extends VBox {
     Building building;
     boolean initiateFloor;
 
-    public ControlPanel(MainFrame frame, Building building) {
+    public ControlPanel(MainFrame frame, Building building, boolean create) {
         this.frame = frame;
         this.building = building;
 
@@ -115,7 +115,7 @@ public class ControlPanel extends VBox {
             }
         });
         
-        if(!initiateFloor)
+        if(create && !initiateFloor)
         {
             Platform.runLater(() -> {
                 addFloorBtn.fire();

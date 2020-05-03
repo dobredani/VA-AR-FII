@@ -23,7 +23,7 @@ public class MainFrame {
     SavePanel savePanel;
     Building building;
     
-    public MainFrame(Stage stage, Building build)
+    public MainFrame(Stage stage, Building build, boolean create)
     {
         this.stage = stage;
         this.building = build;
@@ -32,7 +32,7 @@ public class MainFrame {
         configPanel = new ConfigPanel(this);
         drawingPanel = new DrawingPanel(this);
         savePanel = new SavePanel(this);
-        controlPanel = new ControlPanel(this, building);
+        controlPanel = new ControlPanel(this, building, create);
         
         pane.setTop(configPanel);
         pane.setLeft(controlPanel);

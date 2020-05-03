@@ -82,13 +82,13 @@ public class Graph implements Serializable {
             List<ExtendedShape> lefts = new ArrayList<>();
             if (r.getValue() != null) {
                 for (Pair p : r.getValue()) {
-                    if (p.getValue().toString().contains("down")) {
+                    if (p.getValue().toString().contains("Down")) {
                         downs.add((ExtendedShape) p.getKey());
-                    } else if (p.getValue().toString().contains("up")) {
+                    } else if (p.getValue().toString().contains("Up")) {
                         ups.add((ExtendedShape) p.getKey());
-                    } else if (p.getValue().toString().contains("right")) {
+                    } else if (p.getValue().toString().contains("Right")) {
                         rights.add((ExtendedShape) p.getKey());
-                    } else if (p.getValue().toString().contains("left")) {
+                    } else if (p.getValue().toString().contains("Left")) {
                         lefts.add((ExtendedShape) p.getKey());
                     }
                 }
@@ -103,22 +103,22 @@ public class Graph implements Serializable {
                 int leftIndex = 0;
                 List<Pair<ExtendedShape, String>> newPairs = new ArrayList<>();
                 for (Pair p : r.getValue()) {
-                    if (p.getValue().toString().contains("down")) {
-                        newPairs.add(new Pair(downs.get(downIndex), "down " + (downIndex + 1)));
+                    if (p.getValue().toString().contains("Down")) {
+                        newPairs.add(new Pair(downs.get(downIndex), "Down " + (downIndex + 1)));
                         downIndex++;
-                    } else if (p.getValue().toString().contains("up")) {
-                        newPairs.add(new Pair(ups.get(upIndex), "up " + (upIndex + 1)));
+                    } else if (p.getValue().toString().contains("Up")) {
+                        newPairs.add(new Pair(ups.get(upIndex), "Up " + (upIndex + 1)));
                         upIndex++;
-                    } else if (p.getValue().toString().contains("right")) {
-                        newPairs.add(new Pair(rights.get(rightIndex), "right " + (rightIndex + 1)));
+                    } else if (p.getValue().toString().contains("Right")) {
+                        newPairs.add(new Pair(rights.get(rightIndex), "Right " + (rightIndex + 1)));
                         rightIndex++;
-                    } else if (p.getValue().toString().contains("left")) {
-                        newPairs.add(new Pair(lefts.get(leftIndex), "left " + (leftIndex + 1)));
+                    } else if (p.getValue().toString().contains("Left")) {
+                        newPairs.add(new Pair(lefts.get(leftIndex), "Left " + (leftIndex + 1)));
                         leftIndex++;
                     }
                 }
-                System.out.println(((ExtendedRectangle) r.getKey()).getId() + " " + r.getValue());
-                System.out.println(((ExtendedRectangle) r.getKey()).getId() + " " + newPairs);
+              //  System.out.println(((ExtendedRectangle) r.getKey()).getId() + " " + r.getValue());
+              //  System.out.println(((ExtendedRectangle) r.getKey()).getId() + " " + newPairs);
                 graph.replace(r.getKey(), newPairs);
                 //graph.replace((ExtendedShape) r, newPairs);
                 //   System.out.println(r.getId());

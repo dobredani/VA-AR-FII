@@ -42,7 +42,7 @@ public class DrawingPanel extends HBox {
     private double initialY = 0;
     private boolean isMouseInCenter = false;
     private ExtendedShape draggedShape = null;
-    private Map<String, List<Integer>> ids;
+    private List<Integer> ids;
 
     public double areaOfTriangle(Point x, Point y, Point z) {
         double returnValue = x.getX() * (y.getY() - z.getY()) + y.getX() * (z.getY() - x.getY()) + z.getX() * (x.getY() - y.getY());
@@ -59,17 +59,12 @@ public class DrawingPanel extends HBox {
         this.setAlignment(Pos.CENTER);
         setCanvas();
         canvas.setVisible(false);
-        ids = new HashMap<>();
+        ids = new ArrayList<>();
         List<Integer> hallways = new ArrayList<>();
         List<Integer> classrooms = new ArrayList<>();
         List<Integer> bathrooms = new ArrayList<>();
         List<Integer> stairs = new ArrayList<>();
         List<Integer> elevator = new ArrayList<>();
-        ids.put("Hallway", hallways);
-        ids.put("Classroom", classrooms);
-        ids.put("Bathroom", bathrooms);
-        ids.put("Stairs", stairs);
-        ids.put("Elevator", elevator);
 
         AnimatedZoomOperator zoomOperator = new AnimatedZoomOperator();
 
@@ -144,7 +139,7 @@ public class DrawingPanel extends HBox {
                 r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
                 shapes.add(r);
                 setId(r);
-                r.setName(r.getId());
+                r.setName(String.valueOf(r.getId()));
                 gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth());
                 if (initialShape == null) {
                     initialShape = r;
@@ -171,25 +166,25 @@ public class DrawingPanel extends HBox {
                         String sToR = null;
                         if (sh.getCenterPoint().getX() == r.getCenterPoint().getX() + r.getWidth()) {
                             if (sh.getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() != r.getCenterPoint().getY() && r.getCenterPoint().getY() + r.getLength() != ((ExtendedRectangle) sh).getCenterPoint().getY() && r.getCenterPoint().getY() + r.getLength() != sh.getCenterPoint().getY() && sh.getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() != r.getCenterPoint().getY()) {
-                                rToS = "left";
-                                sToR = "right";
+                                rToS = "Left";
+                                sToR = "Right";
                                 ok = true;
                             }
                         } else if (sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() == r.getCenterPoint().getX()) {
                             if (sh.getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() != r.getCenterPoint().getY() && r.getCenterPoint().getY() + r.getLength() != ((ExtendedRectangle) sh).getCenterPoint().getY() && r.getCenterPoint().getY() + r.getLength() != sh.getCenterPoint().getY() && sh.getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() != r.getCenterPoint().getY()) {
-                                rToS = "right";
-                                sToR = "left";
+                                rToS = "Right";
+                                sToR = "Left";
                                 ok = true;
                             }
                         } else if (sh.getCenterPoint().getY() - r.getLength() == r.getCenterPoint().getY()) {
                             if (sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() != r.centerPoint.getX() && r.getCenterPoint().getX() + r.getWidth() != sh.getCenterPoint().getX() && r.getCenterPoint().getX() + r.getWidth() != sh.centerPoint.getX() && sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() != r.getCenterPoint().getX()) {
-                                rToS = "up";
-                                sToR = "down";
+                                rToS = "Up";
+                                sToR = "Down";
                                 ok = true;
                             }
                         } else if (sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() != r.centerPoint.getX() && r.getCenterPoint().getX() + r.getWidth() != sh.getCenterPoint().getX() && r.getCenterPoint().getX() + r.getWidth() != sh.centerPoint.getX() && sh.getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() != r.getCenterPoint().getX()) {
-                            rToS = "down";
-                            sToR = "up";
+                            rToS = "Down";
+                            sToR = "Up";
                             ok = true;
                         }
                         if (ok == true) {
@@ -212,7 +207,7 @@ public class DrawingPanel extends HBox {
         gc.setStroke(Color.valueOf(s.getColor()));
         gc.rect(s.getCenterPoint().getX(), s.getCenterPoint().getY(), ((ExtendedRectangle) s).getWidth(), ((ExtendedRectangle) s).getLength());
         // gc.fill();
-        gc.fillText(((ExtendedRectangle)s).getName(), ((ExtendedRectangle)s).getStartPoint().getX() - ((ExtendedRectangle)s).getName().length() * 2 - 3, ((ExtendedRectangle)s).getStartPoint().getY() - 1, ((ExtendedRectangle)s).getWidth());
+        gc.fillText(((ExtendedRectangle) s).getName(), ((ExtendedRectangle) s).getStartPoint().getX() - ((ExtendedRectangle) s).getName().length() * 2 - 3, ((ExtendedRectangle) s).getStartPoint().getY() - 1, ((ExtendedRectangle) s).getWidth());
         gc.stroke();
     }
 
@@ -329,7 +324,7 @@ public class DrawingPanel extends HBox {
             r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
             shapes.add(r);
             setId(r);
-            r.setName(r.getId());
+            r.setName(String.valueOf(r.getId()));
             gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth());
             addShapeToGraph(r);
             setOrder();
@@ -347,7 +342,7 @@ public class DrawingPanel extends HBox {
 
     public void deleteShapeFromGraph(ExtendedShape s) {
         shapes.remove(s);
-        ids.get(((ExtendedRectangle) s).type).remove(Integer.valueOf(((ExtendedRectangle) s).getId().split(" ")[1]));
+        ids.remove((Integer)(((ExtendedRectangle) s).getId()));
         graph.deleteShapeFromGraph(s);
         System.out.println(graph);
     }
@@ -704,20 +699,22 @@ public class DrawingPanel extends HBox {
     }
 
     public void setId(ExtendedRectangle r) {
+        Collections.sort(ids);
         int i = 1;
-        if (ids.get(r.type) != null) {
-            for (Integer id : ids.get(r.type)) {
+        if (ids.isEmpty()) {
+            r.setId(i);
+            ids.add(i);
+        } else {
+            for (Integer id : ids) {
                 if (id != i) {
                     break;
-                } else {
-                    i++;
                 }
+                i++;
             }
+            r.setId(i);
+            ids.add(i);
         }
-        ids.get(r.type).add(i);
-        Collections.sort(ids.get(r.type));
-        r.setId(r.type + " " + i);
-        // System.out.println(ids.get(r.type));
+        System.out.println(ids);
     }
 
     public void setOrder() {

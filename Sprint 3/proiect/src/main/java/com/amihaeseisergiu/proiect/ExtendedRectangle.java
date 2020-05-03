@@ -21,7 +21,7 @@ public class ExtendedRectangle extends ExtendedShape implements Serializable {
     private String name;
     private Rectangle rectangle = new Rectangle();
     protected String type;
-    private String id;
+    private int id;
     
     public ExtendedRectangle(Point p) {
         super(p);
@@ -76,19 +76,18 @@ public class ExtendedRectangle extends ExtendedShape implements Serializable {
         this.name = name;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
     @Override
     public String toString() {
-        return id;
+        return "ID :" + id;
     }
     
     
 }
-

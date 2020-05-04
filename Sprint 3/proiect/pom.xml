@@ -28,12 +28,6 @@
             <version>2.8.6</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -49,8 +43,7 @@
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.3</version>
-                <configuration>
-                    <executable>C:\Program Files\Java\jdk-14.0.1\bin\java</executable>
+                <configuration>           
                     <mainClass>com.amihaeseisergiu.proiect.App</mainClass>
                 </configuration>
             </plugin>

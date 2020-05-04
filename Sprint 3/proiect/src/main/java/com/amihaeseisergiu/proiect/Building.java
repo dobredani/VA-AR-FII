@@ -36,9 +36,9 @@ public class Building implements Serializable {
         buildingJSON.put("name", name);
 
         List<JSONObject> floorList = new ArrayList<JSONObject>();
-        for (var floor : floors.entrySet()) {
+        floors.entrySet().forEach((floor) -> {
             floorList.add(floor.getValue().toJson());
-        }
+        });
 
         buildingJSON.put("floors", floorList);
 

@@ -115,40 +115,42 @@ public class DrawingPanel extends HBox {
 
     public void drawRectangle(double x, double y) {
         if (!mainFrame.getConfigPanel().getWidthTextField().getText().isBlank() && !mainFrame.getConfigPanel().getHeightTextField().getText().isBlank()) {
-            ExtendedRectangle r = new ExtendedRectangle(new Point(x, y));
+            ExtendedRectangle r = null;
             if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
                 r = new Classroom(new Point(x, y));
-            } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+            } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way") && graph.hallway == null) {
                 r = new Hallway(new Point(x, y));
+                graph.hallway = ((Hallway) r);
             } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
                 r = new Stairs(new Point(x, y));
             } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
                 r = new Elevator(new Point(x, y));
             }
-
-            initRectangle(r, x, y, Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
-            if (checkCollision(r, 0) == false) {
-                gc.beginPath();
-                gc.setFill(mainFrame.getConfigPanel().getColorPicker().getValue());
-                gc.setStroke(mainFrame.getConfigPanel().getColorPicker().getValue());
-                gc.rect(x, y, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                // gc.fill();
-                gc.stroke();
-                r.setLength(Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                r.setWidth(Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
-                r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
-                shapes.add(r);
-                setId(r);
-                r.setName(String.valueOf(r.getId()));
-                gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth());
-                if (initialShape == null) {
-                    initialShape = r;
-                    graph.addInitialShape(initialShape);
-                } else {
-                    addShapeToGraph(r);
-                    setOrder();
+            if (r != null) {
+                initRectangle(r, x, y, Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
+                if (checkCollision(r, 0) == false) {
+                    gc.beginPath();
+                    gc.setFill(mainFrame.getConfigPanel().getColorPicker().getValue());
+                    gc.setStroke(mainFrame.getConfigPanel().getColorPicker().getValue());
+                    gc.rect(x, y, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                    // gc.fill();
+                    gc.stroke();
+                    r.setLength(Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                    r.setWidth(Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
+                    r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
+                    shapes.add(r);
+                    setId(r);
+                    r.setName(String.valueOf(r.getId()));
+                    gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth());
+                    if (initialShape == null) {
+                        initialShape = r;
+                        graph.addInitialShape(initialShape);
+                    } else {
+                        addShapeToGraph(r);
+                        setOrder();
+                    }
+                   // System.out.println(graph);
                 }
-                System.out.println(graph);
             }
         }
     }
@@ -222,8 +224,9 @@ public class DrawingPanel extends HBox {
                     gc.rect(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
                     if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
                         r = new Classroom(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way") && graph.hallway == null) {
                         r = new Hallway(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        graph.hallway = ((Hallway) r);
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
                         r = new Stairs(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
@@ -233,8 +236,9 @@ public class DrawingPanel extends HBox {
                     gc.rect(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
                     if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
                         r = new Classroom(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way") && graph.hallway == null) {
                         r = new Hallway(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        graph.hallway = ((Hallway) r);
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
                         r = new Stairs(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
@@ -246,8 +250,9 @@ public class DrawingPanel extends HBox {
                     gc.rect(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength(), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
                     if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
                         r = new Classroom(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way") && graph.hallway == null) {
                         r = new Hallway(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        graph.hallway = ((Hallway) r);
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
                         r = new Stairs(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
@@ -257,8 +262,9 @@ public class DrawingPanel extends HBox {
                     gc.rect(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength(), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
                     if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
                         r = new Classroom(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way") && graph.hallway == null) {
                         r = new Hallway(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        graph.hallway = ((Hallway) r);
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
                         r = new Stairs(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
@@ -270,8 +276,9 @@ public class DrawingPanel extends HBox {
                     gc.rect(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
                     if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
                         r = new Classroom(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way") && graph.hallway == null) {
                         r = new Hallway(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
+                        graph.hallway = ((Hallway) r);
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
                         r = new Stairs(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
@@ -281,8 +288,9 @@ public class DrawingPanel extends HBox {
                     gc.rect(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
                     if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
                         r = new Classroom(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way") && graph.hallway == null) {
                         r = new Hallway(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        graph.hallway = ((Hallway) r);
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
                         r = new Stairs(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
@@ -294,8 +302,9 @@ public class DrawingPanel extends HBox {
                     gc.rect(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
                     if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
                         r = new Classroom(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way") && graph.hallway == null) {
                         r = new Hallway(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
+                        graph.hallway = ((Hallway) r);
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
                         r = new Stairs(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
@@ -305,8 +314,9 @@ public class DrawingPanel extends HBox {
                     gc.rect(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
                     if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
                         r = new Classroom(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way") && graph.hallway == null) {
                         r = new Hallway(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        graph.hallway = ((Hallway) r);
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
                         r = new Stairs(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
                     } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
@@ -315,20 +325,22 @@ public class DrawingPanel extends HBox {
                 }
             }
         }
-        initRectangle(r, r.getCenterPoint().getX(), r.getCenterPoint().getY(), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
-        if (checkCollision(r, 0) == false) {
-            gc.stroke();
-            // gc.fill();
-            r.setLength(Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-            r.setWidth(Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
-            r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
-            shapes.add(r);
-            setId(r);
-            r.setName(String.valueOf(r.getId()));
-            gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth());
-            addShapeToGraph(r);
-            setOrder();
-            System.out.println(graph);
+        if (r != null) {
+            initRectangle(r, r.getCenterPoint().getX(), r.getCenterPoint().getY(), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
+            if (checkCollision(r, 0) == false) {
+                gc.stroke();
+                // gc.fill();
+                r.setLength(Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                r.setWidth(Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
+                r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
+                shapes.add(r);
+                setId(r);
+                r.setName(String.valueOf(r.getId()));
+                gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth());
+                addShapeToGraph(r);
+                setOrder();
+              //  System.out.println(graph);
+            }
         }
     }
 
@@ -342,9 +354,12 @@ public class DrawingPanel extends HBox {
 
     public void deleteShapeFromGraph(ExtendedShape s) {
         shapes.remove(s);
-        ids.remove((Integer)(((ExtendedRectangle) s).getId()));
+        if(s instanceof Hallway) {
+            graph.hallway = null;
+        }
+        ids.remove((Integer) (((ExtendedRectangle) s).getId()));
         graph.deleteShapeFromGraph(s);
-        System.out.println(graph);
+      //  System.out.println(graph);
     }
 
     public void delete(double x, double y) {
@@ -478,10 +493,13 @@ public class DrawingPanel extends HBox {
                     deleteShapeFromGraph(draggedShape);
                     shapes.add(draggedShape);
                     addShapeToGraph(castedShape);
+                    if(castedShape instanceof Hallway) {
+                        graph.hallway = ((Hallway)castedShape);
+                    } 
                     setOrder();
                     setId((ExtendedRectangle) draggedShape);
                     drawAll();
-                    System.out.println(graph);
+                //    System.out.println(graph);
                 }
             }
         });
@@ -714,7 +732,7 @@ public class DrawingPanel extends HBox {
             r.setId(i);
             ids.add(i);
         }
-        System.out.println(ids);
+      //  System.out.println(ids);
     }
 
     public void setOrder() {

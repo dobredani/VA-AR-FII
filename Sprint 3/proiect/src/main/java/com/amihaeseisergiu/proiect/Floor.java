@@ -22,6 +22,15 @@ public class Floor implements Serializable {
     
     private List<ExtendedShape> shapes = new ArrayList<>();
     private Graph graph = new Graph();
+    private Hallway hallway;
+
+    public Hallway getHallway() {
+        return hallway;
+    }
+
+    public void setHallway(Hallway hallway) {
+        this.hallway = hallway;
+    }
 
     private int level;
 
@@ -59,13 +68,13 @@ public class Floor implements Serializable {
         floorJSON.put("level", level);
 
         List<JSONObject> waypointsList = new ArrayList<JSONObject>();
-        for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : graph.graph.entrySet()) {
+        for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : graph.neighborGraph.entrySet()) {
 
             JSONObject waypointJSON = new JSONObject();
 
             waypointJSON.put("name", ((ExtendedRectangle) entry.getKey()).getName());
-
-            waypointJSON.put("type", "in progress");
+            waypointJSON.put("markerId", ((ExtendedRectangle) entry.getKey()).getId());
+            waypointJSON.put("type", "connector");
 
             List<JSONObject> neighboursList = new ArrayList<JSONObject>();
             for (Pair<ExtendedShape, String> neighbour : entry.getValue()) {
@@ -74,7 +83,7 @@ public class Floor implements Serializable {
                 neighbourJSON.put("direction", neighbour.getValue());
                 neighboursList.add(neighbourJSON);
             }
-            waypointJSON.put("neighbours", neighboursList);
+            waypointJSON.put("neighbors", neighboursList);
             waypointsList.add(waypointJSON);
         }
         floorJSON.put("waypoints", waypointsList);

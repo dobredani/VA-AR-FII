@@ -1,14 +1,20 @@
 package com.amihaeseisergiu.proiect;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Insets;
@@ -26,76 +32,75 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 public class MainMenu {
-    
+
     Stage stage;
     Scene scene;
-    
-    public MainMenu(Stage stage)
-    {
+
+    public MainMenu(Stage stage) {
         this.stage = stage;
-        
+
         BorderPane pane = new BorderPane();
         pane.setPadding(new Insets(5, 5, 5, 5));
-        
+
         HBox topHBox = new HBox();
         topHBox.setPadding(new Insets(5, 5, 5, 5));
         topHBox.setAlignment(Pos.CENTER);
         topHBox.setSpacing(10);
-        
+
         Label topLabel = new Label("Building Creator");
         topLabel.setStyle("-fx-font-size: 20;");
         topHBox.getChildren().addAll(topLabel);
-        
+
         VBox leftVBox = new VBox();
         leftVBox.setPadding(new Insets(5, 5, 5, 5));
         leftVBox.setAlignment(Pos.TOP_CENTER);
         leftVBox.setSpacing(10);
-        
+
         Button createNewBuilding = new Button("Create New Building");
         createNewBuilding.setMaxWidth(Double.MAX_VALUE);
         leftVBox.getChildren().addAll(createNewBuilding);
-        leftVBox.setStyle("-fx-border-color: black;" +
-        "-fx-border-insets: 5;" +
-        "-fx-border-width: 3;" +
-        "-fx-border-radius: 5;");
-        
+        leftVBox.setStyle("-fx-border-color: black;"
+                + "-fx-border-insets: 5;"
+                + "-fx-border-width: 3;"
+                + "-fx-border-radius: 5;");
+
         VBox centerVBox = new VBox();
         centerVBox.setPadding(new Insets(5, 5, 5, 5));
         centerVBox.setAlignment(Pos.TOP_CENTER);
         centerVBox.setSpacing(10);
-        centerVBox.setStyle("-fx-border-color: black;" +
-        "-fx-border-insets: 5;" +
-        "-fx-border-width: 3;" +
-        "-fx-border-radius: 5;");
+        centerVBox.setStyle("-fx-border-color: black;"
+                + "-fx-border-insets: 5;"
+                + "-fx-border-width: 3;"
+                + "-fx-border-radius: 5;");
         ScrollPane centerScrollPane = new ScrollPane();
         centerScrollPane.setFitToWidth(true);
         centerScrollPane.setStyle("-fx-background-color:transparent;");
-        
+
         VBox centerScrollPaneVBox = new VBox();
         centerScrollPaneVBox.setPadding(new Insets(5, 5, 5, 5));
         centerScrollPaneVBox.setAlignment(Pos.TOP_CENTER);
         centerScrollPaneVBox.setSpacing(10);
         centerScrollPane.setContent(centerScrollPaneVBox);
-        
+
         Button selectFolder = new Button("Load Buildings");
         selectFolder.setMaxWidth(Double.MAX_VALUE);
         centerVBox.getChildren().addAll(selectFolder);
         centerVBox.getChildren().addAll(centerScrollPane);
-        
+
         pane.setCenter(centerVBox);
         pane.setTop(topHBox);
         pane.setLeft(leftVBox);
-        
+
         createNewBuilding.setOnAction(e -> {
-            
+
             HBox buildingHBox = new HBox();
             buildingHBox.setPadding(new Insets(5, 5, 5, 5));
             buildingHBox.setAlignment(Pos.CENTER);
             buildingHBox.setSpacing(10);
-            buildingHBox.setStyle("-fx-border-color: black;" +
-            "-fx-border-insets: 5;" +
-            "-fx-border-width: 3;" +
-            "-fx-border-radius: 5;");
+            buildingHBox.setStyle("-fx-border-color: black;"
+                    + "-fx-border-insets: 5;"
+                    + "-fx-border-width: 3;"
+                    + "-fx-border-radius: 5;");
 
             TextField buildName = new TextField();
             HBox leftBox = new HBox(buildName);
@@ -116,9 +121,8 @@ public class MainMenu {
             centerScrollPaneVBox.getChildren().add(buildingHBox);
 
             editBtn.setOnAction(ev -> {
-                
-                if(!buildName.getText().isEmpty())
-                {
+
+                if (!buildName.getText().isEmpty()) {
                     Building build = new Building();
                     build.name = buildName.getText();
                     MainFrame mainFrame = new MainFrame(stage, build, true);
@@ -127,45 +131,42 @@ public class MainMenu {
             });
 
             deleteBtn.setOnAction(ev -> {
-                
+
                 centerScrollPaneVBox.getChildren().remove(buildingHBox);
             });
-            
+
         });
-        
+
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setInitialDirectory(new File("C:/"));
-        
+
         selectFolder.setOnAction(e -> {
             File selectedDirectory = directoryChooser.showDialog(stage);
 
-            if(selectedDirectory != null)
-            {
+            if (selectedDirectory != null) {
                 File[] files = fileFinder(selectedDirectory.getAbsolutePath());
-                for(File f : files)
-                {
+                for (File f : files) {
                     System.out.println(f.getAbsolutePath());
                 }
-                
+
                 centerScrollPaneVBox.getChildren().clear();
-                
-                for (File f : files)
-                {
+
+                for (File f : files) {
                     FileInputStream fileInputStream;
                     try {
                         fileInputStream = new FileInputStream(f.getAbsolutePath());
                         ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
                         Building build = (Building) objectInputStream.readObject();
                         objectInputStream.close();
-                        
+
                         HBox buildingHBox = new HBox();
                         buildingHBox.setPadding(new Insets(5, 5, 5, 5));
                         buildingHBox.setAlignment(Pos.CENTER);
                         buildingHBox.setSpacing(10);
-                        buildingHBox.setStyle("-fx-border-color: black;" +
-                        "-fx-border-insets: 5;" +
-                        "-fx-border-width: 3;" +
-                        "-fx-border-radius: 5;");
+                        buildingHBox.setStyle("-fx-border-color: black;"
+                                + "-fx-border-insets: 5;"
+                                + "-fx-border-width: 3;"
+                                + "-fx-border-radius: 5;");
 
                         TextField buildName = new TextField(f.getName().replaceFirst("[.][^.]+$", ""));
                         HBox leftBox = new HBox(buildName);
@@ -194,16 +195,19 @@ public class MainMenu {
                         });
 
                         exportBtn.setOnAction(ev -> {
-                            PrintWriter pw = null;
+                            System.out.println(build.toJson().toJSONString());
+                            String response = executePost("http://localhost:5000/building", build.toJson().toJSONString());
+                            System.out.println(response);
+                            /*PrintWriter pw = null;
                             try {
                                 pw = new PrintWriter("building.json");
                                 pw.write(build.toJson().toJSONString());
-
                                 pw.flush();
                                 pw.close();
                             } catch (FileNotFoundException ex) {
                                 ex.printStackTrace();
-                            }
+                            }*/
+                            // System.out.println(build.toJson().toJSONString());
                         });
 
                         deleteBtn.setOnAction(ev -> {
@@ -217,28 +221,70 @@ public class MainMenu {
                     } catch (IOException | ClassNotFoundException ex) {
                         Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    
+
                 }
             }
         });
-        
+
         scene = new Scene(pane, 800, 600);
         stage.setScene(scene);
         stage.show();
     }
-    
-    public File[] fileFinder(String dirName)
-    {
+
+    public static String executePost(String targetURL, String urlParameters) {
+        HttpURLConnection connection = null;
+
+        try {
+            //Create connection
+            URL url = new URL(targetURL);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Content-Type",
+                    "application/json; utf-8");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Content-Length",
+                    Integer.toString(urlParameters.getBytes().length));
+            connection.setRequestProperty("Content-Language", "en-US");
+
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
+
+            //Send request
+            DataOutputStream wr = new DataOutputStream(
+                    connection.getOutputStream());
+            wr.writeBytes(urlParameters);
+            wr.close();
+
+            //Get Response  
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
+            String line;
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+            return response.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+
+    public File[] fileFinder(String dirName) {
         File dir = new File(dirName);
 
-        return dir.listFiles(new FilenameFilter()
-        { 
+        return dir.listFiles(new FilenameFilter() {
             @Override
-            public boolean accept(File dir, String filename)
-            {
+            public boolean accept(File dir, String filename) {
                 return filename.endsWith(".building");
             }
-            
+
         });
 
     }

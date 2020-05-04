@@ -19,6 +19,7 @@ import com.example.myapplication.problem.Building;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
 
         start.setVisibility(View.GONE);
-        getBuildingData();
+        getBuildingData("FII");
         getBuildingList();
 
         Button start = findViewById(R.id.startBtn);
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        final String url = "http://192.168.0.147:5000/rest/building";
+        final String url = "http://192.168.1.142:5000/rest/building";
 
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
@@ -68,6 +69,13 @@ public class MainActivity extends AppCompatActivity {
                         List<String> buildingList = JsonParser.parseBuildingList(response);
                         applicationData.setBuildings(buildingList);
                         Log.d("JsonObject", "Building List" + buildingList.toString());
+
+                        List<Building> allBuildings = new ArrayList<>();
+                        for (String buildingName:applicationData.getBuildings())
+                            if (!buildingName.equals("FII"))
+                                getBuildingData(buildingName);
+                       // applicationData.setCurrentBuilding(allBuildings.get(0));
+
                         start.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                     }
@@ -84,15 +92,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void getBuildingData(){
+    public void getBuildingData(final String buildingName) {
         // the url is different for every computer.
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
 
-        String url = "http://192.168.0.147:5000/building/";
-//        Mock url until we implement function for picking building.
-        url = url.concat("FII");
+        String url = "http://192.168.1.142:5000/building/";
+        url = url.concat(buildingName);
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -102,8 +109,10 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d("JsonObject","Response: " + response.toString());
                         Building building = JsonParser.parseBuilding(response);
-                        applicationData.setCurrentBuilding(building);
-                        Log.e("check", applicationData.getCurrentBuilding().getName());
+                        applicationData.getBuildingsData().add(building);
+                        if (buildingName.equals("FII"))
+                            applicationData.setCurrentBuilding(building);
+                        //Log.e("check", applicationData.getCurrentBuilding().getName());
 //                        for ( Location location : applicationData.getCurrentBuilding().getLocations())
 //                            Log.e("location", location.getName());
                         //System.out.println(applicationData.getCurrentBuilding().getName());
@@ -116,6 +125,5 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         requestQueue.add(jsonObjectRequest);
-
     }
 }

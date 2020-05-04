@@ -85,33 +85,33 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 Location start = appData.currentBuilding.getLocation(startName);
                 Location destination = appData.currentBuilding.getLocation(destinationName);
                 getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
-            }
-        });
+    }
+});
 
         generateSuggestedPlaces(5);
 
-    }
+        }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+@Override
+public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (mToggle.onOptionsItemSelected(item)) {
-            return true;
+        return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+        }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+@Override
+public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.chooseBuilding) {
-            showBuildings();
+        showBuildings();
         }
         return false;
-    }
+        }
 
-    private void showBuildings() {
+private void showBuildings() {
         List<String> buildingNames = appData.getBuildings();
-        final String[] buildings = new String[buildingNames.size()];
+final String[] buildings = new String[buildingNames.size()];
         int i = 0;
         for(String temp : buildingNames) {
             buildings[i] = temp;
@@ -124,8 +124,9 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 appData.setCurrentBuildingName(buildings[which]);
+                appData.setCurrentBuilding(appData.getBuildingByName(buildings[which]));
                 generateSuggestedPlaces(5);
-                actionBar=getSupportActionBar();
+                actionBar = getSupportActionBar();
                 actionBar.setTitle(buildings[which]);
             }
 
@@ -148,8 +149,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.0.147:5000/route/FII?";
-        url = url.concat("start=" + start + "&" + "destination=" + destination);
+        String url = "http://192.168.1.142:5000/route/";
+        url = url.concat(appData.getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
         System.out.println(url);
         final RequestQueue requestQueue = Volley.newRequestQueue(StartNavigationActivity.this);
 

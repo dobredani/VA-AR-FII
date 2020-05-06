@@ -1,15 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lay"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="top|right"
+        android:background="#00000000"
+        >
+
+        <ImageButton
+            android:id="@+id/flash"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/flash_button"
+            android:contentDescription="flash"
+            android:src="@drawable/ic_icon_flash" />
+
+        <ImageButton
+            android:id="@+id/back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/flash_button"
+            android:contentDescription="flash"
+            android:src="@drawable/ic_close" />
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/camera_preview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="695dp"
         android:layout_weight="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +50,9 @@
             android:layout_gravity="bottom"
             android:background="#00000000"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+
     </FrameLayout>
+
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -41,20 +70,6 @@
             android:onClick="scanWaypoint"
             android:text="Scan Waypoint" />
 
-        <ImageButton
-            android:id="@+id/flash"
-            android:layout_width="84dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:src="@drawable/ic_flash" />
-
-        <Button
-            android:id="@+id/restartNavigation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="restartNavigation"
-            android:text="Restart Navigation" />
     </LinearLayout>
 
 </LinearLayout>

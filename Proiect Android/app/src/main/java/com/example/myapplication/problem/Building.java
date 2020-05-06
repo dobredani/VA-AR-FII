@@ -35,6 +35,6 @@ public class Building {
 
     public List<Location> getTopLocations(int howMany) {
         int locationsToReturn = Math.min(howMany, locations.size());
-        return locations.subList(0, locationsToReturn + 1);
+        return locations.subList(0, locationsToReturn);
     }
 }

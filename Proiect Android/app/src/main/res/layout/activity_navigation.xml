@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lay"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -12,8 +11,8 @@
         android:layout_height="wrap_content"
         android:gravity="top|right"
         android:background="#00000000"
+        android:orientation="horizontal"
         >
-
         <ImageButton
             android:id="@+id/flash"
             android:layout_width="30dp"
@@ -31,6 +30,8 @@
             android:background="@drawable/flash_button"
             android:contentDescription="flash"
             android:src="@drawable/ic_close" />
+
+
     </LinearLayout>
 
     <FrameLayout
@@ -46,7 +47,6 @@
             android:id="@+id/text_view_id"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_centerInParent="false"
             android:layout_gravity="bottom"
             android:background="#00000000"
             android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -54,22 +54,47 @@
     </FrameLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <ImageButton
+            android:id="@+id/arrowBack"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="10dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/flash_button"
+            android:contentDescription="flash"
+            android:src="@drawable/ic_arrow_back" />
+        <ImageButton
+            android:id="@+id/arrowForward"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toRightOf="@+id/arrowBack"
+            android:layout_margin="10dp"
+            android:background="@drawable/flash_button"
+            android:contentDescription="flash"
+            android:src="@drawable/ic_arrow_forward" />
+
         <Button
             android:id="@+id/scanWaypointButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_alignParentRight="true"
+
+            android:background="@drawable/waypoint_button"
             android:onClick="scanWaypoint"
+            android:padding="10dp"
             android:text="Scan Waypoint" />
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
 </LinearLayout>

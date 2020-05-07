@@ -21,47 +21,76 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp">
-
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_close"
+                android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/closeInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:drawableStart="@drawable/ic_close"
                 android:text="@string/close_button"
                 android:textAlignment="center"
                 android:textColor="#000"
                 android:textSize="20sp" />
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_arrow_forward"
+                android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/nextBtnInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:drawableStart="@drawable/ic_arrow_forward"
-                android:text="@string/next_button"
                 android:textAlignment="center"
+                android:text="@string/next_button"
                 android:textColor="#000"
                 android:textSize="20sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_arrow_back"
+                android:layout_gravity="center"/>
 
             <TextView
                 android:id="@+id/previousBtnInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:drawableStart="@drawable/ic_arrow_back"
                 android:text="@string/previous_button"
                 android:textAlignment="center"
                 android:textColor="#000"
                 android:textSize="20sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_icon_flash"
+                android:layout_gravity="center"/>
             <TextView
                 android:id="@+id/flashBtnInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:drawableStart="@drawable/ic_icon_flash"
-                android:text="@string/flash_button"
                 android:textAlignment="center"
+                android:text="@string/flash_button"
+                android:textColor="#000"
+                android:textSize="20sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_scan"
+                android:layout_gravity="center"/>
+            <TextView
+                android:id="@+id/scanBtnInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:textAlignment="center"
+                android:text="@string/scan_button"
                 android:textColor="#000"
                 android:textSize="20sp" />
 

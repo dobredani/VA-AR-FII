@@ -11,6 +11,7 @@ import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ public class CameraActivity extends AppCompatActivity {
     private boolean isCameraInitialized;
     private Camera mCamera = null;
     private FrameLayout preview;
-    private ImageButton flashB;
+    private Button flashB;
     private boolean isFlashOn;
     private Snackbar mySnackbar;
     protected String currentInstruction;

@@ -6,24 +6,38 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/navigationMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="top|right"
-        android:background="#00000000"
         android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         >
+
         <ImageButton
             android:id="@+id/flash"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="10dp"
+            android:layout_toStartOf="@id/help"
             android:background="@drawable/flash_button"
             android:contentDescription="flash"
             android:src="@drawable/ic_icon_flash" />
+        <ImageButton
+            android:id="@+id/help"
+            android:layout_toStartOf="@+id/back"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/flash_button"
+            android:contentDescription="flash"
+            android:src="@drawable/ic_icon_help" />
 
         <ImageButton
             android:id="@+id/back"
+            android:layout_alignParentEnd="true"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="10dp"
@@ -32,16 +46,14 @@
             android:src="@drawable/ic_close" />
 
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/camera_preview"
         android:layout_width="match_parent"
-        android:layout_height="695dp"
-        android:layout_weight="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <TextView
             android:id="@+id/text_view_id"
@@ -55,7 +67,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/navigationButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -68,7 +80,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_margin="10dp"
-            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:background="@drawable/flash_button"
             android:contentDescription="flash"
             android:src="@drawable/ic_arrow_back" />
@@ -76,7 +88,7 @@
             android:id="@+id/arrowForward"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_toRightOf="@+id/arrowBack"
+            android:layout_toEndOf="@+id/arrowBack"
             android:layout_margin="10dp"
             android:background="@drawable/flash_button"
             android:contentDescription="flash"
@@ -87,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
 
             android:background="@drawable/waypoint_button"
             android:onClick="scanWaypoint"

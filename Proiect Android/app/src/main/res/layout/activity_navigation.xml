@@ -32,8 +32,15 @@
             android:layout_height="30dp"
             android:layout_margin="10dp"
             android:background="@drawable/flash_button"
-            android:contentDescription="flash"
+            android:contentDescription="help"
             android:src="@drawable/ic_icon_help" />
+      <!--  <Button
+            android:id="@+id/restartNavigation"
+            android:background="@drawable/flash_button"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="10dp"
+            android:onClick="restartNavigation" />-->
 
         <ImageButton
             android:id="@+id/back"
@@ -42,7 +49,7 @@
             android:layout_height="30dp"
             android:layout_margin="10dp"
             android:background="@drawable/flash_button"
-            android:contentDescription="flash"
+            android:contentDescription="close"
             android:src="@drawable/ic_close" />
 
 

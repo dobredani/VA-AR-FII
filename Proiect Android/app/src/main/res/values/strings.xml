@@ -4,4 +4,8 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="FII">UAIC, Corp C</string>
+    <string name="close_button">This closes the camera and sends you to the main screen.</string>
+    <string name="next_button">This button will show you the next instruction.</string>
+    <string name="previous_button">This button will show you the previous instruction.</string>
+    <string name="flash_button">This will open your camera flash.</string>
 </resources>

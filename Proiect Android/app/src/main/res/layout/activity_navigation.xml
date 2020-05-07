@@ -34,15 +34,18 @@
             android:background="@drawable/flash_button"
             android:contentDescription="flash"
             android:src="@drawable/ic_icon_flash" />
-        <ImageButton
+        <Button
             android:id="@+id/help"
             android:layout_toStartOf="@+id/restartNavigation"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_margin="10dp"
             android:background="@drawable/flash_button"
-            android:contentDescription="help"
-            android:src="@drawable/ic_icon_help" />
+            android:layout_margin="10dp"
+            android:padding="8dp"
+            android:gravity="center"
+            android:drawableStart="@drawable/ic_icon_help"
+
+            android:onClick="showHelp" />
         <Button
             android:id="@+id/restartNavigation"
             android:layout_alignParentEnd="true"

@@ -203,7 +203,7 @@ final String[] buildings = new String[buildingNames.size()];
 
                 // Set the text color of TextView (ListView Item)
                 tv.setTextColor(Color.BLACK);
-                tv.setBackgroundColor(Color.parseColor("#C8D2D3"));
+                tv.setBackgroundColor(Color.parseColor("#B7D4FF"));
 
                 // Generate ListView Item using TextView
                 return view;

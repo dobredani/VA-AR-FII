@@ -88,7 +88,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     }
 });
 
-        generateSuggestedPlaces(3);
+        generateSuggestedPlaces(4);
 
         }
 
@@ -125,7 +125,7 @@ final String[] buildings = new String[buildingNames.size()];
             public void onClick(DialogInterface dialog, int which) {
                 appData.setCurrentBuildingName(buildings[which]);
                 appData.setCurrentBuilding(appData.getBuildingByName(buildings[which]));
-                generateSuggestedPlaces(5);
+                generateSuggestedPlaces(4);
                 actionBar = getSupportActionBar();
                 actionBar.setTitle(buildings[which]);
             }

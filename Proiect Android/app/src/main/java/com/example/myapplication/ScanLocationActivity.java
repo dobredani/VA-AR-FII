@@ -59,4 +59,7 @@ public class ScanLocationActivity extends AppCompatActivity implements AsyncQR {
     }
 
 
+    public void closeActivity(View view) {
+        finish();
+    }
 }

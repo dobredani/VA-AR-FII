@@ -30,25 +30,27 @@
                 android:layout_height="match_parent"
                 tools:layout="@layout/activity_scan_location" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/flash"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_gravity="top|right"
+                android:layout_gravity="end"
+                android:layout_marginEnd="40dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="50dp"
                 android:background="@drawable/flash_button"
-                android:contentDescription="flash"
-                android:src="@drawable/ic_icon_flash" />
-            <ImageButton
-                android:id="@+id/back"
+                android:drawableStart="@drawable/ic_icon_flash"
+                android:padding="8dp" />
+            <Button
+                android:id="@+id/restartNavigation"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_margin="10dp"
-                android:layout_gravity="top|right"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="end"
                 android:background="@drawable/flash_button"
-                android:contentDescription="flash"
-                android:src="@drawable/ic_close" />
+                android:layout_marginEnd="5dp"
+                android:gravity="center"
+                android:onClick="closeActivity"
+                android:drawableStart="@drawable/ic_close" />
 
         </FrameLayout>
     </LinearLayout>

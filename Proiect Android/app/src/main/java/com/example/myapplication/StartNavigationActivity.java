@@ -149,7 +149,7 @@ final String[] buildings = new String[buildingNames.size()];
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.1.142:5000/route/";
+        String url = "http://192.168.1.8:5000/route/";
         url = url.concat(appData.getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
         System.out.println(url);
         final RequestQueue requestQueue = Volley.newRequestQueue(StartNavigationActivity.this);
@@ -183,7 +183,7 @@ final String[] buildings = new String[buildingNames.size()];
     private void generateSuggestedPlaces(int howMany) {
         final ListView lv = (ListView) findViewById(R.id.listView);
         List<Location> topLocations = appData.getCurrentBuilding().getTopLocations(howMany);
-        String[] locations = new String[howMany+1];
+        String[] locations = new String[topLocations.size()];
         int i = 0;
         for(Location temp : topLocations) {
             locations[i] = temp.getName();

@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StartNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
@@ -75,16 +77,31 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             }
         });
 
-        Button startNavigation = findViewById(R.id.navigationBtn);
+        final Button startNavigation = findViewById(R.id.navigationBtn);
         startNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startNavigation.setEnabled(false);
                 String startName = ((TextView)findViewById(R.id.currentLocation)).getText().toString();
                 String destinationName = ((TextView)findViewById(R.id.destination)).getText().toString();
                 System.out.println(appData.currentBuilding);
                 Location start = appData.currentBuilding.getLocation(startName);
                 Location destination = appData.currentBuilding.getLocation(destinationName);
                 getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
+                Timer buttonTimer = new Timer();
+                buttonTimer.schedule(new TimerTask() {
+
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                startNavigation.setEnabled(true);
+                            }
+                        });
+                    }
+                }, 5000);
     }
 });
 

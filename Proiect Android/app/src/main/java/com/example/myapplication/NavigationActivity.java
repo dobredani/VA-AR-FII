@@ -42,6 +42,7 @@ public class NavigationActivity extends CameraActivity {
         displayController = new DisplayController();
         Intent intent = getIntent();
         instructions = intent.getStringArrayListExtra("instructions");
+        
         codesToScan = intent.getIntegerArrayListExtra("codesToScan");
 
         snackbar = Snackbar.make(findViewById(R.id.lay), "", Snackbar.LENGTH_INDEFINITE);
@@ -82,6 +83,7 @@ public class NavigationActivity extends CameraActivity {
                     button.setClickable(false);
                 } else
                     currentInstruction = instructions.get(currentIndex - 1);
+
             }
         }
     }

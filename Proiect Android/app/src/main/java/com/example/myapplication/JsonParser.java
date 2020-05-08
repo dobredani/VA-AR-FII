@@ -108,11 +108,16 @@ public class JsonParser {
 
     public static List<Waypoint> parseRoute(JSONArray jsonArray) {
         List<Waypoint> waypointList = new ArrayList<>();
+        Boolean check_stairs = false;
 //        Building currentBuilding = MainActivity.applicationData.getCurrentBuilding();
         try {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject object = jsonArray.getJSONObject(i);
+                if (object.getString("name").equals("Stairs") && check_stairs.equals(false)) {
+                    check_stairs = true;
+                    continue;
+                }
 
                 Waypoint waypoint = null;
 
@@ -133,20 +138,20 @@ public class JsonParser {
 //                        Add indication to the previous waypoint.
                     Waypoint prevWaypoint = waypointList.get(waypointList.size() - 2);
 
-                    if (object.getString("name").equals("Stairs") && prevWaypoint.getLocationName().equals("Stairs")) {
+                    if (object.getString("name").equals("Stairs")) {
+                        check_stairs = false;
                         int floor = object.getInt("floor");
 
 //                          Previous Waypoint indication = Go {direction}
-                        prevWaypoint.addInstruction(" to floor " + Integer.toString(floor));
+                        prevWaypoint.addInstruction(", take the stairs to floor " + Integer.toString(floor));
                     }
 
-                    prevWaypoint.addInstruction(" then " + "scan " + object.getString("name"));
+                    prevWaypoint.addInstruction(", then " + "scan " + object.getString("name"));
 
 
                 }
 
             }
-
             for (Waypoint waypoint : waypointList) {
                 Log.e("Indication", waypoint.print());
             }

@@ -149,7 +149,7 @@ final String[] buildings = new String[buildingNames.size()];
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://" + R.string.ip + ":" + R.string.port + "/route/";
+        String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/route/";
         url = url.concat(appData.getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
         System.out.println(url);
         final RequestQueue requestQueue = Volley.newRequestQueue(StartNavigationActivity.this);

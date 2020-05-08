@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        final String url = "http://" + R.string.ip + ":" + R.string.port + "/rest/building";
+        final String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/rest/building";
 
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         // for device, run ipconfig in cmd and get ipv4 address
 
 
-        String url = "http://" + R.string.ip + ":" + R.string.port + "/building/";
+        String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/building/";
         url = url.concat(buildingName);
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 

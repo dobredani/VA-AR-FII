@@ -1,10 +1,15 @@
 package com.example.myapplication;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    private Dialog errorDialog;
+    private Button closePopup;
+    private LinearLayout popup;
     final static ApplicationData applicationData = new ApplicationData();
     Button start;
     ProgressBar progressBar;
@@ -33,12 +40,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        errorDialog = new Dialog(this);
+
         start = findViewById(R.id.startBtn);
         progressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
 
         start.setVisibility(View.GONE);
         getBuildingData("FII");
         getBuildingList();
+
 
         Button start = findViewById(R.id.startBtn);
         start.setOnClickListener(new View.OnClickListener() {
@@ -65,16 +75,16 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("JsonObject","Response: " + response.toString());
+                        Log.d("JsonObject", "Response: " + response.toString());
                         List<String> buildingList = JsonParser.parseBuildingList(response);
                         applicationData.setBuildings(buildingList);
                         Log.d("JsonObject", "Building List" + buildingList.toString());
 
                         List<Building> allBuildings = new ArrayList<>();
-                        for (String buildingName:applicationData.getBuildings())
+                        for (String buildingName : applicationData.getBuildings())
                             if (!buildingName.equals("FII"))
                                 getBuildingData(buildingName);
-                       // applicationData.setCurrentBuilding(allBuildings.get(0));
+                        // applicationData.setCurrentBuilding(allBuildings.get(0));
 
                         start.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
@@ -82,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Log.e("JsonError","Error on get JSON request!");
+                        showPopup();
+                        Log.e("JsonError", "Error on get JSON request!");
                         start.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                     }
@@ -107,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("JsonObject","Response: " + response.toString());
+                        Log.d("JsonObject", "Response: " + response.toString());
                         Building building = JsonParser.parseBuilding(response);
                         applicationData.getBuildingsData().add(building);
                         if (buildingName.equals("FII"))
@@ -120,10 +130,32 @@ public class MainActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Log.e("JsonError","Error on get JSON request!");
+                        showPopup();
+                        Log.e("JsonError", "Error on get JSON request!");
                     }
                 });
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public void refreshActivity() {
+        finish();
+        startActivity(getIntent());
+    }
+
+    public void showPopup() {
+        errorDialog.setContentView(R.layout.error_popup);
+        popup = (LinearLayout) errorDialog.findViewById(R.id.errorInfo);
+        popup.setVisibility(View.VISIBLE);
+        closePopup = (Button) errorDialog.findViewById(R.id.refreshBtn);
+        closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorDialog.dismiss();
+                refreshActivity();
+            }
+        });
+        errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        errorDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        errorDialog.show();
     }
 }

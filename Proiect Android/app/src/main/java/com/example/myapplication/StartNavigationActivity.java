@@ -1,18 +1,22 @@
 package com.example.myapplication;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -47,13 +51,18 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     private ActionBarDrawerToggle mToggle;
     private ApplicationData appData = new ApplicationData();
     private ActionBar actionBar;
+    private Dialog errorDialog;
+    private Button closePopup;
+    private LinearLayout popup;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        errorDialog = new Dialog(this);
+
         setContentView(R.layout.start_navigation);
-        actionBar=getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setTitle(appData.getCurrentBuilding().getName());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -82,8 +91,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             @Override
             public void onClick(View v) {
                 startNavigation.setEnabled(false);
-                String startName = ((TextView)findViewById(R.id.currentLocation)).getText().toString();
-                String destinationName = ((TextView)findViewById(R.id.destination)).getText().toString();
+                String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
+                String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
                 System.out.println(appData.currentBuilding);
                 Location start = appData.currentBuilding.getLocation(startName);
                 Location destination = appData.currentBuilding.getLocation(destinationName);
@@ -102,35 +111,35 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                         });
                     }
                 }, 5000);
-    }
-});
+            }
+        });
 
         generateSuggestedPlaces(4);
 
-        }
+    }
 
-@Override
-public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (mToggle.onOptionsItemSelected(item)) {
-        return true;
+            return true;
         }
         return super.onOptionsItemSelected(item);
-        }
+    }
 
-@Override
-public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.chooseBuilding) {
-        showBuildings();
+            showBuildings();
         }
         return false;
-        }
+    }
 
-private void showBuildings() {
+    private void showBuildings() {
         List<String> buildingNames = appData.getBuildings();
-final String[] buildings = new String[buildingNames.size()];
+        final String[] buildings = new String[buildingNames.size()];
         int i = 0;
-        for(String temp : buildingNames) {
+        for (String temp : buildingNames) {
             buildings[i] = temp;
             i++;
         }
@@ -155,7 +164,7 @@ final String[] buildings = new String[buildingNames.size()];
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == 1) {
             String msg = data.getStringExtra("returnedData");
-            Location location =appData.getCurrentBuilding().getLocationById(Integer.parseInt(msg));
+            Location location = appData.getCurrentBuilding().getLocationById(Integer.parseInt(msg));
             EditText editText = findViewById(R.id.currentLocation);
             editText.setText(location.getName());
         }
@@ -176,10 +185,10 @@ final String[] buildings = new String[buildingNames.size()];
 
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("JsonObject","Response: " + response.toString());
+                        Log.d("JsonObject", "Response: " + response.toString());
 
                         List<Waypoint> waypointList = JsonParser.parseRoute(response);
-                        for (Waypoint waypoint:waypointList)
+                        for (Waypoint waypoint : waypointList)
                             System.out.println(waypoint);
                         appData.setWaypoints(waypointList);
                         Intent intent = new Intent(StartNavigationActivity.this, NavigationActivity.class);
@@ -190,19 +199,19 @@ final String[] buildings = new String[buildingNames.size()];
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Log.e("JsonError","Error on get JSON request!");
+                        showPopup();
+                        Log.e("JsonError", "Error on get JSON request!");
                     }
                 });
         requestQueue.add(jsonObjectRequest);
     }
-  
+
     private void generateSuggestedPlaces(int howMany) {
         final ListView lv = (ListView) findViewById(R.id.listView);
         List<Location> topLocations = appData.getCurrentBuilding().getTopLocations(howMany);
         String[] locations = new String[howMany];
         int i = 0;
-        for(Location temp : topLocations) {
+        for (Location temp : topLocations) {
             locations[i] = temp.getName();
             i++;
         }
@@ -228,5 +237,27 @@ final String[] buildings = new String[buildingNames.size()];
         };
         lv.setAdapter(arrayAdapter);
 
+    }
+
+    public void refreshActivity() {
+        finish();
+        startActivity(getIntent());
+    }
+
+    public void showPopup() {
+        errorDialog.setContentView(R.layout.error_popup);
+        popup = (LinearLayout) errorDialog.findViewById(R.id.errorInfo);
+        popup.setVisibility(View.VISIBLE);
+        closePopup = (Button) errorDialog.findViewById(R.id.refreshBtn);
+        closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorDialog.dismiss();
+                refreshActivity();
+            }
+        });
+        errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        errorDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        errorDialog.show();
     }
 }

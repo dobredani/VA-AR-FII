@@ -9,4 +9,5 @@
     <string name="previous_button">This button will show you the previous instruction.</string>
     <string name="flash_button">This will open your camera flash.</string>
     <string name="scan_button">This will allow you to scan a waypoint.</string>
+    <string name="error_message">Could not load data from database. Please try refreshing the page.</string>
 </resources>

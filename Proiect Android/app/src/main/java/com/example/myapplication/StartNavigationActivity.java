@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,8 +53,6 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     private ApplicationData appData = new ApplicationData();
     private ActionBar actionBar;
     private Dialog errorDialog;
-    private Button closePopup;
-    private LinearLayout popup;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -92,25 +91,38 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             public void onClick(View v) {
                 startNavigation.setEnabled(false);
                 String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
-                String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
-                System.out.println(appData.currentBuilding);
-                Location start = appData.currentBuilding.getLocation(startName);
-                Location destination = appData.currentBuilding.getLocation(destinationName);
-                getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
-                Timer buttonTimer = new Timer();
-                buttonTimer.schedule(new TimerTask() {
+                if (appData.getCurrentBuilding().getLocation(startName) == null) {
+                    Toast.makeText(getApplicationContext(), "Invalid Starting Point", Toast.LENGTH_SHORT).show();
+                    startNavigation.setEnabled(true);
 
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
+                } else {
+                    String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
+                    if (appData.getCurrentBuilding().getLocation(destinationName) == null) {
+                        Toast.makeText(getApplicationContext(), "Invalid Destination", Toast.LENGTH_SHORT).show();
+                        startNavigation.setEnabled(true);
+                    } else {
+                        Location start = ApplicationData.currentBuilding.getLocation(startName);
+                        Location destination = ApplicationData.currentBuilding.getLocation(destinationName);
+                        getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
+                        Timer buttonTimer = new Timer();
+                        buttonTimer.schedule(new TimerTask() {
 
                             @Override
                             public void run() {
-                                startNavigation.setEnabled(true);
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        startNavigation.setEnabled(true);
+                                    }
+                                });
                             }
-                        });
+                        }, 5000);
+
                     }
-                }, 5000);
+                }
+
+
             }
         });
 
@@ -246,9 +258,9 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
     public void showPopup() {
         errorDialog.setContentView(R.layout.error_popup);
-        popup = (LinearLayout) errorDialog.findViewById(R.id.errorInfo);
+        LinearLayout popup = (LinearLayout) errorDialog.findViewById(R.id.errorInfo);
         popup.setVisibility(View.VISIBLE);
-        closePopup = (Button) errorDialog.findViewById(R.id.refreshBtn);
+        Button closePopup = (Button) errorDialog.findViewById(R.id.refreshBtn);
         closePopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

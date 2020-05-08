@@ -29,8 +29,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Dialog errorDialog;
-    private Button closePopup;
-    private LinearLayout popup;
     final static ApplicationData applicationData = new ApplicationData();
     Button start;
     ProgressBar progressBar;
@@ -144,9 +142,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopup() {
         errorDialog.setContentView(R.layout.error_popup);
-        popup = (LinearLayout) errorDialog.findViewById(R.id.errorInfo);
+        LinearLayout popup = (LinearLayout) errorDialog.findViewById(R.id.errorInfo);
         popup.setVisibility(View.VISIBLE);
-        closePopup = (Button) errorDialog.findViewById(R.id.refreshBtn);
+        Button closePopup = (Button) errorDialog.findViewById(R.id.refreshBtn);
         closePopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -5,8 +5,6 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,13 +14,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class UpdateClassroomPopUp extends Application {
 
@@ -30,12 +26,13 @@ public class UpdateClassroomPopUp extends Application {
     Classroom shape;
     double x;
     double y;
-    
+    DrawingPanel drawingPanel;
 
-    public UpdateClassroomPopUp(ExtendedShape shape, double x, double y) {
+    public UpdateClassroomPopUp(DrawingPanel drawingPanel, ExtendedShape shape, double x, double y) {
         this.shape = (Classroom) shape;
         this.x = x;
         this.y = y;
+        this.drawingPanel = drawingPanel;
     }
 
     @Override
@@ -49,7 +46,7 @@ public class UpdateClassroomPopUp extends Application {
         topHBox.getChildren().addAll(info);
         topHBox.setAlignment(Pos.CENTER);
         topHBox.setPadding(new Insets(10, 10, 10, 10));
- 
+
         VBox containerOrar = new VBox();
         Button luniAdd = new Button("+luni");
         Button martiAdd = new Button("+marti");
@@ -59,6 +56,21 @@ public class UpdateClassroomPopUp extends Application {
         Button sambataAdd = new Button("+sambata");
         Button duminicaAdd = new Button("+duminica");
 
+        
+        //cod bagat de mine
+        Label widthLabel = new Label("Width: ");
+        Label heightLabel = new Label("Height: ");
+        TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
+        TextField heightField = new TextField(String.valueOf(((ExtendedRectangle) shape).getLength()));
+        HBox width = new HBox();
+        width.getChildren().addAll(widthLabel, widthField);
+        HBox height = new HBox();
+        height.getChildren().addAll(heightLabel, heightField);
+        containerOrar.getChildren().addAll(width, height);
+        width.setAlignment(Pos.CENTER);
+        height.setAlignment(Pos.CENTER);
+        //cod bagat de mine
+        
         VBox luni = new VBox();
         luni.getChildren().add(new Label("luni"));
         luni.setAlignment(Pos.CENTER);
@@ -101,14 +113,13 @@ public class UpdateClassroomPopUp extends Application {
         duminica.getChildren().add(duminicaAdd);
         containerOrar.getChildren().add(duminica);
 
-       
         ScrollPane scrollOrar = new ScrollPane();
         containerOrar.setAlignment(Pos.CENTER);
         scrollOrar.setContent(containerOrar);
         scrollOrar.setFitToWidth(true);
-       
-       for(int i=0;i<shape.listaMaterieLuni.size();i++)
-        {   final int index=i;
+
+        for (int i = 0; i < shape.listaMaterieLuni.size(); i++) {
+            final int index = i;
             HBox grupareInputuri = new HBox();
             Label oraStart = new Label("Ora inceput");
             Label oraFinal = new Label("Ora final");
@@ -137,8 +148,8 @@ public class UpdateClassroomPopUp extends Application {
                 shape.listaMaterieLuni.remove(index);
             });
         }
-        for(int i=0;i<shape.listaMaterieMarti.size();i++)
-        {   final int index=i;
+        for (int i = 0; i < shape.listaMaterieMarti.size(); i++) {
+            final int index = i;
             HBox grupareInputuri = new HBox();
             Label oraStart = new Label("Ora inceput");
             Label oraFinal = new Label("Ora final");
@@ -166,9 +177,9 @@ public class UpdateClassroomPopUp extends Application {
                 shape.listaOraSfarsitMarti.remove(index);
                 shape.listaMaterieMarti.remove(index);
             });
-        } 
-        for(int i=0;i<shape.listaMaterieMiercuri.size();i++)
-        {   final int index=i;
+        }
+        for (int i = 0; i < shape.listaMaterieMiercuri.size(); i++) {
+            final int index = i;
             HBox grupareInputuri = new HBox();
             Label oraStart = new Label("Ora inceput");
             Label oraFinal = new Label("Ora final");
@@ -197,8 +208,8 @@ public class UpdateClassroomPopUp extends Application {
                 shape.listaMaterieMiercuri.remove(index);
             });
         }
-        for(int i=0;i<shape.listaMaterieJoi.size();i++)
-        {   final int index=i;
+        for (int i = 0; i < shape.listaMaterieJoi.size(); i++) {
+            final int index = i;
             HBox grupareInputuri = new HBox();
             Label oraStart = new Label("Ora inceput");
             Label oraFinal = new Label("Ora final");
@@ -226,9 +237,9 @@ public class UpdateClassroomPopUp extends Application {
                 shape.listaOraSfarsitJoi.remove(index);
                 shape.listaMaterieJoi.remove(index);
             });
-        } 
-        for(int i=0;i<shape.listaMaterieVineri.size();i++)
-        {   final int index=i;
+        }
+        for (int i = 0; i < shape.listaMaterieVineri.size(); i++) {
+            final int index = i;
             HBox grupareInputuri = new HBox();
             Label oraStart = new Label("Ora inceput");
             Label oraFinal = new Label("Ora final");
@@ -256,9 +267,9 @@ public class UpdateClassroomPopUp extends Application {
                 shape.listaOraSfarsitVineri.remove(index);
                 shape.listaMaterieVineri.remove(index);
             });
-        } 
-        for(int i=0;i<shape.listaMaterieSambata.size();i++)
-        {   final int index=i;
+        }
+        for (int i = 0; i < shape.listaMaterieSambata.size(); i++) {
+            final int index = i;
             HBox grupareInputuri = new HBox();
             Label oraStart = new Label("Ora inceput");
             Label oraFinal = new Label("Ora final");
@@ -286,9 +297,9 @@ public class UpdateClassroomPopUp extends Application {
                 shape.listaOraSfarsitSambata.remove(index);
                 shape.listaMaterieSambata.remove(index);
             });
-        } 
-        for(int i=0;i<shape.listaMaterieDuminica.size();i++)
-        {   final int index=i;
+        }
+        for (int i = 0; i < shape.listaMaterieDuminica.size(); i++) {
+            final int index = i;
             HBox grupareInputuri = new HBox();
             Label oraStart = new Label("Ora inceput");
             Label oraFinal = new Label("Ora final");
@@ -316,7 +327,7 @@ public class UpdateClassroomPopUp extends Application {
                 shape.listaOraSfarsitDuminica.remove(index);
                 shape.listaMaterieDuminica.remove(index);
             });
-        } 
+        }
         luniAdd.setOnAction(event -> {
             HBox grupareInputuri = new HBox();
             Label oraStart = new Label("Ora inceput");
@@ -539,234 +550,271 @@ public class UpdateClassroomPopUp extends Application {
         closeBtn.setOnAction(event -> {
             stage.close();
             rectangle.setName(nameField.getText());
-            int contor=1;
-            int figuriAdaugateAnterior=0;
+            int contor = 1;
+            int figuriAdaugateAnterior = 0;
             for (Node child : luni.getChildren()) {
-                if (child instanceof HBox) 
+                if (child instanceof HBox) {
                     for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField)
-                        figuriAdaugateAnterior++;
-                        if(figuriAdaugateAnterior>shape.marimeListaLuni*3)
-                        {if(contor==1)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraStartLuni.add(((TextField) child1).getText());
-                            contor++;
-                        }}
-                        else
-                        if(contor==2)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraSfarsitLuni.add(((TextField) child1).getText());
-                            contor++;
-                         
-                        }}
-                        else
-                        {if(contor==3)
                         if (child1 instanceof TextField) {
-                            shape.listaMaterieLuni.add(((TextField) child1).getText());
-                            contor=1;
+                            figuriAdaugateAnterior++;
                         }
-                        }}
+                        if (figuriAdaugateAnterior > shape.marimeListaLuni * 3) {
+                            if (contor == 1) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraStartLuni.add(((TextField) child1).getText());
+                                    contor++;
+                                }
+                            } else if (contor == 2) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraSfarsitLuni.add(((TextField) child1).getText());
+                                    contor++;
+
+                                }
+                            } else {
+                                if (contor == 3) {
+                                    if (child1 instanceof TextField) {
+                                        shape.listaMaterieLuni.add(((TextField) child1).getText());
+                                        contor = 1;
+                                    }
+                                }
+                            }
+                        }
                     }
-                
-            
-        }
-            contor=1;
-            figuriAdaugateAnterior=0;
+                }
+
+            }
+            contor = 1;
+            figuriAdaugateAnterior = 0;
             for (Node child : marti.getChildren()) {
-                if (child instanceof HBox) 
+                if (child instanceof HBox) {
                     for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField)
-                        figuriAdaugateAnterior++;
-                        if(figuriAdaugateAnterior>shape.marimeListaMarti*3)
-                        {if(contor==1)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraStartMarti.add(((TextField) child1).getText());
-                            contor++;
-                        }}
-                        else
-                        if(contor==2)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraSfarsitMarti.add(((TextField) child1).getText());
-                            contor++;
-                         
-                        }}
-                        else
-                        {if(contor==3)
                         if (child1 instanceof TextField) {
-                            shape.listaMaterieMarti.add(((TextField) child1).getText());
-                            contor=1;
+                            figuriAdaugateAnterior++;
                         }
-                        }}
+                        if (figuriAdaugateAnterior > shape.marimeListaMarti * 3) {
+                            if (contor == 1) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraStartMarti.add(((TextField) child1).getText());
+                                    contor++;
+                                }
+                            } else if (contor == 2) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraSfarsitMarti.add(((TextField) child1).getText());
+                                    contor++;
+
+                                }
+                            } else {
+                                if (contor == 3) {
+                                    if (child1 instanceof TextField) {
+                                        shape.listaMaterieMarti.add(((TextField) child1).getText());
+                                        contor = 1;
+                                    }
+                                }
+                            }
+                        }
                     }
-                
-            
-        }
-            contor=1;
-            figuriAdaugateAnterior=0;
+                }
+
+            }
+            contor = 1;
+            figuriAdaugateAnterior = 0;
             for (Node child : miercuri.getChildren()) {
-                if (child instanceof HBox) 
+                if (child instanceof HBox) {
                     for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField)
-                        figuriAdaugateAnterior++;
-                        if(figuriAdaugateAnterior>shape.marimeListaMiercuri*3)
-                        {if(contor==1)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraStartMiercuri.add(((TextField) child1).getText());
-                            contor++;
-                        }}
-                        else
-                        if(contor==2)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraSfarsitMiercuri.add(((TextField) child1).getText());
-                            contor++;
-                         
-                        }}
-                        else
-                        {if(contor==3)
                         if (child1 instanceof TextField) {
-                            shape.listaMaterieMiercuri.add(((TextField) child1).getText());
-                            contor=1;
+                            figuriAdaugateAnterior++;
                         }
-                        }}
+                        if (figuriAdaugateAnterior > shape.marimeListaMiercuri * 3) {
+                            if (contor == 1) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraStartMiercuri.add(((TextField) child1).getText());
+                                    contor++;
+                                }
+                            } else if (contor == 2) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraSfarsitMiercuri.add(((TextField) child1).getText());
+                                    contor++;
+
+                                }
+                            } else {
+                                if (contor == 3) {
+                                    if (child1 instanceof TextField) {
+                                        shape.listaMaterieMiercuri.add(((TextField) child1).getText());
+                                        contor = 1;
+                                    }
+                                }
+                            }
+                        }
                     }
-                
-            
-        }
-             contor=1;
-            figuriAdaugateAnterior=0;
+                }
+
+            }
+            contor = 1;
+            figuriAdaugateAnterior = 0;
             for (Node child : joi.getChildren()) {
-                if (child instanceof HBox) 
+                if (child instanceof HBox) {
                     for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField)
-                        figuriAdaugateAnterior++;
-                        if(figuriAdaugateAnterior>shape.marimeListaJoi*3)
-                        {if(contor==1)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraStartJoi.add(((TextField) child1).getText());
-                            contor++;
-                        }}
-                        else
-                        if(contor==2)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraSfarsitJoi.add(((TextField) child1).getText());
-                            contor++;
-                         
-                        }}
-                        else
-                        {if(contor==3)
                         if (child1 instanceof TextField) {
-                            shape.listaMaterieJoi.add(((TextField) child1).getText());
-                            contor=1;
+                            figuriAdaugateAnterior++;
                         }
-                        }}
+                        if (figuriAdaugateAnterior > shape.marimeListaJoi * 3) {
+                            if (contor == 1) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraStartJoi.add(((TextField) child1).getText());
+                                    contor++;
+                                }
+                            } else if (contor == 2) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraSfarsitJoi.add(((TextField) child1).getText());
+                                    contor++;
+
+                                }
+                            } else {
+                                if (contor == 3) {
+                                    if (child1 instanceof TextField) {
+                                        shape.listaMaterieJoi.add(((TextField) child1).getText());
+                                        contor = 1;
+                                    }
+                                }
+                            }
+                        }
                     }
-                
-            
-        }
-            contor=1;
-            figuriAdaugateAnterior=0;
+                }
+
+            }
+            contor = 1;
+            figuriAdaugateAnterior = 0;
             for (Node child : vineri.getChildren()) {
-                if (child instanceof HBox) 
+                if (child instanceof HBox) {
                     for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField)
-                        figuriAdaugateAnterior++;
-                        if(figuriAdaugateAnterior>shape.marimeListaVineri*3)
-                        {if(contor==1)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraStartVineri.add(((TextField) child1).getText());
-                            contor++;
-                        }}
-                        else
-                        if(contor==2)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraSfarsitVineri.add(((TextField) child1).getText());
-                            contor++;
-                         
-                        }}
-                        else
-                        {if(contor==3)
                         if (child1 instanceof TextField) {
-                            shape.listaMaterieVineri.add(((TextField) child1).getText());
-                            contor=1;
+                            figuriAdaugateAnterior++;
                         }
-                        }}
+                        if (figuriAdaugateAnterior > shape.marimeListaVineri * 3) {
+                            if (contor == 1) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraStartVineri.add(((TextField) child1).getText());
+                                    contor++;
+                                }
+                            } else if (contor == 2) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraSfarsitVineri.add(((TextField) child1).getText());
+                                    contor++;
+
+                                }
+                            } else {
+                                if (contor == 3) {
+                                    if (child1 instanceof TextField) {
+                                        shape.listaMaterieVineri.add(((TextField) child1).getText());
+                                        contor = 1;
+                                    }
+                                }
+                            }
+                        }
                     }
-                
-            
-        }
-            contor=1;
-            figuriAdaugateAnterior=0;
+                }
+
+            }
+            contor = 1;
+            figuriAdaugateAnterior = 0;
             for (Node child : sambata.getChildren()) {
-                if (child instanceof HBox) 
+                if (child instanceof HBox) {
                     for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField)
-                        figuriAdaugateAnterior++;
-                        if(figuriAdaugateAnterior>shape.marimeListaSambata*3)
-                        {if(contor==1)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraStartSambata.add(((TextField) child1).getText());
-                            contor++;
-                        }}
-                        else
-                        if(contor==2)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraSfarsitSambata.add(((TextField) child1).getText());
-                            contor++;
-                         
-                        }}
-                        else
-                        {if(contor==3)
                         if (child1 instanceof TextField) {
-                            shape.listaMaterieSambata.add(((TextField) child1).getText());
-                            contor=1;
+                            figuriAdaugateAnterior++;
                         }
-                        }}
+                        if (figuriAdaugateAnterior > shape.marimeListaSambata * 3) {
+                            if (contor == 1) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraStartSambata.add(((TextField) child1).getText());
+                                    contor++;
+                                }
+                            } else if (contor == 2) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraSfarsitSambata.add(((TextField) child1).getText());
+                                    contor++;
+
+                                }
+                            } else {
+                                if (contor == 3) {
+                                    if (child1 instanceof TextField) {
+                                        shape.listaMaterieSambata.add(((TextField) child1).getText());
+                                        contor = 1;
+                                    }
+                                }
+                            }
+                        }
                     }
-                
-            
-        }
-            contor=1;
-            figuriAdaugateAnterior=0;
+                }
+
+            }
+            contor = 1;
+            figuriAdaugateAnterior = 0;
             for (Node child : duminica.getChildren()) {
-                if (child instanceof HBox) 
+                if (child instanceof HBox) {
                     for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField)
-                        figuriAdaugateAnterior++;
-                        if(figuriAdaugateAnterior>shape.marimeListaDuminica*3)
-                        {if(contor==1)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraStartDuminica.add(((TextField) child1).getText());
-                            contor++;
-                        }}
-                        else
-                        if(contor==2)
-                        {if (child1 instanceof TextField) {
-                            shape.listaOraSfarsitDuminica.add(((TextField) child1).getText());
-                            contor++;
-                         
-                        }}
-                        else
-                        {if(contor==3)
                         if (child1 instanceof TextField) {
-                            shape.listaMaterieDuminica.add(((TextField) child1).getText());
-                            contor=1;
+                            figuriAdaugateAnterior++;
                         }
-                        }}
+                        if (figuriAdaugateAnterior > shape.marimeListaDuminica * 3) {
+                            if (contor == 1) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraStartDuminica.add(((TextField) child1).getText());
+                                    contor++;
+                                }
+                            } else if (contor == 2) {
+                                if (child1 instanceof TextField) {
+                                    shape.listaOraSfarsitDuminica.add(((TextField) child1).getText());
+                                    contor++;
+
+                                }
+                            } else {
+                                if (contor == 3) {
+                                    if (child1 instanceof TextField) {
+                                        shape.listaMaterieDuminica.add(((TextField) child1).getText());
+                                        contor = 1;
+                                    }
+                                }
+                            }
+                        }
                     }
-                
-            
-        }
-         
-            shape.marimeListaLuni=shape.listaMaterieLuni.size();
-            shape.marimeListaMarti=shape.listaMaterieMarti.size();
-            shape.marimeListaMiercuri=shape.listaMaterieMiercuri.size();
-             shape.marimeListaJoi=shape.listaMaterieJoi.size();
-             shape.marimeListaVineri=shape.listaMaterieVineri.size();
-              shape.marimeListaSambata=shape.listaMaterieSambata.size();
-               shape.marimeListaDuminica=shape.listaMaterieDuminica.size();
+                }
+
+            }
+
+            shape.marimeListaLuni = shape.listaMaterieLuni.size();
+            shape.marimeListaMarti = shape.listaMaterieMarti.size();
+            shape.marimeListaMiercuri = shape.listaMaterieMiercuri.size();
+            shape.marimeListaJoi = shape.listaMaterieJoi.size();
+            shape.marimeListaVineri = shape.listaMaterieVineri.size();
+            shape.marimeListaSambata = shape.listaMaterieSambata.size();
+            shape.marimeListaDuminica = shape.listaMaterieDuminica.size();
             //oraStart->getText()
+
+            // cod bagat de mine
+            drawingPanel.deleteShape(rectangle);
+            double initialWidth = rectangle.getWidth();
+            double initialHeight = rectangle.getLength();
+            rectangle.setLength(Double.valueOf(heightField.getText()));
+            rectangle.setWidth(Double.valueOf(widthField.getText()));
+            rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
+            if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
+                rectangle.setLength(initialHeight);
+                rectangle.setWidth(initialWidth);
+                rectangle.getRectangle().setSize((int)rectangle.getWidth(), (int)rectangle.getLength());
+                drawingPanel.drawAll();
+            } else {
+                drawingPanel.deleteShapeFromGraph(rectangle);
+                drawingPanel.getShapes().add(rectangle);
+                drawingPanel.addShapeToGraph(rectangle);
+                drawingPanel.setOrder();
+                drawingPanel.drawAll();
+                drawingPanel.getIds().add(rectangle.getId());
+            }
+            rectangle.getRectangle().setBounds((int) rectangle.getCenterPoint().getX(), (int) rectangle.getCenterPoint().getY(), (int) rectangle.getWidth(), (int) rectangle.getLength());
+            // cod bagat de mine
         });
-        
+
         pane.setTop(topHBox);
         pane.setCenter(centerVBox);
         pane.setBottom(bottomHBox);
@@ -774,7 +822,7 @@ public class UpdateClassroomPopUp extends Application {
         scene = new Scene(pane, 700, 700);
 
         pane.setStyle("-fx-background-color: transparent;");
-     
+
         stage.setX(x + 10);
         stage.setY(y - scene.getHeight() / 2);
         //stage.initStyle(StageStyle.TRANSPARENT);

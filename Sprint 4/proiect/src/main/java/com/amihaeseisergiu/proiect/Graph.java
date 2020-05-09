@@ -5,7 +5,6 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,9 +16,7 @@ import javafx.util.Pair;
 /**
  * @author Alex
  */
-public class Graph implements Serializable {
-
-    static final long serialVersionUID = 1L;
+public class Graph {
 
     Map<ExtendedShape, List<Pair<ExtendedShape, String>>> graph;
     Map<ExtendedShape, List<Pair<ExtendedShape, String>>> neighborGraph;
@@ -73,6 +70,30 @@ public class Graph implements Serializable {
             }
             for (int i = 0; i < contor; i++) {
                 entry.getValue().remove(indexes[i]);
+            }
+        }
+
+        s = null;
+        for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : neighborGraph.entrySet()) {
+            if (entry.getKey() == shape) {
+                s = entry.getKey();
+                break;
+            }
+        }
+        neighborGraph.remove(s);
+
+        for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : neighborGraph.entrySet()) {
+            if (entry.getValue() != null) {
+                int[] indexes = new int[entry.getValue().size()];
+                int contor = 0;
+                for (Pair<ExtendedShape, String> p : entry.getValue()) {
+                    if (p.getKey() == s) {
+                        indexes[contor++] = entry.getValue().indexOf(p);
+                    }
+                }
+                for (int i = 0; i < contor; i++) {
+                    entry.getValue().remove(indexes[i]);
+                }
             }
         }
     }
@@ -134,7 +155,7 @@ public class Graph implements Serializable {
         setNeighbors();
     }
 
-    private void setNeighbors() {
+    public void setNeighbors() {
         for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : graph.entrySet()) {
             if (entry.getKey() != hallway) {
                 String relationToHallway = "";
@@ -210,17 +231,20 @@ public class Graph implements Serializable {
         }
     }
 
-    /*  @Override
+    @Override
     public String toString() {
         String output = "Graph: \n";
         for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : neighborGraph.entrySet()) {
-            output += ((ExtendedRectangle) entry.getKey()).getId() + "\n";
-            for (Pair<ExtendedShape, String> p : entry.getValue()) {
-                output += ((ExtendedRectangle) p.getKey()).getId() + ":" + p.getValue() + "\n";
+            output += ((ExtendedRectangle) entry.getKey()).getName() + "\n";
+            if (entry.getValue() != null) {
+                for (Pair<ExtendedShape, String> p : entry.getValue()) {
+                    output += ((ExtendedRectangle) p.getKey()).getName() + ":" + p.getValue() + "\n";
+                }
             }
         }
         return output;
-    }*/
+    }
+
     private ExtendedShape findLeftNeighbor(ExtendedShape sh, String dth, int otw) {
         String searchDirection = "";
         if (dth.equals("Left")) {
@@ -399,8 +423,8 @@ public class Graph implements Serializable {
             searchDirection = "Down";
         }
 
-      //  double minDistance = Double.MAX_VALUE;
-      //  ExtendedShape currentShape = null;
+        //  double minDistance = Double.MAX_VALUE;
+        //  ExtendedShape currentShape = null;
         for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : graph.entrySet()) {
             if (entry.getKey() != hallway && entry.getKey() != sh) {
                 String relationToHallway = "";

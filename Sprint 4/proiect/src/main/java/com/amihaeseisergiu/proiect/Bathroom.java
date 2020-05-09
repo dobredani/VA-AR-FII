@@ -5,19 +5,17 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import java.io.Serializable;
 
 /**
  *
  * @author Alex
  */
-public class Bathroom extends ExtendedRectangle implements Serializable {
-    
-    private final static String shapeType = "closed";
+public class Bathroom extends ExtendedRectangle {
     
     public Bathroom(Point p) {
         super(p);
-        this.type = "Bathroom";
+        this.type = "bathRoom";
+        this.shapeType = "Bathroom";
     }
     
 }

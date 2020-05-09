@@ -5,22 +5,20 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
 import java.awt.Rectangle;
-import java.io.Serializable;
 
 /**
  *
  * @author Alex
  */
-public class ExtendedRectangle extends ExtendedShape implements Serializable {
+public class ExtendedRectangle extends ExtendedShape {
     
     private double length = 100;
     private double width = 100;
     private String name;
     private Rectangle rectangle = new Rectangle();
     protected String type;
+    protected String shapeType;
     private int id;
     
     public ExtendedRectangle(Point p) {
@@ -87,6 +85,34 @@ public class ExtendedRectangle extends ExtendedShape implements Serializable {
     @Override
     public String toString() {
         return "ID :" + id;
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * @return the shapeType
+     */
+    public String getShapeType() {
+        return shapeType;
+    }
+
+    /**
+     * @param shapeType the shapeType to set
+     */
+    public void setShapeType(String shapeType) {
+        this.shapeType = shapeType;
     }
     
     

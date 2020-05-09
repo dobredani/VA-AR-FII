@@ -11,9 +11,7 @@ import java.io.Serializable;
  *
  * @author Alex
  */
-public class Point implements Serializable {
-    
-    static final long serialVersionUID = 1L;
+public class Point {
 
     private double x;
     private double y;

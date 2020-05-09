@@ -5,19 +5,29 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Sergiu
  */
-public class Office extends ExtendedRectangle implements Serializable {
+public class Office extends ExtendedRectangle {
     
-    private final static String shapeType = "closed";
+    private List<String> professors = new ArrayList<>();
     
     public Office(Point p) {
         super(p);
-        this.type = "Office";
+        this.type = "office";
+        this.shapeType = "Office";
+    }
+
+    public List<String> getProfessors() {
+        return professors;
+    }
+
+    public void setProfessors(List<String> professors) {
+        this.professors = professors;
     }
     
 }

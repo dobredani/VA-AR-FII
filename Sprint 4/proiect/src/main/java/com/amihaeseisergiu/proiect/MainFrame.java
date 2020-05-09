@@ -23,10 +23,9 @@ public class MainFrame {
     SavePanel savePanel;
     Building building;
 
-    public MainFrame(Stage stage, Building build) {
+    public MainFrame(Stage stage, Building build, boolean state) {
         this.stage = stage;
         this.building = build;
-
         BorderPane pane = new BorderPane();
         configPanel = new ConfigPanel(this);
         drawingPanel = new DrawingPanel(this);
@@ -38,7 +37,7 @@ public class MainFrame {
             });
         }
         savePanel = new SavePanel(this);
-        controlPanel = new ControlPanel(this, building);
+        controlPanel = new ControlPanel(this, building, state);
         pane.setTop(configPanel);
         pane.setLeft(controlPanel);
         pane.setCenter(drawingPanel);
@@ -49,6 +48,8 @@ public class MainFrame {
 
     public void init() {
         stage.setScene(scene);
+        stage.setAlwaysOnTop(true);
+        stage.setFullScreen(true);
         stage.show();
     }
 

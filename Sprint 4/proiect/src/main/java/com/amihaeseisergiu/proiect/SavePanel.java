@@ -12,11 +12,9 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
 
@@ -43,32 +41,26 @@ public class SavePanel extends HBox {
         directoryChooser.setInitialDirectory(new File("C:/"));
         
         saveBtn.setOnAction(e -> {
+            
             File selectedDirectory = directoryChooser.showDialog(frame.stage);
 
             if(selectedDirectory != null)
             {
-                FileOutputStream fileOutputStream = null;
                 try {
-                    System.out.println(selectedDirectory.getAbsolutePath());
-                    fileOutputStream = new FileOutputStream(selectedDirectory.getAbsolutePath() + "/" + frame.building.name + ".building");
-                    try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream)) {
-                        objectOutputStream.writeObject(frame.building);
-                        objectOutputStream.flush();
-                        MainMenu menu = new MainMenu(frame.stage);
+                    
+                    try (FileOutputStream fileOutputStream = new FileOutputStream(selectedDirectory.getAbsolutePath() + "/" + frame.building.name + ".json")) {
+                        byte[] strToBytes = frame.building.toJson().toJSONString().getBytes();
+                        fileOutputStream.write(strToBytes);
                     }
+                    MainMenu menu = new MainMenu(frame.stage);
+                        
                 } catch (FileNotFoundException ex) {
                     Logger.getLogger(SavePanel.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (IOException ex) {
                     Logger.getLogger(SavePanel.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
-                    try {
-                        fileOutputStream.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(SavePanel.class.getName()).log(Level.SEVERE, null, ex);
-                    }
                 }
             }
-                
+            
         });
     }
 }

@@ -5,16 +5,13 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  *
  * @author Alex
  */
-public class SortByX implements Comparator<ExtendedShape>, Serializable {
-    
-    static final long serialVersionUID = 1L;
+public class SortByX implements Comparator<ExtendedShape> {
 
     @Override
     public int compare(ExtendedShape o1, ExtendedShape o2) {

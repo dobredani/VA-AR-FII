@@ -5,16 +5,12 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import java.io.Serializable;
-import java.util.Comparator;
 
 /**
  *
  * @author Alex
  */
-public class ExtendedShape implements Serializable {
-    
-    static final long serialVersionUID = 1L;
+public class ExtendedShape {
 
     Point centerPoint;
     private String color;

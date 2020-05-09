@@ -36,7 +36,7 @@ public class ControlPanel extends VBox {
     Building building;
     boolean initiateFloor;
 
-    public ControlPanel(MainFrame frame, Building building) {
+    public ControlPanel(MainFrame frame, Building building, boolean state) {
         this.frame = frame;
         this.building = building;
 
@@ -59,7 +59,6 @@ public class ControlPanel extends VBox {
         comboBox.getSelectionModel().select(0);
         comboBox.setMaxWidth(Double.MAX_VALUE);
         eraserBtn.setMaxWidth(Double.MAX_VALUE);
-
         this.getChildren().addAll(eraserBtn, comboBox, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10, 10, 10, 10));
@@ -115,7 +114,7 @@ public class ControlPanel extends VBox {
             }
         });
         
-        if(!initiateFloor)
+        if(state && !initiateFloor)
         {
             Platform.runLater(() -> {
                 addFloorBtn.fire();

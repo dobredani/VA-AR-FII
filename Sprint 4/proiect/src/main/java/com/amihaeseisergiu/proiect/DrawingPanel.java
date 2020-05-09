@@ -125,7 +125,7 @@ public class DrawingPanel extends HBox {
                     r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
                     shapes.add(r);
                     setId(r);
-                    r.setName(String.valueOf(r.getId()));
+                    r.setName(r.getType() + " " + String.valueOf(r.getId()));
                     gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth());
                     if (initialShape == null) {
                         initialShape = r;
@@ -134,7 +134,7 @@ public class DrawingPanel extends HBox {
                         addShapeToGraph(r);
                         setOrder();
                     }
-                   // System.out.println(graph);
+                 //   System.out.println(graph);
                 }
             }
         }
@@ -352,7 +352,7 @@ public class DrawingPanel extends HBox {
                 r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
                 shapes.add(r);
                 setId(r);
-                r.setName(String.valueOf(r.getId()));
+                r.setName(r.getType() + " " + String.valueOf(r.getId()));
                 gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth());
                 addShapeToGraph(r);
                 setOrder();
@@ -371,12 +371,12 @@ public class DrawingPanel extends HBox {
 
     public void deleteShapeFromGraph(ExtendedShape s) {
         shapes.remove(s);
-        if(s instanceof Hallway) {
+        if (s instanceof Hallway) {
             graph.hallway = null;
         }
         ids.remove((Integer) (((ExtendedRectangle) s).getId()));
         graph.deleteShapeFromGraph(s);
-      //  System.out.println(graph);
+     //   System.out.println(graph);
     }
 
     public void delete(double x, double y) {
@@ -401,7 +401,7 @@ public class DrawingPanel extends HBox {
         canvas.heightProperty().bind(this.heightProperty());
         this.getChildren().add(canvas);
         gc = canvas.getGraphicsContext2D();
-        System.out.println(shapes);
+     //   System.out.println(shapes);
         canvas.setOnMousePressed(e -> {
             mouseX = e.getX();
             mouseY = e.getY();
@@ -422,20 +422,28 @@ public class DrawingPanel extends HBox {
                             Bounds bounds = canvas.localToScreen(canvas.getBoundsInLocal());
                             int x = (int) bounds.getMinX() + (int) ((ExtendedRectangle) shape).getRectangle().getX() + (int) ((ExtendedRectangle) shape).getRectangle().getWidth();
                             int y = (int) bounds.getMinY() + (int) ((ExtendedRectangle) shape).getRectangle().getY() + (int) ((ExtendedRectangle) shape).getLength() / 2;
-                            if (((ExtendedRectangle) shape).type.equals("Classroom")) {
-                                UpdateClassroomPopUp popUpFrame = new UpdateClassroomPopUp(shape, x, y);
+                            if (((ExtendedRectangle) shape).getShapeType().equals("Classroom")) {
+                                UpdateClassroomPopUp popUpFrame = new UpdateClassroomPopUp(this, shape, x, y);
                                 popUpFrame.start(new Stage());
-                            } else if (((ExtendedRectangle) shape).type.equals("Stairs")) {
-                                UpdateStairsPopUp popUpFrame = new UpdateStairsPopUp(shape, x, y);
+                            } else if (((ExtendedRectangle) shape).getShapeType().equals("Stairs")) {
+                                List<ExtendedShape> stairs = new ArrayList<>();
+                                mainFrame.building.getFloors().entrySet().forEach((floor) -> {
+                                    for (ExtendedShape s : floor.getValue().getShapes()) {
+                                        if (s instanceof Stairs) {
+                                            stairs.add(s);
+                                        }
+                                    }
+                                });
+                                UpdateStairsPopUp popUpFrame = new UpdateStairsPopUp(this, stairs, shape, x, y);
                                 popUpFrame.start(new Stage());
-                            } else if (((ExtendedRectangle) shape).type.equals("Hallway")) {
-                                UpdateHallwayPopUp popUpFrame = new UpdateHallwayPopUp(shape, x, y);
+                            } else if (((ExtendedRectangle) shape).getShapeType().equals("Hallway")) {
+                                UpdateHallwayPopUp popUpFrame = new UpdateHallwayPopUp(this, shape, x, y);
                                 popUpFrame.start(new Stage());
-                            } else if (((ExtendedRectangle) shape).type.equals("Elevator")) {
-                                UpdateElevatorPopUp popUpFrame = new UpdateElevatorPopUp(shape, x, y);
+                            } else if (((ExtendedRectangle) shape).getShapeType().equals("Elevator")) {
+                                UpdateElevatorPopUp popUpFrame = new UpdateElevatorPopUp(this, shape, x, y);
                                 popUpFrame.start(new Stage());
-                            } else if (((ExtendedRectangle) shape).type.equals("Office")) {
-                                UpdateOfficePopUp popUpFrame = new UpdateOfficePopUp(shape, x, y);
+                            } else if (((ExtendedRectangle) shape).getShapeType().equals("Office")) {
+                                UpdateOfficePopUp popUpFrame = new UpdateOfficePopUp(this, shape, x, y);
                                 popUpFrame.start(new Stage());
                             }
                         }
@@ -443,84 +451,89 @@ public class DrawingPanel extends HBox {
                 }
             }
         });
-        mainFrame.getStage().show();
+        //   mainFrame.getStage().setFullScreen(false);
+        //   mainFrame.getStage().setFullScreen(true);
+        //  mainFrame.getStage().show();
+        //   mainFrame.getStage().setFullScreen(true);
         canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (initialX == 0 && initialY == 0) {
-                    initialX = mouseX;
-                    initialY = mouseY;
-                }
-                event.setDragDetect(false);
-                ExtendedRectangle castedShape = null;
-                if (isShapeBeingDragged == false) {
-                    for (ExtendedShape s : shapes) {
-                        if (isMouseInRectangle(s, event.getX(), event.getY())) {
-                            isShapeBeingDragged = true;
-                            draggedShape = s;
+                if (event.isPrimaryButtonDown() == true) {
+                    if (initialX == 0 && initialY == 0) {
+                        initialX = mouseX;
+                        initialY = mouseY;
+                    }
+                    event.setDragDetect(false);
+                    ExtendedRectangle castedShape = null;
+                    if (isShapeBeingDragged == false) {
+                        for (ExtendedShape s : shapes) {
+                            if (isMouseInRectangle(s, event.getX(), event.getY())) {
+                                isShapeBeingDragged = true;
+                                draggedShape = s;
+                                castedShape = ((ExtendedRectangle) draggedShape);
+                            }
+                        }
+                    } else {
+                        if (!isMouseInRectangle(draggedShape, event.getX(), event.getY())) {
+                            castedShape = null;
+                        } else {
                             castedShape = ((ExtendedRectangle) draggedShape);
                         }
                     }
-                } else {
-                    if (!isMouseInRectangle(draggedShape, event.getX(), event.getY())) {
-                        castedShape = null;
-                    } else {
-                        castedShape = ((ExtendedRectangle) draggedShape);
-                    }
-                }
-                if (castedShape != null) {
-                    double beforeHeight = castedShape.getLength();
-                    double beforeWidth = castedShape.getWidth();
-                    double beforeX = castedShape.getCenterPoint().getX();
-                    double beforeY = castedShape.getCenterPoint().getY();
-                    if (isMouseInCenter == false) {
-                        if (getRectangleHalf(draggedShape, event.getX(), event.getY()) == false) {
-                            castedShape.setLength(castedShape.getLength() + (event.getY() - initialY));
-                            castedShape.setWidth(castedShape.getWidth() + (event.getX() - initialX));
-                            castedShape.getRectangle().setSize((int) castedShape.getWidth(), (int) castedShape.getLength());
+                    if (castedShape != null) {
+                        double beforeHeight = castedShape.getLength();
+                        double beforeWidth = castedShape.getWidth();
+                        double beforeX = castedShape.getCenterPoint().getX();
+                        double beforeY = castedShape.getCenterPoint().getY();
+                        if (isMouseInCenter == false) {
+                            if (getRectangleHalf(draggedShape, event.getX(), event.getY()) == false) {
+                                castedShape.setLength(castedShape.getLength() + (event.getY() - initialY));
+                                castedShape.setWidth(castedShape.getWidth() + (event.getX() - initialX));
+                                castedShape.getRectangle().setSize((int) castedShape.getWidth(), (int) castedShape.getLength());
+                            } else {
+                                castedShape.setLength(castedShape.getLength() - (event.getY() - initialY));
+                                castedShape.setWidth(castedShape.getWidth() - (event.getX() - initialX));
+                                castedShape.getCenterPoint().setX(castedShape.getCenterPoint().getX() + (event.getX() - initialX));
+                                castedShape.getCenterPoint().setY(castedShape.getCenterPoint().getY() + (event.getY() - initialY));
+                                castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
+                                castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
+                                castedShape.getRectangle().setBounds((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY(), (int) castedShape.getWidth(), (int) castedShape.getLength());
+                            }
+                            initialX = event.getX();
+                            initialY = event.getY();
                         } else {
-                            castedShape.setLength(castedShape.getLength() - (event.getY() - initialY));
-                            castedShape.setWidth(castedShape.getWidth() - (event.getX() - initialX));
                             castedShape.getCenterPoint().setX(castedShape.getCenterPoint().getX() + (event.getX() - initialX));
                             castedShape.getCenterPoint().setY(castedShape.getCenterPoint().getY() + (event.getY() - initialY));
+                            castedShape.getRectangle().setLocation((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY());
+                            castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
+                            castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
+                            initialX = event.getX();
+                            initialY = event.getY();
+                        }
+                        if (checkCollision(castedShape, 0) == true || castedShape.getWidth() < 50 || castedShape.getLength() < 50) {
+                            castedShape.setLength(beforeHeight);
+                            castedShape.setWidth(beforeWidth);
+                            castedShape.getCenterPoint().setX(beforeX);
+                            castedShape.getCenterPoint().setY(beforeY);
                             castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
                             castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
                             castedShape.getRectangle().setBounds((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY(), (int) castedShape.getWidth(), (int) castedShape.getLength());
                         }
-                        initialX = event.getX();
-                        initialY = event.getY();
-                    } else {
-                        castedShape.getCenterPoint().setX(castedShape.getCenterPoint().getX() + (event.getX() - initialX));
-                        castedShape.getCenterPoint().setY(castedShape.getCenterPoint().getY() + (event.getY() - initialY));
-                        castedShape.getRectangle().setLocation((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY());
-                        castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
-                        castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
-                        initialX = event.getX();
-                        initialY = event.getY();
+                        ExtendedRectangle oldShape = new ExtendedRectangle(new Point(beforeX, beforeY));
+                        oldShape.setLength(beforeHeight);
+                        oldShape.setWidth(beforeWidth);
+                        deleteShape(oldShape);
+                        deleteShapeFromGraph(draggedShape);
+                        shapes.add(draggedShape);
+                        addShapeToGraph(castedShape);
+                        if (castedShape instanceof Hallway) {
+                            graph.hallway = ((Hallway) castedShape);
+                        }
+                        setOrder();
+                        setId((ExtendedRectangle) draggedShape);
+                        drawAll();
+                      //  System.out.println(graph);
                     }
-                    if (checkCollision(castedShape, 0) == true || castedShape.getWidth() < 50 || castedShape.getLength() < 50) {
-                        castedShape.setLength(beforeHeight);
-                        castedShape.setWidth(beforeWidth);
-                        castedShape.getCenterPoint().setX(beforeX);
-                        castedShape.getCenterPoint().setY(beforeY);
-                        castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
-                        castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
-                        castedShape.getRectangle().setBounds((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY(), (int) castedShape.getWidth(), (int) castedShape.getLength());
-                    }
-                    ExtendedRectangle oldShape = new ExtendedRectangle(new Point(beforeX, beforeY));
-                    oldShape.setLength(beforeHeight);
-                    oldShape.setWidth(beforeWidth);
-                    deleteShape(oldShape);
-                    deleteShapeFromGraph(draggedShape);
-                    shapes.add(draggedShape);
-                    addShapeToGraph(castedShape);
-                    if(castedShape instanceof Hallway) {
-                        graph.hallway = ((Hallway)castedShape);
-                    } 
-                    setOrder();
-                    setId((ExtendedRectangle) draggedShape);
-                    drawAll();
-                //    System.out.println(graph);
                 }
             }
         });
@@ -753,7 +766,7 @@ public class DrawingPanel extends HBox {
             r.setId(i);
             ids.add(i);
         }
-      //  System.out.println(ids);
+        //  System.out.println(ids);
     }
 
     public void setOrder() {
@@ -770,6 +783,7 @@ public class DrawingPanel extends HBox {
 
     public void setGraph(Graph graph) {
         this.graph = graph;
+     //   System.out.println(graph);
     }
 
     public void setShapes(List<ExtendedShape> shapes) {

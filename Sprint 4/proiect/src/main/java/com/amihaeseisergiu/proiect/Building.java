@@ -5,7 +5,6 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +15,7 @@ import org.json.simple.JSONObject;
 /**
  * @author Alex
  */
-public class Building implements Serializable {
-    
-    static final long serialVersionUID = 1L;
+public class Building {
     
     Map<Integer, Floor> floors = new HashMap<>();
     String name;
@@ -35,7 +32,7 @@ public class Building implements Serializable {
         JSONObject buildingJSON = new JSONObject();
         buildingJSON.put("name", name);
 
-        List<JSONObject> floorList = new ArrayList<JSONObject>();
+        List<JSONObject> floorList = new ArrayList<>();
         floors.entrySet().forEach((floor) -> {
             floorList.add(floor.getValue().toJson());
         });

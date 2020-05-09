@@ -5,19 +5,16 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import java.io.Serializable;
-
 /**
  *
  * @author Alex
  */
-public class Hallway extends ExtendedRectangle implements Serializable {
-    
-    private static final String shapeType = "connector";
+public class Hallway extends ExtendedRectangle {
     
     public Hallway(Point p) {
         super(p);
-        this.type = "Hallway";
+        this.type = "hallway";
+        this.shapeType = "Hallway";
     }
     
 }

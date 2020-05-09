@@ -15,6 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.Schedule.SchedView;
 import com.example.myapplication.problem.Building;
 
 import org.json.JSONObject;
@@ -40,11 +41,19 @@ public class MainActivity extends AppCompatActivity {
         getBuildingData("FII");
         getBuildingList();
 
+//        Button start = findViewById(R.id.startBtn);
+//        start.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent launchActivity1 = new Intent(MainActivity.this, StartNavigationActivity.class);
+//                startActivity(launchActivity1);
+//            }
+//        });
         Button start = findViewById(R.id.startBtn);
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchActivity1 = new Intent(MainActivity.this, StartNavigationActivity.class);
+                Intent launchActivity1 = new Intent(MainActivity.this, SchedView.class);
                 startActivity(launchActivity1);
             }
         });

@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-
+        final String url = "http://192.168.1.142:5000/rest/building";
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-
+        String url = "http://192.168.1.142:5000/building/";
         url = url.concat(buildingName);
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 

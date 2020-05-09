@@ -1,103 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/lay"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/camera_preview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-       <TextView
-            android:id="@+id/text_view_id"
+        <RelativeLayout
+            android:id="@+id/camera_preview"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_gravity="bottom"
-            android:background="@color/transparent"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            tools:ignore="UselessParent">
 
-        <Button
-            android:id="@+id/flash"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="105dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/flash_button"
-            android:drawableStart="@drawable/ic_icon_flash"
-            android:padding="8dp" />
-        <Button
-            android:id="@+id/help"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="end"
-            android:background="@drawable/flash_button"
-            android:layout_marginEnd="60dp"
-            android:padding="8dp"
-            android:gravity="center"
-            android:drawableStart="@drawable/ic_icon_help"
-            android:onClick="showHelp" />
-        <Button
-            android:id="@+id/restartNavigation"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="end"
-            android:background="@drawable/flash_button"
-            android:layout_marginEnd="15dp"
-            android:gravity="center"
-            android:drawableStart="@drawable/ic_close"
-            android:onClick="restartNavigation" />
+            <TextView
+                android:id="@+id/text_view_id"
+                android:layout_width="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:gravity="center_horizontal"
+                android:textColor="#000"
+                android:background="@drawable/instruction_background"
+                android:layout_gravity="bottom"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
+            <Button
+                android:id="@+id/flash"
+                android:layout_width="30dp"
+                android:layout_toStartOf="@id/help"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_icon_flash"
+                android:padding="8dp" />
 
-        <Button
-            android:layout_gravity="left|bottom"
-            android:id="@+id/arrowBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:gravity="center"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:layout_margin="10dp"
-            android:drawableStart="@drawable/ic_arrow_back"
-            android:background="@drawable/flash_button" />
-        <Button
-            android:id="@+id/arrowForward"
-            android:layout_gravity="left|bottom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:gravity="center"
-            android:minHeight="0dp"
-            android:minWidth="0dp"
-            android:layout_marginStart="70dp"
-            android:layout_marginBottom="10dp"
-            android:drawableStart="@drawable/ic_arrow_forward"
-            android:background="@drawable/flash_button"/>
+            <Button
+                android:id="@+id/help"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_toStartOf="@id/restartNavigation"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_icon_help"
+                android:gravity="center"
+                android:onClick="showHelp"
+                android:padding="8dp" />
 
-        <Button
-            android:id="@+id/scanWaypointButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_margin="10dp"
-            android:background="@drawable/waypoint_button"
-            android:drawableStart="@drawable/ic_scan"
-            android:gravity="center"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:onClick="scanWaypoint"
-            android:padding="11dp" />
+            <Button
+                android:id="@+id/restartNavigation"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_close"
+                android:onClick="restartNavigation" />
 
 
-    </FrameLayout>
+            <Button
+                android:id="@+id/arrowBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_above="@id/text_view_id"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_arrow_back"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="12dp" />
 
+            <Button
+                android:id="@+id/arrowForward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/arrowBack"
+                android:layout_above="@id/text_view_id"
+                android:layout_margin="10dp"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_arrow_forward"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="12dp" />
+
+            <Button
+                android:id="@+id/scanWaypointButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/text_view_id"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/waypoint_button"
+                android:drawableStart="@drawable/ic_scan"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:onClick="scanWaypoint"
+                android:padding="11dp" />
+        </RelativeLayout>
 
 
 </LinearLayout>

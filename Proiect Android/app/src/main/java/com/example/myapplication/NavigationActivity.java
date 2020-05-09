@@ -112,10 +112,7 @@ public class NavigationActivity extends CameraActivity {
             currentInstruction = instructions.get(currentIndex);
             currentIndex++;
             final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
-            displayController.addOverlay(helloTextView, currentInstruction, 90, 135);
-        }
-        else{
-            Toast.makeText(getApplicationContext(), "Destination reached", Toast.LENGTH_SHORT).show();
+            displayController.addOverlay(helloTextView, currentInstruction);
         }
     }
 
@@ -124,9 +121,7 @@ public class NavigationActivity extends CameraActivity {
             currentInstruction = instructions.get(currentIndex - 1);
             currentIndex--;
             final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
-            displayController.addOverlay(helloTextView, currentInstruction, 90, 135);
-        } else{
-            Toast.makeText(getApplicationContext(), "No more previous instructions", Toast.LENGTH_SHORT).show();
+            displayController.addOverlay(helloTextView, currentInstruction);
         }
     }
 }

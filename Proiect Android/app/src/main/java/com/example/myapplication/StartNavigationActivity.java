@@ -187,7 +187,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.1.142:5000/route/";
+        String url = "http://192.168.0.158:5000/route/";
         url = url.concat(appData.getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
         System.out.println(url);
         final RequestQueue requestQueue = Volley.newRequestQueue(StartNavigationActivity.this);
@@ -242,6 +242,14 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 // Set the text color of TextView (ListView Item)
                 tv.setTextColor(Color.BLACK);
                 tv.setBackgroundColor(Color.parseColor("#F1F6FB"));
+
+//                tv.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        System.out.println(((TextView)v).getText());
+//                    }
+//                });
+
 
                 // Generate ListView Item using TextView
                 return view;

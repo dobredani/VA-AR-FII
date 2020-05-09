@@ -7,10 +7,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class Overlay {
 
-    public void draw(TextView t, String text, int height, int width) {
+    public void draw(TextView t, String text) {
         t.setText(text);
-        t.setHeight(height);
-        t.setWidth(width);
         t.bringToFront();
     }
 

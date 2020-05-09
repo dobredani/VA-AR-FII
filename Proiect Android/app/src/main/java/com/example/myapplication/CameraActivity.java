@@ -114,7 +114,7 @@ public class CameraActivity extends AppCompatActivity {
 
             final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
             DisplayController displayController = new DisplayController();
-            displayController.addOverlay(helloTextView, currentInstruction, 90, 135);
+            displayController.addOverlay(helloTextView, currentInstruction);
 
             Button flashB = findViewById(R.id.flash);
             flashB.setOnClickListener(new View.OnClickListener() {

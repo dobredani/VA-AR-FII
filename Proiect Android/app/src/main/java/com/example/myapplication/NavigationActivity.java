@@ -107,4 +107,26 @@ public class NavigationActivity extends CameraActivity {
         helpDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         helpDialog.show();
     }
+    public void getNextInstruction(View view) {
+        if(currentIndex<instructions.size()) {
+            currentInstruction = instructions.get(currentIndex);
+            currentIndex++;
+            final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
+            displayController.addOverlay(helloTextView, currentInstruction, 90, 135);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Destination reached", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void getPreviousInstruction(View view) {
+        if(currentIndex>0 && currentIndex<=instructions.size()) {
+            currentInstruction = instructions.get(currentIndex - 1);
+            currentIndex--;
+            final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
+            displayController.addOverlay(helloTextView, currentInstruction, 90, 135);
+        } else{
+            Toast.makeText(getApplicationContext(), "No more previous instructions", Toast.LENGTH_SHORT).show();
+        }
+    }
 }

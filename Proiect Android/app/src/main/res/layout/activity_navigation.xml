@@ -70,6 +70,7 @@
                 android:layout_above="@id/text_view_id"
                 android:background="@drawable/flash_button"
                 android:drawableStart="@drawable/ic_arrow_back"
+                android:onClick="getPreviousInstruction"
                 android:gravity="center"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
@@ -85,6 +86,7 @@
                 android:background="@drawable/flash_button"
                 android:drawableStart="@drawable/ic_arrow_forward"
                 android:gravity="center"
+                android:onClick="getNextInstruction"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:padding="12dp" />

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,8 +44,7 @@ public class CameraActivity extends AppCompatActivity {
     private static Camera.Parameters p;
     private boolean isCameraInitialized;
     private Camera mCamera = null;
-    private FrameLayout preview;
-    private Button flashB;
+    private RelativeLayout preview;
     private boolean isFlashOn;
     private Snackbar mySnackbar;
     protected String currentInstruction;
@@ -113,9 +114,9 @@ public class CameraActivity extends AppCompatActivity {
 
             final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
             DisplayController displayController = new DisplayController();
-            displayController.addOverlay(helloTextView, "black", "white", currentInstruction, 90, 135);
+            displayController.addOverlay(helloTextView, currentInstruction, 90, 135);
 
-            flashB = findViewById(R.id.flash);
+            Button flashB = findViewById(R.id.flash);
             flashB.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

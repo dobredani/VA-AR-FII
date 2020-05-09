@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.ActionBar;
@@ -14,7 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 public class ScanLocationActivity extends AppCompatActivity implements AsyncQR {
-    private ImageButton flashB;
+    private Button flashB;
+    private boolean isFlashOn = false;
     Intent intent;
 
     @Override
@@ -49,17 +51,34 @@ public class ScanLocationActivity extends AppCompatActivity implements AsyncQR {
         setContentView(R.layout.activity_scan_location);
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment scannerFragment = fm.findFragmentById(R.id.scanner_fragment);
+        final Fragment scannerFragment = fm.findFragmentById(R.id.scanner_fragment);
         fm.beginTransaction()
                 .setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
                 .show(scannerFragment)
                 .commit();
 
         ((ScanQR) scannerFragment).resumeScan();
+
+        flashB = findViewById(R.id.flash);
+        flashB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isFlashOn == false) {
+                    ((ScanQR) scannerFragment).flashON();
+                    isFlashOn = true;
+                } else {
+                    ((ScanQR) scannerFragment).flashOFF();
+                    isFlashOn = false;
+                }
+            }
+        });
+
     }
 
 
     public void closeActivity(View view) {
         finish();
     }
+
+
 }

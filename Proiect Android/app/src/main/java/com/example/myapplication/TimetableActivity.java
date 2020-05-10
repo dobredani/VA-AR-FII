@@ -3,20 +3,26 @@ package com.example.myapplication;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.Schedule.SchedView;
 import com.example.myapplication.problem.Location;
+import com.example.myapplication.problem.LocationType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +35,7 @@ public class TimetableActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
+        getSupportActionBar().hide();
 
         SearchView searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -62,7 +69,7 @@ public class TimetableActivity extends AppCompatActivity {
     }
 
     private void populateListView(String lookupText) {
-        final ListView lv = (ListView) findViewById(R.id.listView);
+        final GridView gv = (GridView) findViewById(R.id.gridView);
         List<Location> locations = appData.getCurrentBuilding().getLocations();
         List<String> locationStrings = new ArrayList<>();
         for (Location temp:locations)
@@ -77,7 +84,12 @@ public class TimetableActivity extends AppCompatActivity {
                 View view = super.getView(position, convertView, parent);
                 TextView tv = (TextView) view.findViewById(android.R.id.text1);
                 tv.setTextColor(Color.BLACK);
-                tv.setBackgroundColor(Color.WHITE);
+                tv.setBackgroundResource(R.drawable.rounded_corners);
+
+                GradientDrawable drawable = (GradientDrawable) tv.getBackground();
+                drawable.setColor(Color.WHITE);
+
+                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -90,6 +102,6 @@ public class TimetableActivity extends AppCompatActivity {
                 return view;
             }
         };
-        lv.setAdapter(arrayAdapter);
+        gv.setAdapter(arrayAdapter);
     }
 }

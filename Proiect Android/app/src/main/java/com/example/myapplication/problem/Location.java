@@ -1,33 +1,59 @@
 package com.example.myapplication.problem;
 
+import com.example.myapplication.Schedule.SchedModel;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Location {
     int id;
     String name;
     LocationType locationType;
-    List<Lecture> schedule;
 
+    List<Lecture> schedules;
+    List<List<SchedModel>> schedModels; // one list per weekday
+
+    public List<SchedModel> getDaySchedule(int weekDay) {
+        if (weekDay < 1 || weekDay > 5) return null;
+        return schedModels.get(weekDay-1);
+    }
+
+    public Location() {
+        schedules = new ArrayList<>();
+        schedModels = new ArrayList<>();
+
+        for (int xi = 0; xi < 5; xi++) {
+            List<SchedModel> lectures = new ArrayList<>();
+            schedModels.add(lectures); // monday - friday
+        }
+    }
 
     public Location(int id, String name) {
+        this();
         this.id = id;
         this.name = name;
-        schedule = new ArrayList<>();
     }
 
     public Location(int id, String name, LocationType locationType) {
+        this();
         this.id = id;
         this.name = name;
         this.locationType = locationType;
     }
 
     public Location(int id, String name, LocationType locationType, List<Lecture> schedule) {
+        this();
         this.id = id;
         this.name = name;
         this.locationType = locationType;
-        this.schedule = schedule;
+
+        for (Lecture lecture: schedule) {
+            schedules.add(lecture);
+            schedModels.get(lecture.dayNumer-1).add(new SchedModel(lecture.getCourse(),
+                    lecture.getGroup(),lecture.getStartTime(),lecture.getFinishTime()));
+        }
     }
 
 
@@ -52,4 +78,6 @@ public class Location {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    //TODO return an array of lectures for the given week day
 }

@@ -27,26 +27,44 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_weight=".2">
+                android:layout_weight=".3">
 
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_schedule_black_18dp"
+                    />
+                <TextView
+                    android:id="@+id/sched_hours"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="interval orar" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_supervisor_account_black_18dp"
+                    />
                 <TextView
                     android:id="@+id/sched_group"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="grupa" />
-
-                <TextView
-                    android:id="@+id/sched_course"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="cursul" />
             </LinearLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/baseline_menu_book_black_18dp"
+                />
             <TextView
-                android:id="@+id/sched_hours"
+                android:id="@+id/sched_course"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="interval orar"
-                android:layout_weight=".8"/>
+                android:text="cursul"
+                android:layout_gravity="center"
+                android:layout_weight=".7"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

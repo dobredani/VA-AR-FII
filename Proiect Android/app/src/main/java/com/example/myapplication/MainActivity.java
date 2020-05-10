@@ -30,7 +30,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private Dialog errorDialog;
-    final static ApplicationData applicationData = new ApplicationData();
+    public final static ApplicationData applicationData = new ApplicationData();
     Button start;
     ProgressBar progressBar;
 

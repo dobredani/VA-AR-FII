@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        final String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/rest/building";
+        final String url = "http://192.168.1.6:5000/rest/building";
 
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
@@ -85,16 +85,14 @@ public class MainActivity extends AppCompatActivity {
                                 getBuildingData(buildingName);
                        // applicationData.setCurrentBuilding(allBuildings.get(0));
                       
-                        start.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.GONE);
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         showPopup();
                         Log.e("JsonError", "Error on get JSON request!");
-                        start.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.GONE);
+
                     }
                 });
         requestQueue.add(jsonObjectRequest);
@@ -106,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/building/";
+        String url = "http://192.168.1.6:5000/building/";
 
         url = url.concat(buildingName);
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
@@ -133,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         showPopup();
                         Log.e("JsonError", "Error on get JSON request!");
+                        start.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
         requestQueue.add(jsonObjectRequest);

@@ -36,7 +36,7 @@ public class ScanQR extends Fragment implements ZXingScannerView.ResultHandler {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mScannerView = new ZXingScannerView(getActivity());
-//        mScannerView.setFlash(true);
+        //mScannerView.setFlash(true);
         List<BarcodeFormat> formats = new ArrayList<>();
         formats.add(BarcodeFormat.QR_CODE);
         mScannerView.setFormats(formats);
@@ -64,5 +64,13 @@ public class ScanQR extends Fragment implements ZXingScannerView.ResultHandler {
 
     public void resumeScan() {
         mScannerView.resumeCameraPreview(ScanQR.this);
+    }
+
+    public void flashON() {
+        mScannerView.setFlash(true);
+    }
+
+    public void flashOFF(){
+        mScannerView.setFlash(false);
     }
 }

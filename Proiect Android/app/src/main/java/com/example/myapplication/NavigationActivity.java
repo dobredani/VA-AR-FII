@@ -1,9 +1,16 @@
 package com.example.myapplication;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -17,14 +24,25 @@ public class NavigationActivity extends CameraActivity {
     List<Integer> codesToScan;
     int currentIndex = 1;
     Snackbar snackbar;
+    Dialog helpDialog;
+    Button closePopup;
+    LinearLayout popup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //hides the action bar
+        getSupportActionBar().hide();
+        //hides the status bar
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        helpDialog = new Dialog(this);
+
         setContentView(R.layout.activity_navigation);
         displayController = new DisplayController();
         Intent intent = getIntent();
         instructions = intent.getStringArrayListExtra("instructions");
+        
         codesToScan = intent.getIntegerArrayListExtra("codesToScan");
 
         snackbar = Snackbar.make(findViewById(R.id.lay), "", Snackbar.LENGTH_INDEFINITE);
@@ -63,14 +81,47 @@ public class NavigationActivity extends CameraActivity {
                     currentInstruction = instructions.get(currentIndex - 1);
                     Button button = findViewById(R.id.scanWaypointButton);
                     button.setClickable(false);
-                }
-                else
+                } else
                     currentInstruction = instructions.get(currentIndex - 1);
+
             }
         }
     }
 
     public void restartNavigation(View view) {
         finish();
+    }
+
+    public void showHelp(View view) {
+        helpDialog.setContentView(R.layout.help_popup);
+        popup = (LinearLayout) helpDialog.findViewById(R.id.helpInfo);
+        popup.setVisibility(View.VISIBLE);
+        closePopup = (Button) helpDialog.findViewById(R.id.closePopup);
+        closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpDialog.dismiss();
+            }
+        });
+        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        helpDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        helpDialog.show();
+    }
+    public void getNextInstruction(View view) {
+        if(currentIndex<instructions.size()) {
+            currentInstruction = instructions.get(currentIndex);
+            currentIndex++;
+            final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
+            displayController.addOverlay(helloTextView, currentInstruction);
+        }
+    }
+
+    public void getPreviousInstruction(View view) {
+        if(currentIndex>0 && currentIndex<=instructions.size()) {
+            currentInstruction = instructions.get(currentIndex - 1);
+            currentIndex--;
+            final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
+            displayController.addOverlay(helloTextView, currentInstruction);
+        }
     }
 }

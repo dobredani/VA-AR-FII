@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.Schedule.SchedView;
 import com.example.myapplication.problem.Location;
 
 import java.util.ArrayList;
@@ -80,6 +81,9 @@ public class TimetableActivity extends AppCompatActivity {
                 tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Intent intent = new Intent(TimetableActivity.this, SchedView.class);
+                        intent.putExtra("room", ((TextView)v).getText());
+                        startActivity(intent);
                         System.out.println(((TextView)v).getText());
                     }
                 });

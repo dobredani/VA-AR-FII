@@ -16,11 +16,6 @@
         android:onClick="openTimetableActivity"
         android:title="Timetables" />
     <item
-        android:id="@+id/feedback"
-        android:title="Send Feedback"
-        android:icon="@drawable/ic_feedback"
-        />
-    <item
         android:id="@+id/help"
         android:title="Help"
         android:icon="@drawable/ic_help"

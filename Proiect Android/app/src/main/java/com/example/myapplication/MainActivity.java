@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent launchActivity1 = new Intent(MainActivity.this, SchedView.class);
+                Intent launchActivity1 = new Intent(MainActivity.this, StartNavigationActivity.class);
                 startActivity(launchActivity1);
             }
         });

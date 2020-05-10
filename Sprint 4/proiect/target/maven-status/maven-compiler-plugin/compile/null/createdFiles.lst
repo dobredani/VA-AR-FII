@@ -9,6 +9,7 @@ com\amihaeseisergiu\proiect\Graph.class
 com\amihaeseisergiu\proiect\Elevator.class
 com\amihaeseisergiu\proiect\Stairs.class
 com\amihaeseisergiu\proiect\App.class
+com\amihaeseisergiu\proiect\AnimatedZoomOperator.class
 com\amihaeseisergiu\proiect\DrawingPanel.class
 com\amihaeseisergiu\proiect\SavePanel.class
 com\amihaeseisergiu\proiect\DrawingPanel$2.class

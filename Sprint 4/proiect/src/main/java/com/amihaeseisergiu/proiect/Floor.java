@@ -11,12 +11,13 @@ import org.json.simple.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.json.simple.JSONArray;
 
 /**
  * @author Alex
  */
 public class Floor {
-    
+
     private List<ExtendedShape> shapes = new ArrayList<>();
     private Graph graph = new Graph();
     private Hallway hallway;
@@ -81,8 +82,7 @@ public class Floor {
 
             List<JSONObject> neighboursList;
             neighboursList = new ArrayList<>();
-            if(entry.getValue() != null)
-            {
+            if (entry.getValue() != null) {
                 for (Pair<ExtendedShape, String> neighbour : entry.getValue()) {
                     JSONObject neighbourJSON = new JSONObject();
                     neighbourJSON.put("name", ((ExtendedRectangle) neighbour.getKey()).getName());
@@ -91,9 +91,16 @@ public class Floor {
                 }
             }
             waypointJSON.put("neighbors", neighboursList);
+            if (entry.getKey() instanceof Office) {
+                JSONArray profs = new JSONArray();
+                for (String prof : ((Office) entry.getKey()).getProfessors()) {
+                    profs.add(prof);
+                }
+                waypointJSON.put("professors", profs);
+            }
             waypointsList.add(waypointJSON);
         }
-        
+
         JSONObject waypointJSON = new JSONObject();
 
         waypointJSON.put("name", ((ExtendedRectangle) graph.hallway).getName());
@@ -106,7 +113,7 @@ public class Floor {
         waypointJSON.put("color", ((ExtendedRectangle) graph.hallway).getColor());
         waypointJSON.put("shapeType", ((ExtendedRectangle) graph.hallway).getShapeType());
         waypointsList.add(waypointJSON);
-        
+
         floorJSON.put("waypoints", waypointsList);
 
         return floorJSON;

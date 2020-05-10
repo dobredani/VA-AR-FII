@@ -280,4 +280,9 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         errorDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         errorDialog.show();
     }
+
+    public void openTimetableActivity(MenuItem item) {
+        Intent intent = new Intent(StartNavigationActivity.this, TimetableActivity.class);
+        startActivity(intent);
+    }
 }

@@ -78,11 +78,12 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("JsonObject", "Building List" + buildingList.toString());
 
                         List<Building> allBuildings = new ArrayList<>();
-                        for (String buildingName : applicationData.getBuildings())
+                      
+                        for (String buildingName:applicationData.getBuildings())
                             if (!buildingName.equals("FII"))
                                 getBuildingData(buildingName);
-                        // applicationData.setCurrentBuilding(allBuildings.get(0));
-
+                       // applicationData.setCurrentBuilding(allBuildings.get(0));
+                      
                         start.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                     }
@@ -104,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.0.158:5000/building/";
+        String url = "http://192.168.0.147:5000/building/";
+      
         url = url.concat(buildingName);
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 

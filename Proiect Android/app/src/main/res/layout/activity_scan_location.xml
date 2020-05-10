@@ -20,7 +20,8 @@
             android:id="@+id/camera_preview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            tools:ignore="UselessParent">
 
             <fragment
                 android:id="@+id/scanner_fragment"
@@ -28,21 +29,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout="@layout/activity_scan_location" />
-        </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-
-            <ImageButton
+            <Button
                 android:id="@+id/flash"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:contentDescription="flash"
-                android:src="@drawable/ic_flash" />
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="60dp"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_icon_flash"
+                android:padding="8dp" />
+            <Button
+                android:id="@+id/restartNavigation"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="end"
+                android:background="@drawable/flash_button"
+                android:layout_marginEnd="15dp"
+                android:gravity="center"
+                android:onClick="closeActivity"
+                android:drawableStart="@drawable/ic_close" />
 
-        </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

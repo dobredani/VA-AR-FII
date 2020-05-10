@@ -1,20 +1,25 @@
 package com.example.myapplication;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,19 +44,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StartNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private ApplicationData appData = new ApplicationData();
     private ActionBar actionBar;
+    private Dialog errorDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        errorDialog = new Dialog(this);
+
         setContentView(R.layout.start_navigation);
-        actionBar=getSupportActionBar();
+        actionBar = getSupportActionBar();
         actionBar.setTitle(appData.getCurrentBuilding().getName());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
@@ -75,20 +85,48 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             }
         });
 
-        Button startNavigation = findViewById(R.id.navigationBtn);
+        final Button startNavigation = findViewById(R.id.navigationBtn);
         startNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String startName = ((TextView)findViewById(R.id.currentLocation)).getText().toString();
-                String destinationName = ((TextView)findViewById(R.id.destination)).getText().toString();
-                System.out.println(appData.currentBuilding);
-                Location start = appData.currentBuilding.getLocation(startName);
-                Location destination = appData.currentBuilding.getLocation(destinationName);
-                getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
+                startNavigation.setEnabled(false);
+                String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
+                if (appData.getCurrentBuilding().getLocation(startName) == null) {
+                    Toast.makeText(getApplicationContext(), "Invalid Starting Point", Toast.LENGTH_SHORT).show();
+                    startNavigation.setEnabled(true);
+
+                } else {
+                    String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
+                    if (appData.getCurrentBuilding().getLocation(destinationName) == null) {
+                        Toast.makeText(getApplicationContext(), "Invalid Destination", Toast.LENGTH_SHORT).show();
+                        startNavigation.setEnabled(true);
+                    } else {
+                        Location start = ApplicationData.currentBuilding.getLocation(startName);
+                        Location destination = ApplicationData.currentBuilding.getLocation(destinationName);
+                        getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
+                        Timer buttonTimer = new Timer();
+                        buttonTimer.schedule(new TimerTask() {
+
+                            @Override
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        startNavigation.setEnabled(true);
+                                    }
+                                });
+                            }
+                        }, 5000);
+
+                    }
+                }
+
+
             }
         });
 
-        generateSuggestedPlaces(5);
+        generateSuggestedPlaces(4);
 
     }
 
@@ -113,7 +151,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         List<String> buildingNames = appData.getBuildings();
         final String[] buildings = new String[buildingNames.size()];
         int i = 0;
-        for(String temp : buildingNames) {
+        for (String temp : buildingNames) {
             buildings[i] = temp;
             i++;
         }
@@ -125,7 +163,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             public void onClick(DialogInterface dialog, int which) {
                 appData.setCurrentBuildingName(buildings[which]);
                 appData.setCurrentBuilding(appData.getBuildingByName(buildings[which]));
-                generateSuggestedPlaces(5);
+                generateSuggestedPlaces(4);
                 actionBar = getSupportActionBar();
                 actionBar.setTitle(buildings[which]);
             }
@@ -138,7 +176,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == 1) {
             String msg = data.getStringExtra("returnedData");
-            Location location =appData.getCurrentBuilding().getLocationById(Integer.parseInt(msg));
+            Location location = appData.getCurrentBuilding().getLocationById(Integer.parseInt(msg));
             EditText editText = findViewById(R.id.currentLocation);
             editText.setText(location.getName());
         }
@@ -149,8 +187,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.0.147:5000/route/FII?";
-        url = url.concat("start=" + start + "&" + "destination=" + destination);
+        String url = "http://192.168.0.158:5000/route/";
+        url = url.concat(appData.getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
         System.out.println(url);
         final RequestQueue requestQueue = Volley.newRequestQueue(StartNavigationActivity.this);
 
@@ -159,10 +197,10 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
                     @Override
                     public void onResponse(JSONArray response) {
-                        Log.d("JsonObject","Response: " + response.toString());
+                        Log.d("JsonObject", "Response: " + response.toString());
 
                         List<Waypoint> waypointList = JsonParser.parseRoute(response);
-                        for (Waypoint waypoint:waypointList)
+                        for (Waypoint waypoint : waypointList)
                             System.out.println(waypoint);
                         appData.setWaypoints(waypointList);
                         Intent intent = new Intent(StartNavigationActivity.this, NavigationActivity.class);
@@ -173,19 +211,19 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Log.e("JsonError","Error on get JSON request!");
+                        showPopup();
+                        Log.e("JsonError", "Error on get JSON request!");
                     }
                 });
         requestQueue.add(jsonObjectRequest);
     }
-  
+
     private void generateSuggestedPlaces(int howMany) {
         final ListView lv = (ListView) findViewById(R.id.listView);
         List<Location> topLocations = appData.getCurrentBuilding().getTopLocations(howMany);
-        String[] locations = new String[howMany+1];
+        String[] locations = new String[howMany];
         int i = 0;
-        for(Location temp : topLocations) {
+        for (Location temp : topLocations) {
             locations[i] = temp.getName();
             i++;
         }
@@ -203,13 +241,44 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
                 // Set the text color of TextView (ListView Item)
                 tv.setTextColor(Color.BLACK);
-                tv.setBackgroundColor(Color.rgb(243, 237, 218));
+                tv.setBackgroundColor(Color.parseColor("#F1F6FB"));
+
+//                tv.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        System.out.println(((TextView)v).getText());
+//                    }
+//                });
+
 
                 // Generate ListView Item using TextView
                 return view;
             }
         };
         lv.setAdapter(arrayAdapter);
+
+    }
+
+    public void refreshActivity() {
+        finish();
+        startActivity(getIntent());
+    }
+
+    public void showPopup() {
+        errorDialog.setContentView(R.layout.error_popup);
+        LinearLayout popup = (LinearLayout) errorDialog.findViewById(R.id.errorInfo);
+        popup.setVisibility(View.VISIBLE);
+        Button closePopup = (Button) errorDialog.findViewById(R.id.refreshBtn);
+        closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorDialog.dismiss();
+                refreshActivity();
+            }
+        });
+        errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        errorDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        errorDialog.show();
     }
 
     public void openTimetableActivity(MenuItem item) {

@@ -4,9 +4,17 @@
     <string name="open">Open</string>
     <string name="close">Close</string>
     <string name="FII">UAIC, Corp C</string>
+
     <string name="w1">L</string>
     <string name="w2">M</string>
     <string name="w3">M</string>
     <string name="w4">J</string>
     <string name="w5">V</string>
+
+    <string name="close_button">This closes the camera and sends you to the main screen.</string>
+    <string name="next_button">This button will show you the next instruction.</string>
+    <string name="previous_button">This button will show you the previous instruction.</string>
+    <string name="flash_button">This will open your camera flash.</string>
+    <string name="scan_button">This will allow you to scan a waypoint.</string>
+    <string name="error_message">Could not load data from database. Please try refreshing the page.</string>
 </resources>

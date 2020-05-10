@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         app:tabMode="scrollable"
-        android:background="@color/design_default_color_primary">
+        android:background="@color/colorPrimaryDark">
 
 
     </com.google.android.material.tabs.TabLayout>
@@ -35,7 +35,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#00000000">
+
+        android:background="@color/transparent">
 
     </androidx.viewpager.widget.ViewPager>
 

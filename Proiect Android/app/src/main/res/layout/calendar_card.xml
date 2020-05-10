@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#00000000">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/calendarCardView"
+        xmlns:cview="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        cview:cardCornerRadius="10dp"
+        cview:cardElevation="5dp"
+        cview:cardBackgroundColor="@color/colorAccent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="5dp"
+            >
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight=".2">
+
+                <TextView
+                    android:id="@+id/sched_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="grupa" />
+
+                <TextView
+                    android:id="@+id/sched_course"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="cursul" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/sched_hours"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="interval orar"
+                android:layout_weight=".8"/>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</LinearLayout>

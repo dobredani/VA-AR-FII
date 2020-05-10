@@ -6,11 +6,9 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class DisplayController {
 
-    public void addOverlay(TextView t, String colorText, String colorBackground, String text, int height, int width) {
+    public void addOverlay(TextView t,  String text) {
         Overlay overlay = new Overlay();
-        String textColor = overlay.setTextColor(colorText);
-        String backgroundColor = overlay.setTextColorBackground(colorBackground);
-        overlay.draw(t, textColor, backgroundColor, text, height, width);
+        overlay.draw(t, text);
     }
 
     public void addSnackBar(Snackbar snackbar, String text) {

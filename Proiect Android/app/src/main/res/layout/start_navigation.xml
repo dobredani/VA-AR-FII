@@ -27,7 +27,7 @@
             android:id="@+id/navigationBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="35dp"
             android:width="200dp"
             android:background="@drawable/custom_button"
             android:text="Start Navigation"
@@ -42,7 +42,7 @@
             android:id="@+id/currentLocation"
             android:layout_width="350dp"
             android:layout_height="50dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="35dp"
             android:background="@drawable/location_button"
             android:ems="10"
             android:hint=" Enter Your Location"
@@ -68,33 +68,37 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/currentLocation" />
 
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
             android:text="Suggested Places"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/backgroundBlue"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/destination"
-            app:layout_constraintVertical_bias="0.163"
             tools:ignore="UnknownId" />
-
 
         <ListView
             android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="418dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:dividerHeight="5dp"
+            android:divider="@android:color/transparent"
+            android:background="@drawable/rounded_corners"
             android:focusableInTouchMode="false"
             android:isScrollContainer="false"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/navigationBtn"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.07">
 
         </ListView>
 

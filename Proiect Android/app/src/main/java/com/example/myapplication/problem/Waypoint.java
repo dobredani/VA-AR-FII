@@ -30,4 +30,8 @@ public class Waypoint {
                 ", instruction='" + instruction + '\'' +
                 '}';
     }
+
+    public String getLocationName(){
+        return this.location.getName();
+    }
 }

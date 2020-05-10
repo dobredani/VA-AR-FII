@@ -15,6 +15,11 @@
         android:title="Choose Building"
         />
     <item
+        android:id="@+id/timetables"
+        android:icon="@drawable/ic_timetable"
+        android:onClick="openTimetableActivity"
+        android:title="Timetables" />
+    <item
         android:id="@+id/feedback"
         android:title="Send Feedback"
         android:icon="@drawable/ic_feedback"

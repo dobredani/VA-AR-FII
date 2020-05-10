@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import android.os.Build;
+
 import com.example.myapplication.problem.Building;
 import com.example.myapplication.problem.Waypoint;
 
@@ -13,9 +15,25 @@ public class ApplicationData {
     static Building currentBuilding;
     static String currentBuildingName;
     static List<Waypoint> waypoints = new ArrayList<>();
+    static List<Building> buildingsData = new ArrayList<>();
 
     public ApplicationData() {
 
+    }
+
+    public Building getBuildingByName(String buildingName) {
+        for (Building building:buildingsData)
+            if (building.getName().equals(buildingName))
+                return building;
+        return null;
+    }
+
+    public static List<Building> getBuildingsData() {
+        return buildingsData;
+    }
+
+    public void setBuildingsData(List<Building> buildingsData) {
+        ApplicationData.buildingsData = buildingsData;
     }
 
     public List<String> getBuildings() {

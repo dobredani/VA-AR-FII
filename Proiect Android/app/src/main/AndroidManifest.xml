@@ -34,6 +34,7 @@
         <activity android:name=".CameraActivity"/>
         <activity android:name=".ScanLocationActivity" />
         <activity android:name=".ScanQR"/>
+        <activity android:name=".TimetableActivity" />
     </application>
 
 </manifest>

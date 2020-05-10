@@ -124,8 +124,9 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 appData.setCurrentBuildingName(buildings[which]);
+                appData.setCurrentBuilding(appData.getBuildingByName(buildings[which]));
                 generateSuggestedPlaces(5);
-                actionBar=getSupportActionBar();
+                actionBar = getSupportActionBar();
                 actionBar.setTitle(buildings[which]);
             }
 
@@ -209,5 +210,10 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             }
         };
         lv.setAdapter(arrayAdapter);
+    }
+
+    public void openTimetableActivity(MenuItem item) {
+        Intent intent = new Intent(StartNavigationActivity.this, TimetableActivity.class);
+        startActivity(intent);
     }
 }

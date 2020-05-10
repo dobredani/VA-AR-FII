@@ -2,35 +2,35 @@ package com.example.myapplication.Schedule;
 
 
 public class SchedModel {
+    String courseTitle;
+    String studentGroup;
+    String startHour;
+    String endHour;
 
-
-    String name;
-    String version;
-    int id_;
-    int image;
-
-    public SchedModel(String name, String version, int id_, int image) {
-        this.name = name;
-        this.version = version;
-        this.id_ = id_;
-        this.image=image;
+    public SchedModel(String courseTitle, String studentGroup, String startHour, String endHour) {
+        this.courseTitle = courseTitle;
+        this.studentGroup = studentGroup;
+        this.startHour = startHour;
+        this.endHour = endHour;
     }
 
-
-    public String getName() {
-        return name;
+    public String getCourseTitle() {
+        return courseTitle;
     }
 
-
-    public String getVersion() {
-        return version;
+    public String getStudentGroup() {
+        return studentGroup;
     }
 
-    public int getImage() {
-        return image;
+    public String getHourInterval() {
+        return startHour + '-' + endHour;
     }
 
-    public int getId() {
-        return id_;
+    public String getEndHour() {
+        return endHour;
+    }
+
+    public String getStartHour() {
+        return startHour;
     }
 }

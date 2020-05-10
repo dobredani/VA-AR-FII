@@ -44,7 +44,7 @@ public class SchedViewFragment extends Fragment {
 
         ArrayList<SchedModel> data = new ArrayList<>();
         for (int xi = 0; xi < SchedData.nameArray.length; xi++) {
-            data.add(new SchedModel(SchedData.nameArray[xi], SchedData.versionArray[xi], SchedData.id_[xi], SchedData.drawableArray[xi]));
+            data.add(new SchedModel(SchedData.nameArray[xi], SchedData.versionArray[xi], SchedData.versionArray[xi], SchedData.versionArray[xi]));
         }
 
         RecyclerView.Adapter adapter = new SchedAdapter(data);

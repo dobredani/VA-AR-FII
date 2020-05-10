@@ -38,9 +38,6 @@ public class SchedView extends AppCompatActivity {
         viewPager.setAdapter(adapter);
 
         weekDaysLayout.setupWithViewPager(viewPager);
-        for (int i = 0; i < weekDaysLayout.getTabCount(); i++) {
-            weekDaysLayout.getTabAt(i).setIcon(R.drawable.ic_camera);
-        }
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

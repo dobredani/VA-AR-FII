@@ -54,9 +54,9 @@ public class SchedAdapter extends RecyclerView.Adapter<SchedAdapter.MyViewHolder
         TextView textViewGroup = holder.textViewGroup;
         TextView textViewCourse = holder.textViewCourse;
 
-        textViewHours.setText(dataSet.get(listPosition).getName());
-        textViewGroup.setText(dataSet.get(listPosition).getVersion());
-        textViewCourse.setText(dataSet.get(listPosition).getVersion());
+        textViewHours.setText(dataSet.get(listPosition).getCourseTitle());
+        textViewGroup.setText(dataSet.get(listPosition).getStudentGroup());
+        textViewCourse.setText(dataSet.get(listPosition).getStudentGroup());
 //        imageView.setImageResource(dataSet.get(listPosition).getImage());
     }
 

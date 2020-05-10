@@ -60,6 +60,15 @@ public class DrawingPanel extends HBox {
         this.setAlignment(Pos.CENTER);
         setCanvas();
         canvas.setVisible(false);
+        
+        mf.stage.widthProperty().addListener((obs, oldVal, newVal) -> {
+            this.setWidth(newVal.doubleValue() - mf.controlPanel.getWidth());
+        });
+
+        mf.stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+            System.out.println(mf.savePanel.getHeight());
+            this.setHeight(newVal.doubleValue() - 2*(mf.configPanel.getHeight() + mf.savePanel.getHeight()));
+        });
     }
 
     public void setMainFrame(MainFrame mf) {

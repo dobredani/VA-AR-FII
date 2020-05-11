@@ -41,7 +41,7 @@ BuildingSchema = {
             'width': fields.Float(required=False),
             'length': fields.Float(required=False),
             'x': fields.Float(required=False),
-            'y': fields.Float(required=False)}), required=True)
+            'y': fields.Float(required=False)}), required=False)
     }), required=True),
 }
 
@@ -122,72 +122,78 @@ class BuildingView(FlaskView):
     def createBuilding(self, building):
         db.begin()
         try:
-            Building(name=building["name"]).save()
-            for floor in building["floors"]:
-                Floor(level=floor["level"],
-                      buildingName=building["name"]).save()
-                for waypoint in floor["waypoints"]:
-                    if ("type" in waypoint):
-                        if (waypoint["type"] == WAYPOINT_TYPES["ClassRoom"]):
-                            classRoom = ClassRoom(
-                                name=waypoint["name"], markerId=waypoint["markerId"],
-                                buildingName=building["name"], floorLevel=floor["level"],
-                                shapeType=waypoint["shapeType"], color=waypoint["color"], width=waypoint["width"],
-                                length=waypoint["length"], x=waypoint["x"], y=waypoint["y"]).save()
-                            for schedule in waypoint["schedule"]:
-                                group = Group(
-                                    name=schedule["group"], buildingName=building["name"]).save()
-                                group.classes.connect(classRoom, {'course': schedule["course"],
-                                                                  'dayOfWeek': schedule["dayOfWeek"],
-                                                                  'startTime': schedule["startTime"],
-                                                                  'finishTime': schedule["finishTime"]})
-                        elif (waypoint["type"] == WAYPOINT_TYPES["Office"]):
-                            office = Office(
-                                name=waypoint["name"], markerId=waypoint["markerId"],
-                                buildingName=building["name"], floorLevel=floor["level"],
-                                shapeType=waypoint["shapeType"], color=waypoint["color"], width=waypoint["width"],
-                                length=waypoint["length"], x=waypoint["x"], y=waypoint["y"]).save()
-                            for prof in waypoint["professors"]:
-                                teacher = Teacher(
-                                    name=prof, buildingName=building["name"]).save()
-                                teacher.office.connect(office)
-                        elif (waypoint["type"] == WAYPOINT_TYPES["Connector"]):
-                            Connector(
-                                name=waypoint["name"], markerId=waypoint["markerId"],
-                                buildingName=building["name"], floorLevel=floor["level"],
-                                shapeType=waypoint["shapeType"], color=waypoint["color"], width=waypoint["width"],
-                                length=waypoint["length"], x=waypoint["x"], y=waypoint["y"]).save()
-                        else:
-                            Waypoint(
-                                name=waypoint["name"], markerId=waypoint["markerId"],
-                                buildingName=building["name"], floorLevel=floor["level"],
-                                shapeType=waypoint["shapeType"], color=waypoint["color"], width=waypoint["width"],
-                                length=waypoint["length"], x=waypoint["x"], y=waypoint["y"]).save()
-                    else:
-                        Waypoint(
-                            name=waypoint["name"], markerId=waypoint["markerId"],
-                            buildingName=building["name"], floorLevel=floor["level"],
-                            shapeType=waypoint["shapeType"], color=waypoint["color"], width=waypoint["width"],
-                            length=waypoint["length"], x=waypoint["x"], y=waypoint["y"]).save()
+            Building(name=building.get("name")).save()
+            if building.get("floors") is not None:
+                for floor in building.get("floors"):
+                    Floor(level=floor.get("level"),
+                          buildingName=building.get("name")).save()
 
-                for hallway in floor["hallways"]:
-                    Hallway(
-                        name=hallway["name"], markerId=hallway["markerId"],
-                        buildingName=building["name"], floorLevel=floor["level"],
-                        shapeType=hallway["shapeType"], color=hallway["color"], width=hallway["width"],
-                        length=hallway["length"], x=hallway["x"], y=hallway["y"]).save()
+                    if floor.get("waypoints") is not None:
+                        for waypoint in floor.get("waypoints"):
+                            if ("type" in waypoint):
+                                if (waypoint.get("type") == WAYPOINT_TYPES["ClassRoom"]):
+                                    classRoom = ClassRoom(
+                                        name=waypoint.get("name"), markerId=waypoint.get("markerId"),
+                                        buildingName=building.get("name"), floorLevel=floor.get("level"),
+                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"), width=waypoint.get("width"),
+                                        length=waypoint.get("length"), x=waypoint.get("x"), y=waypoint.get("y")).save()
+                                    for schedule in waypoint["schedule"]:
+                                        group = Group(
+                                            name=schedule["group"], buildingName=building.get("name")).save()
+                                        group.classes.connect(classRoom, {'course': schedule["course"],
+                                                                          'dayOfWeek': schedule["dayOfWeek"],
+                                                                          'startTime': schedule["startTime"],
+                                                                          'finishTime': schedule["finishTime"]})
+                                elif (waypoint.get("type") == WAYPOINT_TYPES["Office"]):
+                                    office = Office(
+                                        name=waypoint.get("name"), markerId=waypoint.get("markerId"),
+                                        buildingName=building.get("name"), floorLevel=floor.get("level"),
+                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"), width=waypoint.get("width"),
+                                        length=waypoint.get("length"), x=waypoint.get("x"), y=waypoint.get("y")).save()
+                                    for prof in waypoint["professors"]:
+                                        teacher = Teacher(
+                                            name=prof, buildingName=building.get("name")).save()
+                                        teacher.office.connect(office)
+                                elif (waypoint.get("type") == WAYPOINT_TYPES["Connector"]):
+                                    Connector(
+                                        name=waypoint.get("name"), markerId=waypoint.get("markerId"),
+                                        buildingName=building.get("name"), floorLevel=floor.get("level"),
+                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"), width=waypoint.get("width"),
+                                        length=waypoint.get("length"), x=waypoint.get("x"), y=waypoint.get("y")).save()
+                                else:
+                                    Waypoint(
+                                        name=waypoint.get("name"), markerId=waypoint.get("markerId"),
+                                        buildingName=building.get("name"), floorLevel=floor.get("level"),
+                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"), width=waypoint.get("width"),
+                                        length=waypoint.get("length"), x=waypoint.get("x"), y=waypoint.get("y")).save()
+                            else:
+                                Waypoint(
+                                    name=waypoint.get("name"), markerId=waypoint.get("markerId"),
+                                    buildingName=building.get("name"), floorLevel=floor.get("level"),
+                                    shapeType=waypoint.get("shapeType"), color=waypoint.get("color"), width=waypoint.get("width"),
+                                    length=waypoint.get("length"), x=waypoint.get("x"), y=waypoint.get("y")).save()
 
-            for floor in building["floors"]:
-                for waypoint in floor["waypoints"]:
-                    base = Waypoint.nodes.get(
-                        name=waypoint["name"], floorLevel=floor["level"], buildingName=building["name"])
-                    for neighbor in waypoint["neighbors"]:
-                        base.neighbors.connect(
-                            Waypoint.nodes.get(
-                                name=neighbor["name"], floorLevel=floor["level"], buildingName=building["name"]), {'direction': neighbor["direction"]})
+                    if floor.get("hallways") is not None:
+                        for hallway in floor.get("hallways"):
+                            Hallway(
+                                name=hallway["name"], markerId=hallway["markerId"],
+                                buildingName=building.get("name"), floorLevel=floor.get("level"),
+                                shapeType=hallway["shapeType"], color=hallway["color"], width=hallway["width"],
+                                length=hallway["length"], x=hallway["x"], y=hallway["y"]).save()
+
+                if building.get("floors") is not None:
+                    for floor in building.get("floors"):
+                        if floor.get("waypoints") is not None:
+                            for waypoint in floor.get("waypoints"):
+                                base = Waypoint.nodes.get(
+                                    name=waypoint.get("name"), floorLevel=floor.get("level"), buildingName=building.get("name"))
+                                for neighbor in waypoint["neighbors"]:
+                                    base.neighbors.connect(
+                                        Waypoint.nodes.get(
+                                            name=neighbor.get("name"), floorLevel=floor.get("level"), buildingName=building.get("name")), {'direction': neighbor.get("direction")})
 
             db.commit()
-            return self.get(building["name"]), 200
+            return self.get(building.get("name")), 200
         except Exception as e:
             db.rollback()
             return str(e), 500

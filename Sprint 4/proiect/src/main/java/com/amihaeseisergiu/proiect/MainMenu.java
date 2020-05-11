@@ -18,6 +18,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -180,6 +181,35 @@ public class MainMenu {
                             switch (shapeType) {
                                 case "Classroom":
                                     shape = new Classroom(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
+                                    for (int i = 0; i <= 6; i++) {
+                                        List<InputSchedule> listaZile = new ArrayList<>();
+                                        for (Object s : (JSONArray) ((JSONObject) waypoint).get("schedule")) {
+                                            if (((JSONObject) s).get("dayOfWeek").toString().equals("Luni") && i == 0) {
+                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                listaZile.add(input);
+                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Marti") && i == 1) {
+                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                listaZile.add(input);
+                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Miercuri") && i == 2) {
+                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                listaZile.add(input);
+                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Joi") && i == 3) {
+                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                listaZile.add(input);
+                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Vineri") && i == 4) {
+                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                listaZile.add(input);
+                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Sambata") && i == 5) {
+                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                listaZile.add(input);
+                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Duminica") && i == 6) {
+                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                listaZile.add(input);
+                                            }
+
+                                        }
+                                        ((Classroom) shape).mapaInputuri.put(i, listaZile);
+                                    }
                                     break;
                                 case "Bathroom":
                                     shape = new Bathroom(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
@@ -187,15 +217,11 @@ public class MainMenu {
                                 case "Elevator":
                                     shape = new Elevator(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
                                     break;
-                                case "Hallway":
-                                    shape = new Hallway(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
-                                    graph.hallway = (Hallway) shape;
-                                    break;
                                 case "Office":
                                     shape = new Office(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
                                     JSONArray profs = (JSONArray) ((JSONObject) waypoint).get("professors");
                                     for (Object p : profs) {
-                                        ((Office)shape).getProfessors().add(p.toString());
+                                        ((Office) shape).getProfessors().add(p.toString());
                                     }
                                     break;
                                 case "Stairs":
@@ -226,6 +252,34 @@ public class MainMenu {
                                 graph.setOrder();
                             }
 
+                        }
+                        
+                        JSONArray hallways = (JSONArray) ((JSONObject) level).get("hallways");
+
+                        for (Object hallway : hallways) {
+                            
+                            String shapeType = ((JSONObject) hallway).get("shapeType").toString();
+                            ExtendedShape shape = new Hallway(new Point(Double.valueOf(((JSONObject) hallway).get("x").toString()), Double.valueOf(((JSONObject) hallway).get("y").toString())));
+                            
+                            
+                            shape.setColor(((JSONObject) hallway).get("color").toString());
+                            shape.setStartPoint(new Point(shape.getCenterPoint().getX() + Double.valueOf(((JSONObject) hallway).get("width").toString()) / 2, shape.getCenterPoint().getY() + Double.valueOf(((JSONObject) hallway).get("length").toString()) / 2));
+                            ((ExtendedRectangle) shape).setWidth(Double.valueOf(((JSONObject) hallway).get("width").toString()));
+                            ((ExtendedRectangle) shape).setLength(Double.valueOf(((JSONObject) hallway).get("length").toString()));
+                            ((ExtendedRectangle) shape).setName(((JSONObject) hallway).get("name").toString());
+                            ((ExtendedRectangle) shape).setShapeType(((JSONObject) hallway).get("shapeType").toString());
+                            ((ExtendedRectangle) shape).setId(Integer.valueOf(((JSONObject) hallway).get("markerId").toString()));
+                            Rectangle rectangle = new Rectangle();
+                            rectangle.setBounds((int) shape.getCenterPoint().getX(), (int) shape.getCenterPoint().getY(), (int) ((ExtendedRectangle) shape).getWidth(), (int) ((ExtendedRectangle) shape).getLength());
+                            ((ExtendedRectangle) shape).setRectangle(rectangle);
+
+                            floor.getShapes().add(shape);
+                            if (graph.graph.isEmpty()) {
+                                graph.addInitialShape(shape);
+                            } else {
+                                addShapeToGraph((ExtendedRectangle) shape, floor.getShapes(), graph);
+                                graph.setOrder();
+                            }
                         }
 
                         build.getFloors().put(floor.getLevel(), floor);

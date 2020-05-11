@@ -5,6 +5,10 @@
  */
 package com.amihaeseisergiu.proiect;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -35,6 +39,27 @@ public class UpdateClassroomPopUp extends Application {
         this.drawingPanel = drawingPanel;
     }
 
+    public HBox adaugareInputuri() {
+        HBox grupareInputuri = new HBox();
+        Label grupa = new Label("Grupa");
+        Label oraStart = new Label("Ora inceput");
+        Label oraFinal = new Label("Ora final");
+        Label materie = new Label("Materie");
+        TextField inputGrupa = new TextField();
+        TextField inputOraStart = new TextField();
+        TextField inputOraFinal = new TextField();
+        TextField inputMaterie = new TextField();
+        grupareInputuri.getChildren().add(grupa);
+        grupareInputuri.getChildren().add(inputGrupa);
+        grupareInputuri.getChildren().add(oraStart);
+        grupareInputuri.getChildren().add(inputOraStart);
+        grupareInputuri.getChildren().add(oraFinal);
+        grupareInputuri.getChildren().add(inputOraFinal);
+        grupareInputuri.getChildren().add(materie);
+        grupareInputuri.getChildren().add(inputMaterie);
+        return grupareInputuri;
+    }
+
     @Override
     public void start(Stage stage) {
         BorderPane pane = new BorderPane();
@@ -56,8 +81,15 @@ public class UpdateClassroomPopUp extends Application {
         Button sambataAdd = new Button("+sambata");
         Button duminicaAdd = new Button("+duminica");
 
-        
-        //cod bagat de mine
+        List<String> zileSaptamana = new ArrayList<>();
+        zileSaptamana.add("Luni");
+        zileSaptamana.add("Marti");
+        zileSaptamana.add("Miercuri");
+        zileSaptamana.add("Joi");
+        zileSaptamana.add("Vineri");
+        zileSaptamana.add("Sambata");
+        zileSaptamana.add("Duminica");
+        List<VBox> listaVboxuri = new ArrayList<>();
         Label widthLabel = new Label("Width: ");
         Label heightLabel = new Label("Height: ");
         TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
@@ -69,453 +101,198 @@ public class UpdateClassroomPopUp extends Application {
         containerOrar.getChildren().addAll(width, height);
         width.setAlignment(Pos.CENTER);
         height.setAlignment(Pos.CENTER);
-        //cod bagat de mine
-        
-        VBox luni = new VBox();
-        luni.getChildren().add(new Label("luni"));
-        luni.setAlignment(Pos.CENTER);
-        luni.getChildren().add(luniAdd);
-        containerOrar.getChildren().add(luni);
-
-        VBox marti = new VBox();
-        marti.getChildren().add(new Label("marti"));
-        marti.setAlignment(Pos.CENTER);
-        marti.getChildren().add(martiAdd);
-        containerOrar.getChildren().add(marti);
-
-        VBox miercuri = new VBox();
-        miercuri.getChildren().add(new Label("miercuri"));
-        miercuri.setAlignment(Pos.CENTER);
-        miercuri.getChildren().add(miercuriAdd);
-        containerOrar.getChildren().add(miercuri);
-
-        VBox joi = new VBox();
-        joi.getChildren().add(new Label("joi"));
-        joi.setAlignment(Pos.CENTER);
-        joi.getChildren().add(joiAdd);
-        containerOrar.getChildren().add(joi);
-
-        VBox vineri = new VBox();
-        vineri.getChildren().add(new Label("vineri"));
-        vineri.setAlignment(Pos.CENTER);
-        vineri.getChildren().add(vineriAdd);
-        containerOrar.getChildren().add(vineri);
-
-        VBox sambata = new VBox();
-        sambata.getChildren().add(new Label("sambata"));
-        sambata.setAlignment(Pos.CENTER);
-        sambata.getChildren().add(sambataAdd);
-        containerOrar.getChildren().add(sambata);
-
-        VBox duminica = new VBox();
-        duminica.getChildren().add(new Label("duminica"));
-        duminica.setAlignment(Pos.CENTER);
-        duminica.getChildren().add(duminicaAdd);
-        containerOrar.getChildren().add(duminica);
-
         ScrollPane scrollOrar = new ScrollPane();
         containerOrar.setAlignment(Pos.CENTER);
         scrollOrar.setContent(containerOrar);
         scrollOrar.setFitToWidth(true);
 
-        for (int i = 0; i < shape.listaMaterieLuni.size(); i++) {
-            final int index = i;
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            inputOraStart.setText(shape.listaOraStartLuni.get(i));
-            TextField inputOraFinal = new TextField();
-            inputOraFinal.setText(shape.listaOraSfarsitLuni.get(i));
-            TextField inputMaterie = new TextField();
-            inputMaterie.setText(shape.listaMaterieLuni.get(i));
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
+        for (int i = 0; i <= 6; i++) {
+            VBox zi = new VBox();
+            Label ziCurenta = new Label(zileSaptamana.get(i));
+            zi.getChildren().add(ziCurenta);
+            zi.setAlignment(Pos.CENTER);
+            switch (i) {
+                case 0:
+                    zi.getChildren().add(luniAdd);
+                    break;
 
-            Button removeLuni = new Button("-");
-            grupareInputuri.getChildren().add(removeLuni);
+                case 1:
+                    zi.getChildren().add(martiAdd);
+                    break;
+                case 2:
+                    zi.getChildren().add(miercuriAdd);
+                    break;
+                case 3:
+                    zi.getChildren().add(joiAdd);
+                    break;
 
-            luni.getChildren().add(grupareInputuri);
-            removeLuni.setOnAction(event2 -> {
-                luni.getChildren().remove(grupareInputuri);
-                shape.listaOraStartLuni.remove(index);
-                shape.listaOraSfarsitLuni.remove(index);
-                shape.listaMaterieLuni.remove(index);
-            });
+                case 4:
+                    zi.getChildren().add(vineriAdd);
+                    break;
+                case 5:
+                    zi.getChildren().add(sambataAdd);
+                    break;
+                case 6:
+                    zi.getChildren().add(duminicaAdd);
+                    break;
+
+            }
+            listaVboxuri.add(zi);
+            containerOrar.getChildren().add(zi);
+
         }
-        for (int i = 0; i < shape.listaMaterieMarti.size(); i++) {
-            final int index = i;
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            inputOraStart.setText(shape.listaOraStartMarti.get(i));
-            TextField inputOraFinal = new TextField();
-            inputOraFinal.setText(shape.listaOraSfarsitMarti.get(i));
-            TextField inputMaterie = new TextField();
-            inputMaterie.setText(shape.listaMaterieMarti.get(i));
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
 
-            Button removeMarti = new Button("-");
-            grupareInputuri.getChildren().add(removeMarti);
+        Iterator<Map.Entry<Integer, List<InputSchedule>>> iter = shape.mapaInputuri.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<Integer, List<InputSchedule>> entry = iter.next();
+            System.out.println("Key = " + entry.getKey());
+            List<InputSchedule> localLista = entry.getValue();
+            for (InputSchedule input : localLista) {
+               HBox grupareInputuri = setareInputuri(input.getGrupa(), input.getOraStart(), input.getOraFinal(), input.getMaterie());
+                switch (entry.getKey()) {
+                    case 0:
+              
+                        Button removeLuni = new Button("-");
+                        grupareInputuri.getChildren().add(removeLuni);
+                        listaVboxuri.get(0).getChildren().add(grupareInputuri);
+                        removeLuni.setOnAction(event2 -> {
+                            listaVboxuri.get(0).getChildren().remove(grupareInputuri);
+                            localLista.remove(input);
+                            shape.mapaInputuri.put(entry.getKey(), localLista);
+                        });
+                        break;
+                    case 1:
+                        
+                        Button removeMarti = new Button("-");
+                        grupareInputuri.getChildren().add(removeMarti);
+                        listaVboxuri.get(1).getChildren().add(grupareInputuri);
+                        removeMarti.setOnAction(event2 -> {
+                            listaVboxuri.get(1).getChildren().remove(grupareInputuri);
+                            localLista.remove(input);
+                            shape.mapaInputuri.put(entry.getKey(), localLista);
+                        });
+                        break;
+                    case 2:
 
-            marti.getChildren().add(grupareInputuri);
-            removeMarti.setOnAction(event2 -> {
-                marti.getChildren().remove(grupareInputuri);
-                shape.listaOraStartMarti.remove(index);
-                shape.listaOraSfarsitMarti.remove(index);
-                shape.listaMaterieMarti.remove(index);
-            });
+                        Button removeMiercuri = new Button("-");
+                        grupareInputuri.getChildren().add(removeMiercuri);
+                        listaVboxuri.get(2).getChildren().add(grupareInputuri);
+                        removeMiercuri.setOnAction(event2 -> {
+                            listaVboxuri.get(2).getChildren().remove(grupareInputuri);
+                            localLista.remove(input);
+                            shape.mapaInputuri.put(entry.getKey(), localLista);
+                        });
+                        break;
+                    case 3:
+                        
+                        Button removeJoi = new Button("-");
+                        grupareInputuri.getChildren().add(removeJoi);
+                        listaVboxuri.get(3).getChildren().add(grupareInputuri);
+                        removeJoi.setOnAction(event2 -> {
+                            listaVboxuri.get(3).getChildren().remove(grupareInputuri);
+                            localLista.remove(input);
+                            shape.mapaInputuri.put(entry.getKey(), localLista);
+                        });
+                        break;
+                        
+                    case 4:
+                        Button removeVineri = new Button("-");
+                        grupareInputuri.getChildren().add(removeVineri);
+                        listaVboxuri.get(4).getChildren().add(grupareInputuri);
+                        removeVineri.setOnAction(event2 -> {
+                            listaVboxuri.get(4).getChildren().remove(grupareInputuri);
+                            localLista.remove(input);
+                            shape.mapaInputuri.put(entry.getKey(), localLista);
+                        });
+                        break;
+                    case 5:
+                        Button removeSambata = new Button("-");
+                        grupareInputuri.getChildren().add(removeSambata);
+                        listaVboxuri.get(5).getChildren().add(grupareInputuri);
+                        removeSambata.setOnAction(event2 -> {
+                            listaVboxuri.get(5).getChildren().remove(grupareInputuri);
+                            localLista.remove(input);
+                            shape.mapaInputuri.put(entry.getKey(), localLista);
+                        });
+                        break;
+                    case 6:
+                        Button removeDuminica = new Button("-");
+                        grupareInputuri.getChildren().add(removeDuminica);
+                        listaVboxuri.get(6).getChildren().add(grupareInputuri);
+                        removeDuminica.setOnAction(event2 -> {
+                            listaVboxuri.get(6).getChildren().remove(grupareInputuri);
+                            localLista.remove(input);
+                            shape.mapaInputuri.put(entry.getKey(), localLista);
+                        });
+                        break;
+                }
+
+            }
         }
-        for (int i = 0; i < shape.listaMaterieMiercuri.size(); i++) {
-            final int index = i;
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            inputOraStart.setText(shape.listaOraStartMiercuri.get(i));
-            TextField inputOraFinal = new TextField();
-            inputOraFinal.setText(shape.listaOraSfarsitMiercuri.get(i));
-            TextField inputMaterie = new TextField();
-            inputMaterie.setText(shape.listaMaterieMiercuri.get(i));
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
 
-            Button removeMiercuri = new Button("-");
-            grupareInputuri.getChildren().add(removeMiercuri);
-
-            miercuri.getChildren().add(grupareInputuri);
-            removeMiercuri.setOnAction(event2 -> {
-                miercuri.getChildren().remove(grupareInputuri);
-                shape.listaOraStartMiercuri.remove(index);
-                shape.listaOraSfarsitMiercuri.remove(index);
-                shape.listaMaterieMiercuri.remove(index);
-            });
-        }
-        for (int i = 0; i < shape.listaMaterieJoi.size(); i++) {
-            final int index = i;
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            inputOraStart.setText(shape.listaOraStartJoi.get(i));
-            TextField inputOraFinal = new TextField();
-            inputOraFinal.setText(shape.listaOraSfarsitJoi.get(i));
-            TextField inputMaterie = new TextField();
-            inputMaterie.setText(shape.listaMaterieJoi.get(i));
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
-            Button removeJoi = new Button("-");
-            grupareInputuri.getChildren().add(removeJoi);
-
-            joi.getChildren().add(grupareInputuri);
-            removeJoi.setOnAction(event2 -> {
-                joi.getChildren().remove(grupareInputuri);
-                shape.listaOraStartJoi.remove(index);
-                shape.listaOraSfarsitJoi.remove(index);
-                shape.listaMaterieJoi.remove(index);
-            });
-        }
-        for (int i = 0; i < shape.listaMaterieVineri.size(); i++) {
-            final int index = i;
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            inputOraStart.setText(shape.listaOraStartVineri.get(i));
-            TextField inputOraFinal = new TextField();
-            inputOraFinal.setText(shape.listaOraSfarsitVineri.get(i));
-            TextField inputMaterie = new TextField();
-            inputMaterie.setText(shape.listaMaterieVineri.get(i));
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
-            Button removeVineri = new Button("-");
-            grupareInputuri.getChildren().add(removeVineri);
-
-            vineri.getChildren().add(grupareInputuri);
-            removeVineri.setOnAction(event2 -> {
-                vineri.getChildren().remove(grupareInputuri);
-                shape.listaOraStartVineri.remove(index);
-                shape.listaOraSfarsitVineri.remove(index);
-                shape.listaMaterieVineri.remove(index);
-            });
-        }
-        for (int i = 0; i < shape.listaMaterieSambata.size(); i++) {
-            final int index = i;
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            inputOraStart.setText(shape.listaOraStartSambata.get(i));
-            TextField inputOraFinal = new TextField();
-            inputOraFinal.setText(shape.listaOraSfarsitSambata.get(i));
-            TextField inputMaterie = new TextField();
-            inputMaterie.setText(shape.listaMaterieSambata.get(i));
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
-            Button removeSambata = new Button("-");
-            grupareInputuri.getChildren().add(removeSambata);
-
-            sambata.getChildren().add(grupareInputuri);
-            removeSambata.setOnAction(event2 -> {
-                sambata.getChildren().remove(grupareInputuri);
-                shape.listaOraStartSambata.remove(index);
-                shape.listaOraSfarsitSambata.remove(index);
-                shape.listaMaterieSambata.remove(index);
-            });
-        }
-        for (int i = 0; i < shape.listaMaterieDuminica.size(); i++) {
-            final int index = i;
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            inputOraStart.setText(shape.listaOraStartDuminica.get(i));
-            TextField inputOraFinal = new TextField();
-            inputOraFinal.setText(shape.listaOraSfarsitDuminica.get(i));
-            TextField inputMaterie = new TextField();
-            inputMaterie.setText(shape.listaMaterieDuminica.get(i));
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
-            Button removeDuminica = new Button("-");
-            grupareInputuri.getChildren().add(removeDuminica);
-
-            duminica.getChildren().add(grupareInputuri);
-            removeDuminica.setOnAction(event2 -> {
-                duminica.getChildren().remove(grupareInputuri);
-                shape.listaOraStartDuminica.remove(index);
-                shape.listaOraSfarsitDuminica.remove(index);
-                shape.listaMaterieDuminica.remove(index);
-            });
-        }
         luniAdd.setOnAction(event -> {
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            TextField inputOraFinal = new TextField();
-            TextField inputMaterie = new TextField();
-
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
             Button removeLuni = new Button("-");
+            HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeLuni);
-
-            luni.getChildren().add(grupareInputuri);
-
+            listaVboxuri.get(0).getChildren().add(grupareInputuri);
             removeLuni.setOnAction(event2 -> {
-                luni.getChildren().remove(grupareInputuri);
+                listaVboxuri.get(0).getChildren().remove(grupareInputuri);
             });
         });
-
-        ///////////////////////////////////////////////////////////////////////
         martiAdd.setOnAction(event -> {
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            TextField inputOraFinal = new TextField();
-            TextField inputMaterie = new TextField();
-
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
             Button removeMarti = new Button("-");
+            HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeMarti);
-
-            marti.getChildren().add(grupareInputuri);
-
+            listaVboxuri.get(1).getChildren().add(grupareInputuri);
             removeMarti.setOnAction(event2 -> {
-                marti.getChildren().remove(grupareInputuri);
+                listaVboxuri.get(1).getChildren().remove(grupareInputuri);
             });
         });
-        /////////////////////////////////////////////////////////////////////
         miercuriAdd.setOnAction(event -> {
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            TextField inputOraFinal = new TextField();
-            TextField inputMaterie = new TextField();
-
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
             Button removeMiercuri = new Button("-");
+            HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeMiercuri);
-
-            miercuri.getChildren().add(grupareInputuri);
-
+            listaVboxuri.get(2).getChildren().add(grupareInputuri);
             removeMiercuri.setOnAction(event2 -> {
-                miercuri.getChildren().remove(grupareInputuri);
+                listaVboxuri.get(2).getChildren().remove(grupareInputuri);
             });
         });
-        //////////////////////////////////////////////////////////////////////
-        /////////////////////////////////////////////////////////////////////
         joiAdd.setOnAction(event -> {
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            TextField inputOraFinal = new TextField();
-            TextField inputMaterie = new TextField();
-
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
             Button removeJoi = new Button("-");
+            HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeJoi);
-
-            joi.getChildren().add(grupareInputuri);
-
+            listaVboxuri.get(3).getChildren().add(grupareInputuri);
             removeJoi.setOnAction(event2 -> {
-                joi.getChildren().remove(grupareInputuri);
+                listaVboxuri.get(3).getChildren().remove(grupareInputuri);
             });
         });
-        ///////////////////////////////////////////////////////////////////////
-
-        /////////////////////////////////////////////////////////////////////
         vineriAdd.setOnAction(event -> {
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            TextField inputOraFinal = new TextField();
-            TextField inputMaterie = new TextField();
-
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
             Button removeVineri = new Button("-");
+            HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeVineri);
-
-            vineri.getChildren().add(grupareInputuri);
-
+            listaVboxuri.get(4).getChildren().add(grupareInputuri);
             removeVineri.setOnAction(event2 -> {
-                vineri.getChildren().remove(grupareInputuri);
+                listaVboxuri.get(4).getChildren().remove(grupareInputuri);
             });
         });
-
-        //////////////////////////////////////////////////////////////////////////
         sambataAdd.setOnAction(event -> {
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            TextField inputOraFinal = new TextField();
-            TextField inputMaterie = new TextField();
-
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
             Button removeSambata = new Button("-");
+            HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeSambata);
-
-            sambata.getChildren().add(grupareInputuri);
-
+            listaVboxuri.get(5).getChildren().add(grupareInputuri);
             removeSambata.setOnAction(event2 -> {
-                sambata.getChildren().remove(grupareInputuri);
+                listaVboxuri.get(5).getChildren().remove(grupareInputuri);
             });
         });
-
-        //////////////////////////////////////////////////////////////////////////
         duminicaAdd.setOnAction(event -> {
-            HBox grupareInputuri = new HBox();
-            Label oraStart = new Label("Ora inceput");
-            Label oraFinal = new Label("Ora final");
-            Label materie = new Label("Materie");
-            TextField inputOraStart = new TextField();
-            TextField inputOraFinal = new TextField();
-            TextField inputMaterie = new TextField();
-
-            grupareInputuri.getChildren().add(oraStart);
-            grupareInputuri.getChildren().add(inputOraStart);
-            grupareInputuri.getChildren().add(oraFinal);
-            grupareInputuri.getChildren().add(inputOraFinal);
-            grupareInputuri.getChildren().add(materie);
-            grupareInputuri.getChildren().add(inputMaterie);
-
             Button removeDuminica = new Button("-");
+            HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeDuminica);
-
-            duminica.getChildren().add(grupareInputuri);
-
+            listaVboxuri.get(6).getChildren().add(grupareInputuri);
             removeDuminica.setOnAction(event2 -> {
-                duminica.getChildren().remove(grupareInputuri);
+                listaVboxuri.get(6).getChildren().remove(grupareInputuri);
             });
         });
-
         ///////////////////////////////////////////////////////////////////////       
         Label name = new Label("Name:");
         TextField nameField = new TextField(rectangle.getName());
@@ -546,250 +323,90 @@ public class UpdateClassroomPopUp extends Application {
         bottomHBox.getChildren().addAll(closeBtn);
         int btnCount = bottomHBox.getChildren().size();
         closeBtn.prefWidthProperty().bind(bottomHBox.widthProperty().divide(btnCount));
-
+        List<InputSchedule> listaInputuri=new ArrayList<>();
         closeBtn.setOnAction(event -> {
             stage.close();
             rectangle.setName(nameField.getText());
-            int contor = 1;
-            int figuriAdaugateAnterior = 0;
-            for (Node child : luni.getChildren()) {
-                if (child instanceof HBox) {
-                    for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField) {
-                            figuriAdaugateAnterior++;
-                        }
-                        if (figuriAdaugateAnterior > shape.marimeListaLuni * 3) {
-                            if (contor == 1) {
+           
+            int contor = 0;
+            int schimbare=1;
+            for (int i = 0; i <= 6; i++) {
+                schimbare=0;
+                List<InputSchedule> localLista = new ArrayList<>();
+                Iterator<Map.Entry<Integer, List<InputSchedule>>> itr = shape.mapaInputuri.entrySet().iterator();
+                            while(itr.hasNext()) {
+                    Map.Entry<Integer, List<InputSchedule>> entry = itr.next();
+                    if(entry.getKey()==i)
+                    localLista = entry.getValue();
+                }
+
+                for (Node child : listaVboxuri.get(i).getChildren()) {
+                    String grupa = null;
+                    String oraStart = null;
+                    String oraFinal = null;
+                    String materie=null;
+
+                    if (child instanceof HBox) {
+                        for (Node child1 : ((HBox) child).getChildren()) {
+                            if (contor == 0) {
                                 if (child1 instanceof TextField) {
-                                    shape.listaOraStartLuni.add(((TextField) child1).getText());
+                                    grupa = (((TextField) child1).getText());
+                                   
                                     contor++;
+                                  
+                                }
+                            } else if (contor == 1) {
+                                if (child1 instanceof TextField) {
+                                    oraStart = (((TextField) child1).getText());
+                                
+                                    contor++;
+                                   
                                 }
                             } else if (contor == 2) {
                                 if (child1 instanceof TextField) {
-                                    shape.listaOraSfarsitLuni.add(((TextField) child1).getText());
+                                    oraFinal = (((TextField) child1).getText());
+                                 
                                     contor++;
 
                                 }
-                            } else {
-                                if (contor == 3) {
-                                    if (child1 instanceof TextField) {
-                                        shape.listaMaterieLuni.add(((TextField) child1).getText());
-                                        contor = 1;
+                            } else if (contor == 3) {
+                                if (child1 instanceof TextField) {
+                                    materie = (((TextField) child1).getText());
+                                  
+                                    InputSchedule grupareInputuri = new InputSchedule(grupa, oraStart, oraFinal, materie);
+                                    int ok = 0;
+                                    if (!localLista.isEmpty()) {
+                                        for (InputSchedule input : localLista) {
+                                            if ((input.equals(grupareInputuri))) {
+                                                ok = 1;
+                                                break;
+
+                                            }
+                                        }
+
                                     }
+                                    if (ok == 0 || localLista.isEmpty()) {
+                                        localLista.add(grupareInputuri);
+                                        schimbare=1;
+                                        
+                                    }
+                                    contor = 0;
                                 }
+
                             }
+
                         }
+
                     }
                 }
-
-            }
-            contor = 1;
-            figuriAdaugateAnterior = 0;
-            for (Node child : marti.getChildren()) {
-                if (child instanceof HBox) {
-                    for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField) {
-                            figuriAdaugateAnterior++;
-                        }
-                        if (figuriAdaugateAnterior > shape.marimeListaMarti * 3) {
-                            if (contor == 1) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraStartMarti.add(((TextField) child1).getText());
-                                    contor++;
-                                }
-                            } else if (contor == 2) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraSfarsitMarti.add(((TextField) child1).getText());
-                                    contor++;
-
-                                }
-                            } else {
-                                if (contor == 3) {
-                                    if (child1 instanceof TextField) {
-                                        shape.listaMaterieMarti.add(((TextField) child1).getText());
-                                        contor = 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                if (!localLista.isEmpty() && schimbare==1) {
+                  
+                    System.out.println(i);
+                    shape.mapaInputuri.put(i, localLista);
                 }
-
-            }
-            contor = 1;
-            figuriAdaugateAnterior = 0;
-            for (Node child : miercuri.getChildren()) {
-                if (child instanceof HBox) {
-                    for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField) {
-                            figuriAdaugateAnterior++;
-                        }
-                        if (figuriAdaugateAnterior > shape.marimeListaMiercuri * 3) {
-                            if (contor == 1) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraStartMiercuri.add(((TextField) child1).getText());
-                                    contor++;
-                                }
-                            } else if (contor == 2) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraSfarsitMiercuri.add(((TextField) child1).getText());
-                                    contor++;
-
-                                }
-                            } else {
-                                if (contor == 3) {
-                                    if (child1 instanceof TextField) {
-                                        shape.listaMaterieMiercuri.add(((TextField) child1).getText());
-                                        contor = 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
-            contor = 1;
-            figuriAdaugateAnterior = 0;
-            for (Node child : joi.getChildren()) {
-                if (child instanceof HBox) {
-                    for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField) {
-                            figuriAdaugateAnterior++;
-                        }
-                        if (figuriAdaugateAnterior > shape.marimeListaJoi * 3) {
-                            if (contor == 1) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraStartJoi.add(((TextField) child1).getText());
-                                    contor++;
-                                }
-                            } else if (contor == 2) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraSfarsitJoi.add(((TextField) child1).getText());
-                                    contor++;
-
-                                }
-                            } else {
-                                if (contor == 3) {
-                                    if (child1 instanceof TextField) {
-                                        shape.listaMaterieJoi.add(((TextField) child1).getText());
-                                        contor = 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
-            contor = 1;
-            figuriAdaugateAnterior = 0;
-            for (Node child : vineri.getChildren()) {
-                if (child instanceof HBox) {
-                    for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField) {
-                            figuriAdaugateAnterior++;
-                        }
-                        if (figuriAdaugateAnterior > shape.marimeListaVineri * 3) {
-                            if (contor == 1) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraStartVineri.add(((TextField) child1).getText());
-                                    contor++;
-                                }
-                            } else if (contor == 2) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraSfarsitVineri.add(((TextField) child1).getText());
-                                    contor++;
-
-                                }
-                            } else {
-                                if (contor == 3) {
-                                    if (child1 instanceof TextField) {
-                                        shape.listaMaterieVineri.add(((TextField) child1).getText());
-                                        contor = 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
-            contor = 1;
-            figuriAdaugateAnterior = 0;
-            for (Node child : sambata.getChildren()) {
-                if (child instanceof HBox) {
-                    for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField) {
-                            figuriAdaugateAnterior++;
-                        }
-                        if (figuriAdaugateAnterior > shape.marimeListaSambata * 3) {
-                            if (contor == 1) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraStartSambata.add(((TextField) child1).getText());
-                                    contor++;
-                                }
-                            } else if (contor == 2) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraSfarsitSambata.add(((TextField) child1).getText());
-                                    contor++;
-
-                                }
-                            } else {
-                                if (contor == 3) {
-                                    if (child1 instanceof TextField) {
-                                        shape.listaMaterieSambata.add(((TextField) child1).getText());
-                                        contor = 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-            }
-            contor = 1;
-            figuriAdaugateAnterior = 0;
-            for (Node child : duminica.getChildren()) {
-                if (child instanceof HBox) {
-                    for (Node child1 : ((HBox) child).getChildren()) {
-                        if (child1 instanceof TextField) {
-                            figuriAdaugateAnterior++;
-                        }
-                        if (figuriAdaugateAnterior > shape.marimeListaDuminica * 3) {
-                            if (contor == 1) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraStartDuminica.add(((TextField) child1).getText());
-                                    contor++;
-                                }
-                            } else if (contor == 2) {
-                                if (child1 instanceof TextField) {
-                                    shape.listaOraSfarsitDuminica.add(((TextField) child1).getText());
-                                    contor++;
-
-                                }
-                            } else {
-                                if (contor == 3) {
-                                    if (child1 instanceof TextField) {
-                                        shape.listaMaterieDuminica.add(((TextField) child1).getText());
-                                        contor = 1;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
             }
 
-            shape.marimeListaLuni = shape.listaMaterieLuni.size();
-            shape.marimeListaMarti = shape.listaMaterieMarti.size();
-            shape.marimeListaMiercuri = shape.listaMaterieMiercuri.size();
-            shape.marimeListaJoi = shape.listaMaterieJoi.size();
-            shape.marimeListaVineri = shape.listaMaterieVineri.size();
-            shape.marimeListaSambata = shape.listaMaterieSambata.size();
-            shape.marimeListaDuminica = shape.listaMaterieDuminica.size();
-            //oraStart->getText()
+           
 
             // cod bagat de mine
             drawingPanel.deleteShape(rectangle);
@@ -801,7 +418,7 @@ public class UpdateClassroomPopUp extends Application {
             if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
                 rectangle.setLength(initialHeight);
                 rectangle.setWidth(initialWidth);
-                rectangle.getRectangle().setSize((int)rectangle.getWidth(), (int)rectangle.getLength());
+                rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
                 drawingPanel.drawAll();
             } else {
                 drawingPanel.deleteShapeFromGraph(rectangle);
@@ -819,15 +436,40 @@ public class UpdateClassroomPopUp extends Application {
         pane.setCenter(centerVBox);
         pane.setBottom(bottomHBox);
 
-        scene = new Scene(pane, 700, 700);
+        scene = new Scene(pane, 950, 700);
 
         pane.setStyle("-fx-background-color: transparent;");
 
-        stage.setX(x + 10);
-        stage.setY(y - scene.getHeight() / 2);
+        stage.setX(x + 20);
+        stage.setY(y - scene.getHeight() / 2.5);
         //stage.initStyle(StageStyle.TRANSPARENT);
         scene.setFill(new Color(0.6, 0.6, 0.6, 0.2));
         stage.setScene(scene);
         stage.show();
+    }
+
+    public HBox setareInputuri(String grp, String oStart, String oFinal, String materieFac) {
+        HBox grupareInputuri = new HBox();
+        Label oraStart = new Label("Ora inceput");
+        Label oraFinal = new Label("Ora final");
+        Label materie = new Label("Materie");
+        TextField inputOraStart = new TextField();
+        Label grupa = new Label("Grupa");
+        TextField inputGrupa = new TextField();
+        inputGrupa.setText(grp);
+        inputOraStart.setText(oStart);
+        TextField inputOraFinal = new TextField();
+        inputOraFinal.setText(oFinal);
+        TextField inputMaterie = new TextField();
+        inputMaterie.setText(materieFac);
+        grupareInputuri.getChildren().add(grupa);
+        grupareInputuri.getChildren().add(inputGrupa);
+        grupareInputuri.getChildren().add(oraStart);
+        grupareInputuri.getChildren().add(inputOraStart);
+        grupareInputuri.getChildren().add(oraFinal);
+        grupareInputuri.getChildren().add(inputOraFinal);
+        grupareInputuri.getChildren().add(materie);
+        grupareInputuri.getChildren().add(inputMaterie);
+        return grupareInputuri;
     }
 }

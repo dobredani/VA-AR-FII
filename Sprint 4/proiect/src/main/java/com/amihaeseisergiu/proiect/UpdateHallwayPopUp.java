@@ -109,7 +109,6 @@ public class UpdateHallwayPopUp extends Application {
                     drawingPanel.deleteShapeFromGraph(rectangle);
                     drawingPanel.getShapes().add(rectangle);
                     drawingPanel.addShapeToGraph(rectangle);
-                    drawingPanel.getGraph().hallway = (Hallway)shape;
                     drawingPanel.setOrder();
                     drawingPanel.drawAll();
                     drawingPanel.getIds().add(rectangle.getId());

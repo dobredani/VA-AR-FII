@@ -7,6 +7,8 @@ package com.amihaeseisergiu.proiect;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -14,36 +16,7 @@ import java.util.List;
  */
 public class Classroom extends ExtendedRectangle {
     
-    private String[] schedule;
-    List<String> listaOraStartLuni = new ArrayList<>();
-    int marimeListaLuni;
-    List<String> listaOraSfarsitLuni = new ArrayList<>();
-    List<String> listaMaterieLuni = new ArrayList<>();
-    List<String> listaOraStartMarti = new ArrayList<>();
-    int marimeListaMarti;
-    List<String> listaOraSfarsitMarti = new ArrayList<>();
-    List<String> listaMaterieMarti = new ArrayList<>();
-    List<String> listaOraStartMiercuri = new ArrayList<>();
-    int marimeListaMiercuri;
-    List<String> listaOraSfarsitMiercuri = new ArrayList<>();
-    List<String> listaMaterieMiercuri = new ArrayList<>();
-    List<String> listaOraStartJoi = new ArrayList<>();
-    int marimeListaJoi;
-    List<String> listaOraSfarsitJoi = new ArrayList<>();
-    List<String> listaMaterieJoi = new ArrayList<>();
-    List<String> listaOraStartVineri = new ArrayList<>();
-    int marimeListaVineri;
-    List<String> listaOraSfarsitVineri = new ArrayList<>();
-    List<String> listaMaterieVineri = new ArrayList<>();
-     List<String> listaOraStartSambata = new ArrayList<>();
-    int marimeListaSambata;
-    List<String> listaOraSfarsitSambata = new ArrayList<>();
-    List<String> listaMaterieSambata= new ArrayList<>();
-      List<String> listaOraStartDuminica = new ArrayList<>();
-    int marimeListaDuminica;
-    List<String> listaOraSfarsitDuminica = new ArrayList<>();
-    List<String> listaMaterieDuminica= new ArrayList<>();
-   
+    Map<Integer, List<InputSchedule>> mapaInputuri = new TreeMap();
 
     public Classroom(Point p) {
         super(p);
@@ -51,13 +24,6 @@ public class Classroom extends ExtendedRectangle {
         this.shapeType = "Classroom";
     }
 
-    public String[] getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(String[] schedule) {
-        this.schedule = schedule;
-    }
 
     public String foo() {
         return "foo";

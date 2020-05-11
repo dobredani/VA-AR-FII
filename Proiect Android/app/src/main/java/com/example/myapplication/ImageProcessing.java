@@ -125,7 +125,7 @@ public class ImageProcessing  extends AppCompatActivity implements CameraBridgeV
     }
 
     /**
-     * TODO this class will take a callback function as argument and this is where the detected
+     * this class will take a callback function as argument and this is where the detected
      * markers will be sent back to the caller
      * @param ids
      */

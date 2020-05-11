@@ -1,8 +1,13 @@
 package com.example.myapplication.Schedule;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.myapplication.ApplicationData;
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.problem.Lecture;
+import com.example.myapplication.problem.Location;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -28,16 +33,28 @@ public class SchedView extends AppCompatActivity {
         TabLayout weekDaysLayout = findViewById(R.id.weekDays);
         ViewPager viewPager = findViewById(R.id.pagerCalendar);
 
+        String room = getIntent().getStringExtra("room");
+        Location location = MainActivity.applicationData.getCurrentBuilding().getLocation(room);
+
         // setup tabs
+        //TODO pass argument to fragment the data (ArrayList) of the respective weekday
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new SchedViewFragment(), "luni");
-        adapter.addFragment(new SchedViewFragment(), "marti");
-        adapter.addFragment(new SchedViewFragment(), "miercuri");
-        adapter.addFragment(new SchedViewFragment(), "joi");
-        adapter.addFragment(new SchedViewFragment(), "vineri");
+        adapter.addFragment(new SchedViewFragment(location.getDaySchedule(1)), "luni");
+        adapter.addFragment(new SchedViewFragment(location.getDaySchedule(2)), "marti");
+        adapter.addFragment(new SchedViewFragment(location.getDaySchedule(3)), "miercuri");
+        adapter.addFragment(new SchedViewFragment(location.getDaySchedule(4)), "joi");
+        adapter.addFragment(new SchedViewFragment(location.getDaySchedule(5)), "vineri");
         viewPager.setAdapter(adapter);
 
         weekDaysLayout.setupWithViewPager(viewPager);
+
+//        for(Lecture lecture : lectures) {
+//            SchedViewFragment fragment = (SchedViewFragment) ((ViewPagerAdapter) viewPager.getAdapter())
+//                    .getItem(lecture.getDayNumer()-1);
+//
+//            fragment.addLecture(lecture.getCourse(), lecture.getGroup(), lecture.getStartTime(), lecture.getFinishTime());
+//        }
+
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -7,12 +7,24 @@ public class Lecture {
     String startTime;
     String finishTime;
 
+   int dayNumer = 0;
+
+    public int getDayNumer() {
+        return dayNumer;
+    }
+
     public Lecture(String group, String course, String dayOfWeek, String startTime, String finishTime) {
         this.group = group;
         this.course = course;
         this.dayOfWeek = dayOfWeek;
         this.startTime = startTime;
         this.finishTime = finishTime;
+
+        if (dayOfWeek.equalsIgnoreCase("Luni")) dayNumer = 1;
+        if (dayOfWeek.equalsIgnoreCase("Marti")) dayNumer = 2;
+        if (dayOfWeek.equalsIgnoreCase("Miercuri")) dayNumer = 3;
+        if (dayOfWeek.equalsIgnoreCase("Joi")) dayNumer = 4;
+        if (dayOfWeek.equalsIgnoreCase("Vineri")) dayNumer = 5;
     }
 
     public String getGroup() {

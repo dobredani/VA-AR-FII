@@ -22,6 +22,8 @@ class Floor(StructuredNode, Node):
     building = RelationshipFrom('models.Building', 'HAS', cardinality=One)
     waypoints = RelationshipTo(
         'models.Waypoint', 'HAS', cardinality=ZeroOrMore)
+    hallways = RelationshipTo(
+        'models.Hallway', 'HAS', cardinality=ZeroOrMore)
 
     def pre_save(self):
         Building.nodes.get(name=self.buildingName)

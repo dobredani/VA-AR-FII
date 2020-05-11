@@ -2,7 +2,7 @@ from flask_classful import FlaskView, route
 from flask import jsonify
 from webargs import fields, validate
 from webargs.flaskparser import use_args
-from models import Building, Floor, Waypoint, GoesTo, Connector, Group, Teacher, ClassRoom, Office
+from models import Building, Floor, Waypoint, GoesTo, Connector, Group, Teacher, ClassRoom, Office, Hallway
 from neomodel import db
 
 WAYPOINT_TYPES = {"ClassRoom": "classRoom",
@@ -15,6 +15,12 @@ BuildingSchema = {
         'waypoints': fields.List(fields.Nested({
             'name': fields.Str(required=True),
             'markerId': fields.Int(required=True),
+            'shapeType': fields.Str(required=False),
+            'color': fields.Str(required=False),
+            'width': fields.Float(required=False),
+            'length': fields.Float(required=False),
+            'x': fields.Float(required=False),
+            'y': fields.Float(required=False),
             'type': fields.Str(required=False, validate=validate.OneOf(list(WAYPOINT_TYPES.values()))),
             'schedule': fields.List(fields.Nested({
                 'group': fields.Str(required=True),
@@ -26,7 +32,17 @@ BuildingSchema = {
             'neighbors': fields.List(fields.Nested({
                 'name': fields.Str(required=True),
                 'direction': fields.Str(required=True, validate=validate.OneOf(list(GoesTo.DIRECTIONS.values())))
-            }))}), required=True)}), required=True),
+            }))}), required=True),
+        'hallways': fields.List(fields.Nested({
+            'name': fields.Str(required=True),
+            'markerId': fields.Int(required=True),
+            'shapeType': fields.Str(required=False),
+            'color': fields.Str(required=False),
+            'width': fields.Float(required=False),
+            'length': fields.Float(required=False),
+            'x': fields.Float(required=False),
+            'y': fields.Float(required=False)}), required=True)
+    }), required=True),
 }
 
 
@@ -46,10 +62,18 @@ class BuildingView(FlaskView):
                        "floors": []}
                 for floor in building.floors:
                     map["floors"].append(
-                        {"level": floor.level, "waypoints": []})
+                        {"level": floor.level, "waypoints": [], "hallways": []})
                     for waypoint in floor.waypoints:
                         map["floors"][-1]["waypoints"].append(
-                            {"name": waypoint.name, "markerId": waypoint.markerId})
+                            {"name": waypoint.name,
+                             "markerId": waypoint.markerId,
+                             "shapeType": waypoint.shapeType,
+                             "color": waypoint.color,
+                             "width": waypoint.width,
+                             "length": waypoint.length,
+                             "x": waypoint.x,
+                             "y": waypoint.y, }
+                        )
                         if ClassRoom.__name__ in waypoint.labels():
                             map["floors"][-1]["waypoints"][-1]["type"] = WAYPOINT_TYPES["ClassRoom"]
                             map["floors"][-1]["waypoints"][-1]["schedule"] = []
@@ -76,6 +100,18 @@ class BuildingView(FlaskView):
                                     neighbor).direction
                                 map["floors"][-1]["waypoints"][-1]["neighbors"].append(
                                     {"name": neighbor.name, "direction": direction})
+
+                    for hallway in floor.hallways:
+                        map["floors"][-1]["hallways"].append(
+                            {"name": hallway.name,
+                             "markerId": hallway.markerId,
+                             "shapeType": hallway.shapeType,
+                             "color": hallway.color,
+                             "width": hallway.width,
+                             "length": hallway.length,
+                             "x": hallway.x,
+                             "y": hallway.y, }
+                        )
                 return jsonify(map)
             else:
                 return "Not Found", 404
@@ -94,7 +130,10 @@ class BuildingView(FlaskView):
                     if ("type" in waypoint):
                         if (waypoint["type"] == WAYPOINT_TYPES["ClassRoom"]):
                             classRoom = ClassRoom(
-                                name=waypoint["name"], markerId=waypoint["markerId"], buildingName=building["name"], floorLevel=floor["level"]).save()
+                                name=waypoint["name"], markerId=waypoint["markerId"],
+                                buildingName=building["name"], floorLevel=floor["level"],
+                                shapeType=waypoint["shapeType"], color=waypoint["color"], width=waypoint["width"],
+                                length=waypoint["length"], x=waypoint["x"], y=waypoint["y"]).save()
                             for schedule in waypoint["schedule"]:
                                 group = Group(
                                     name=schedule["group"], buildingName=building["name"]).save()
@@ -104,20 +143,39 @@ class BuildingView(FlaskView):
                                                                   'finishTime': schedule["finishTime"]})
                         elif (waypoint["type"] == WAYPOINT_TYPES["Office"]):
                             office = Office(
-                                name=waypoint["name"], markerId=waypoint["markerId"], buildingName=building["name"], floorLevel=floor["level"]).save()
+                                name=waypoint["name"], markerId=waypoint["markerId"],
+                                buildingName=building["name"], floorLevel=floor["level"],
+                                shapeType=waypoint["shapeType"], color=waypoint["color"], width=waypoint["width"],
+                                length=waypoint["length"], x=waypoint["x"], y=waypoint["y"]).save()
                             for prof in waypoint["professors"]:
                                 teacher = Teacher(
                                     name=prof, buildingName=building["name"]).save()
                                 teacher.office.connect(office)
                         elif (waypoint["type"] == WAYPOINT_TYPES["Connector"]):
                             Connector(
-                                name=waypoint["name"], markerId=waypoint["markerId"], buildingName=building["name"], floorLevel=floor["level"]).save()
+                                name=waypoint["name"], markerId=waypoint["markerId"],
+                                buildingName=building["name"], floorLevel=floor["level"],
+                                shapeType=waypoint["shapeType"], color=waypoint["color"], width=waypoint["width"],
+                                length=waypoint["length"], x=waypoint["x"], y=waypoint["y"]).save()
                         else:
                             Waypoint(
-                                name=waypoint["name"], markerId=waypoint["markerId"], buildingName=building["name"], floorLevel=floor["level"]).save()
+                                name=waypoint["name"], markerId=waypoint["markerId"],
+                                buildingName=building["name"], floorLevel=floor["level"],
+                                shapeType=waypoint["shapeType"], color=waypoint["color"], width=waypoint["width"],
+                                length=waypoint["length"], x=waypoint["x"], y=waypoint["y"]).save()
                     else:
                         Waypoint(
-                            name=waypoint["name"], markerId=waypoint["markerId"], buildingName=building["name"], floorLevel=floor["level"]).save()
+                            name=waypoint["name"], markerId=waypoint["markerId"],
+                            buildingName=building["name"], floorLevel=floor["level"],
+                            shapeType=waypoint["shapeType"], color=waypoint["color"], width=waypoint["width"],
+                            length=waypoint["length"], x=waypoint["x"], y=waypoint["y"]).save()
+
+                for hallway in floor["hallways"]:
+                    Hallway(
+                        name=hallway["name"], markerId=hallway["markerId"],
+                        buildingName=building["name"], floorLevel=floor["level"],
+                        shapeType=hallway["shapeType"], color=hallway["color"], width=hallway["width"],
+                        length=hallway["length"], x=hallway["x"], y=hallway["y"]).save()
 
             for floor in building["floors"]:
                 for waypoint in floor["waypoints"]:
@@ -167,8 +225,30 @@ class BuildingView(FlaskView):
         if building is not None:
             floors = []
             for floor in building.floors:
-                floors.append({"floorLevel": floor.level, "waypoints": list(map(
-                    lambda waypoint: waypoint.name, floor.waypoints))})
+                floors.append(
+                    {"level": floor.level, "waypoints": []})
+                for waypoint in floor.waypoints:
+                    floors[-1]["waypoints"].append(
+                        {"name": waypoint.name, "markerId": waypoint.markerId, }
+                    )
+                    if ClassRoom.__name__ in waypoint.labels():
+                        floors[-1]["waypoints"][-1]["type"] = WAYPOINT_TYPES["ClassRoom"]
+                        floors[-1]["waypoints"][-1]["schedule"] = []
+                        for group in [group for group in Group.nodes.filter(buildingName=buildingName).has(classes=True) if group.classes.relationship(waypoint)]:
+                            classes = group.classes.all_relationships(
+                                waypoint)
+                            for cclass in classes:
+                                floors[-1]["waypoints"][-1]["schedule"].append(
+                                    {"group": group.name, "course": cclass.course, "dayOfWeek": cclass.dayOfWeek,
+                                        "startTime": cclass.startTime, "finishTime": cclass.finishTime})
+                    elif Office.__name__ in waypoint.labels():
+                        floors[-1]["waypoints"][-1]["type"] = WAYPOINT_TYPES["Office"]
+                        floors[-1]["waypoints"][-1]["professors"] = []
+                        for teacher in [teacher for teacher in Teacher.nodes.filter(buildingName=buildingName).has(office=True) if teacher.office.relationship(waypoint)]:
+                            floors[-1]["waypoints"][-1]["professors"].append(
+                                teacher.name)
+                    elif Connector.__name__ in waypoint.labels():
+                        floors[-1]["waypoints"][-1]["type"] = WAYPOINT_TYPES["Connector"]
             return jsonify(floors), 200
         else:
             return "Building not found", 404

@@ -79,5 +79,11 @@ public class Location {
         return Objects.hash(id);
     }
 
+
     //TODO return an array of lectures for the given week day
+
+    public LocationType getLocationType() {
+        return locationType;
+    }
+  
 }

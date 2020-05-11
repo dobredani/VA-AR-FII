@@ -85,16 +85,14 @@ public class MainActivity extends AppCompatActivity {
                                 getBuildingData(buildingName);
                        // applicationData.setCurrentBuilding(allBuildings.get(0));
                       
-                        start.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.GONE);
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         showPopup();
                         Log.e("JsonError", "Error on get JSON request!");
-                        start.setVisibility(View.VISIBLE);
-                        progressBar.setVisibility(View.GONE);
+
                     }
                 });
         requestQueue.add(jsonObjectRequest);
@@ -133,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         showPopup();
                         Log.e("JsonError", "Error on get JSON request!");
+                        start.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
         requestQueue.add(jsonObjectRequest);

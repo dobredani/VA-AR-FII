@@ -34,6 +34,12 @@ class Waypoint(StructuredNode, Node):
     building_unique_waypoint = StringProperty(required=True, unique_index=True)
     neighbors = RelationshipTo(
         'Waypoint', 'GOES_TO', cardinality=ZeroOrMore, model=GoesTo)
+    shapeType = StringProperty(required=False)
+    color = StringProperty(required=False)
+    width = IntegerProperty(required=False)
+    length = IntegerProperty(required=False)
+    x = IntegerProperty(required=False)
+    y = IntegerProperty(required=False)
 
     def pre_save(self):
         Building.nodes.get(name=self.buildingName)

@@ -9,6 +9,7 @@ package com.amihaeseisergiu.proiect;
  *
  * @author Alex
  */
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -108,6 +109,7 @@ public class ConfigPanel extends HBox {
                 heightTextField.setText("1");
             }
         });
+
     }
 
     public MainFrame getMainFrame() {

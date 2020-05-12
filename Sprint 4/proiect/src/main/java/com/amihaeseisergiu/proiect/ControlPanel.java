@@ -192,6 +192,10 @@ public class ControlPanel extends VBox {
                 eraserBtn.setText("Eraser: On");
             }
         });
+        
+        Platform.runLater(() -> {
+            CustomAnimation.animateTypeWriterText(nrFloorsLabel, "Floors: " + addFloorVBox.getChildren().size());
+        });
     }
 
     public ComboBox getComboBox() {

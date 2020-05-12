@@ -78,10 +78,10 @@ public class MainFrame {
         
         scene = new Scene(pane, 800, 600);
         
-        CustomAnimation.animateInFromLeft(scene.getWidth(), controlPanel);
-        CustomAnimation.animateInFromRight(scene.getWidth(), drawingPanel);
-        CustomAnimation.animateInFromTop(scene.getHeight(), configPanel);
-        CustomAnimation.animateInFromBottom(scene.getHeight(), savePanel);
+        CustomAnimation.animateInFromLeftWithBounceSmall(scene.getWidth(), controlPanel);
+        CustomAnimation.animateInFromRightWithBounceSmall(scene.getWidth(), drawingPanel);
+        CustomAnimation.animateInFromTopWithBounceSmall(scene.getHeight(), configPanel);
+        CustomAnimation.animateInFromBottomWithBounceSmall(scene.getHeight(), savePanel);
     }
 
     public void init() {

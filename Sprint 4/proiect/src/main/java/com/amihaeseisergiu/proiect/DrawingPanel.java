@@ -760,7 +760,6 @@ public class DrawingPanel extends HBox {
             r.setId(i);
             ids.add(i);
         }
-        //  System.out.println(ids);
     }
 
     public void setOrder() {

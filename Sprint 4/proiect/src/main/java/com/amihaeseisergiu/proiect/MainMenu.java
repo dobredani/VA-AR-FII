@@ -4,43 +4,35 @@ import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.stage.DirectoryChooser;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 public class MainMenu {
 
@@ -52,14 +44,20 @@ public class MainMenu {
 
         BorderPane pane = new BorderPane();
         pane.setPadding(new Insets(5, 5, 5, 5));
+        pane.setStyle("-fx-background-color: linear-gradient(#4facfe, #00f2fe)");
 
         HBox topHBox = new HBox();
         topHBox.setPadding(new Insets(5, 5, 5, 5));
         topHBox.setAlignment(Pos.CENTER);
         topHBox.setSpacing(10);
+        topHBox.setStyle("-fx-background-radius: 5;"
+                + "-fx-background-color: white;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
 
         Label topLabel = new Label("Building Creator");
-        topLabel.setStyle("-fx-font-size: 20;");
+        topLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 20));
         topHBox.getChildren().addAll(topLabel);
 
         VBox leftVBox = new VBox();
@@ -68,37 +66,49 @@ public class MainMenu {
         leftVBox.setSpacing(10);
 
         Button createNewBuilding = new Button("Create New Building");
+        createNewBuilding.setSkin(new FadeButtonSkin(createNewBuilding));
+        createNewBuilding.setStyle("-fx-background-color: #ffff00;");
         createNewBuilding.setMaxWidth(Double.MAX_VALUE);
-        leftVBox.getChildren().addAll(createNewBuilding);
-        leftVBox.setStyle("-fx-border-insets: 5;"
-                + "-fx-border-width: 3;"
+        Button selectFolder = new Button("Load Buildings");
+        selectFolder.setStyle("-fx-background-color: #ffff00;");
+        selectFolder.setSkin(new FadeButtonSkin(selectFolder));
+        selectFolder.setMaxWidth(Double.MAX_VALUE);
+        leftVBox.getChildren().addAll(createNewBuilding, selectFolder);
+        leftVBox.setStyle("-fx-background-radius: 5;"
+                + "-fx-background-color: white;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
                 + "-fx-border-radius: 5;");
 
         VBox centerVBox = new VBox();
         centerVBox.setPadding(new Insets(5, 5, 5, 5));
         centerVBox.setAlignment(Pos.TOP_CENTER);
         centerVBox.setSpacing(10);
-        centerVBox.setStyle("-fx-border-insets: 5;"
-                + "-fx-border-width: 1;"
-                + "-fx-border-radius: 1;");
+        centerVBox.setStyle("fx-background-color: transparent");
         ScrollPane centerScrollPane = new ScrollPane();
         centerScrollPane.setFitToWidth(true);
-        centerScrollPane.setStyle("-fx-background-color:transparent;");
+        centerScrollPane.setStyle("-fx-background-color: transparent;");
+        centerScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        stage.setOnShown(e -> centerScrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
 
         VBox centerScrollPaneVBox = new VBox();
         centerScrollPaneVBox.setPadding(new Insets(5, 5, 5, 5));
         centerScrollPaneVBox.setAlignment(Pos.TOP_CENTER);
         centerScrollPaneVBox.setSpacing(10);
+        centerScrollPaneVBox.setStyle("-fx-background-color:transparent;");
         centerScrollPane.setContent(centerScrollPaneVBox);
 
-        Button selectFolder = new Button("Load Buildings");
-        selectFolder.setMaxWidth(Double.MAX_VALUE);
-        centerVBox.getChildren().addAll(selectFolder);
         centerVBox.getChildren().addAll(centerScrollPane);
 
         pane.setCenter(centerVBox);
         pane.setTop(topHBox);
         pane.setLeft(leftVBox);
+        
+        stage.setOnShowing(e -> {
+            CustomAnimation.animateInFromLeft(scene, leftVBox);
+            CustomAnimation.animateInFromTop(scene, topHBox);
+            CustomAnimation.animateTypeWriterText(topLabel, "Building Creator");
+        });
 
         createNewBuilding.setOnAction(e -> {
 
@@ -107,20 +117,25 @@ public class MainMenu {
             buildingHBox.setAlignment(Pos.CENTER);
             buildingHBox.setSpacing(10);
             buildingHBox.setStyle("-fx-border-color: black;"
-                    + "-fx-border-insets: 5;"
+                    + "-fx-background-color: white;"
+                    + "-fx-background-radius: 5;"
                     + "-fx-border-width: 1;"
-                    + "-fx-border-radius: 1;");
+                    + "-fx-border-style: dashed;"
+                    + "-fx-border-radius: 5;");
 
             TextField buildName = new TextField();
-            HBox leftBox = new HBox(buildName);
+            Label nameLabel = new Label("Building Name:");
+            HBox leftBox = new HBox(nameLabel, buildName);
             leftBox.setAlignment(Pos.CENTER_LEFT);
             leftBox.setPadding(new Insets(5, 5, 5, 5));
             leftBox.setSpacing(10);
             HBox.setHgrow(leftBox, Priority.ALWAYS);
 
             Button editBtn = new Button("Edit");
-            editBtn.setStyle("-fx-background-color: white;");
+            editBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
+            editBtn.setSkin(new FadeButtonSkin(editBtn));
             Button deleteBtn = new Button("X");
+            deleteBtn.setSkin(new FadeButtonSkin(deleteBtn));
             deleteBtn.setStyle("-fx-background-color: rgb(240,128,128);");
             HBox rightBox = new HBox(editBtn, deleteBtn);
             rightBox.setAlignment(Pos.CENTER_RIGHT);
@@ -142,206 +157,218 @@ public class MainMenu {
             });
 
             deleteBtn.setOnAction(ev -> {
-
-                centerScrollPaneVBox.getChildren().remove(buildingHBox);
+                CustomAnimation.animateOutToLeftAndRemove(scene, buildingHBox, centerScrollPaneVBox.getChildren());
             });
 
+            CustomAnimation.animateInFromRightWithBounce(scene, buildingHBox);
+            
         });
 
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File("C:/"));
-
         selectFolder.setOnAction(e -> {
-            try {
-                String buildingNames = executeGet("http://localhost:5000/building");
-                JSONParser buildingParser = new JSONParser();
-                JSONArray buildings = (JSONArray) buildingParser.parse(buildingNames);
+            ProgressIndicator progress = new ProgressIndicator();
+            progress.setMaxSize(40, 40);
+            progress.setStyle("-fx-progress-color: green");
+            centerVBox.getChildren().add(progress);
 
-                for (Object objct : buildings) {
-                    String jsonBuilding = executeGet("http://localhost:5000/building/" + objct.toString());
-                    JSONParser jsonParser = new JSONParser();
-                    JSONObject obj = (JSONObject) jsonParser.parse(jsonBuilding);
+            new Thread(new Runnable() {
 
-                    Building build = new Building();
-                    build.name = obj.get("name").toString();
+                @Override
+                public void run() {
+                    try {
+                        String buildingNames = executeGet("http://localhost:5000/building");
+                        JSONParser buildingParser = new JSONParser();
+                        JSONArray buildings = (JSONArray) buildingParser.parse(buildingNames);
 
-                    JSONArray floors = (JSONArray) obj.get("floors");
+                        for (Object objct : buildings) {
+                            String jsonBuilding = executeGet("http://localhost:5000/building/" + objct.toString());
+                            JSONParser jsonParser = new JSONParser();
+                            JSONObject obj = (JSONObject) jsonParser.parse(jsonBuilding);
 
-                    for (Object level : floors) {
+                            Building build = new Building();
+                            build.name = obj.get("name").toString();
 
-                        Floor floor = new Floor(Integer.valueOf(((JSONObject) level).get("level").toString()));
-                        Graph graph = new Graph();
-                        floor.setGraph(graph);
+                            JSONArray floors = (JSONArray) obj.get("floors");
 
-                        JSONArray waypoints = (JSONArray) ((JSONObject) level).get("waypoints");
+                            for (Object level : floors) {
 
-                        for (Object waypoint : waypoints) {
-                            String shapeType = ((JSONObject) waypoint).get("shapeType").toString();
-                            ExtendedShape shape;
-                            switch (shapeType) {
-                                case "Classroom":
-                                    shape = new Classroom(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
-                                    for (int i = 0; i <= 6; i++) {
-                                        List<InputSchedule> listaZile = new ArrayList<>();
-                                        for (Object s : (JSONArray) ((JSONObject) waypoint).get("schedule")) {
-                                            if (((JSONObject) s).get("dayOfWeek").toString().equals("Luni") && i == 0) {
-                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
-                                                listaZile.add(input);
-                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Marti") && i == 1) {
-                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
-                                                listaZile.add(input);
-                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Miercuri") && i == 2) {
-                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
-                                                listaZile.add(input);
-                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Joi") && i == 3) {
-                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
-                                                listaZile.add(input);
-                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Vineri") && i == 4) {
-                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
-                                                listaZile.add(input);
-                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Sambata") && i == 5) {
-                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
-                                                listaZile.add(input);
-                                            } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Duminica") && i == 6) {
-                                                InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
-                                                listaZile.add(input);
+                                Floor floor = new Floor(Integer.valueOf(((JSONObject) level).get("level").toString()));
+                                Graph graph = new Graph();
+                                floor.setGraph(graph);
+
+                                JSONArray waypoints = (JSONArray) ((JSONObject) level).get("waypoints");
+
+                                for (Object waypoint : waypoints) {
+                                    String shapeType = ((JSONObject) waypoint).get("shapeType").toString();
+                                    ExtendedShape shape;
+                                    switch (shapeType) {
+                                        case "Classroom":
+                                            shape = new Classroom(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
+                                            for (int i = 0; i <= 6; i++) {
+                                                List<InputSchedule> listaZile = new ArrayList<>();
+                                                for (Object s : (JSONArray) ((JSONObject) waypoint).get("schedule")) {
+                                                    if (((JSONObject) s).get("dayOfWeek").toString().equals("Luni") && i == 0) {
+                                                        InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                        listaZile.add(input);
+                                                    } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Marti") && i == 1) {
+                                                        InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                        listaZile.add(input);
+                                                    } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Miercuri") && i == 2) {
+                                                        InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                        listaZile.add(input);
+                                                    } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Joi") && i == 3) {
+                                                        InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                        listaZile.add(input);
+                                                    } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Vineri") && i == 4) {
+                                                        InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                        listaZile.add(input);
+                                                    } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Sambata") && i == 5) {
+                                                        InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                        listaZile.add(input);
+                                                    } else if (((JSONObject) s).get("dayOfWeek").toString().equals("Duminica") && i == 6) {
+                                                        InputSchedule input = new InputSchedule(((JSONObject) s).get("group").toString(), ((JSONObject) s).get("startTime").toString(), ((JSONObject) s).get("finishTime").toString(), ((JSONObject) s).get("course").toString());
+                                                        listaZile.add(input);
+                                                    }
+
+                                                }
+                                                ((Classroom) shape).mapaInputuri.put(i, listaZile);
                                             }
+                                            break;
+                                        case "Bathroom":
+                                            shape = new Bathroom(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
+                                            break;
+                                        case "Elevator":
+                                            shape = new Elevator(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
+                                            break;
+                                        case "Office":
+                                            shape = new Office(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
+                                            JSONArray profs = (JSONArray) ((JSONObject) waypoint).get("professors");
+                                            for (Object p : profs) {
+                                                ((Office) shape).getProfessors().add(p.toString());
+                                            }
+                                            break;
+                                        case "Stairs":
+                                            shape = new Stairs(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
+                                            break;
+                                        default:
+                                            shape = new Stairs(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
+                                            break;
+                                    }
 
-                                        }
-                                        ((Classroom) shape).mapaInputuri.put(i, listaZile);
+                                    shape.setColor(((JSONObject) waypoint).get("color").toString());
+                                    shape.setStartPoint(new Point(shape.getCenterPoint().getX() + Double.valueOf(((JSONObject) waypoint).get("width").toString()) / 2, shape.getCenterPoint().getY() + Double.valueOf(((JSONObject) waypoint).get("length").toString()) / 2));
+                                    ((ExtendedRectangle) shape).setWidth(Double.valueOf(((JSONObject) waypoint).get("width").toString()));
+                                    ((ExtendedRectangle) shape).setLength(Double.valueOf(((JSONObject) waypoint).get("length").toString()));
+                                    ((ExtendedRectangle) shape).setName(((JSONObject) waypoint).get("name").toString());
+                                    ((ExtendedRectangle) shape).setType(((JSONObject) waypoint).get("type").toString());
+                                    ((ExtendedRectangle) shape).setShapeType(((JSONObject) waypoint).get("shapeType").toString());
+                                    ((ExtendedRectangle) shape).setId(Integer.valueOf(((JSONObject) waypoint).get("markerId").toString()));
+                                    Rectangle rectangle = new Rectangle();
+                                    rectangle.setBounds((int) shape.getCenterPoint().getX(), (int) shape.getCenterPoint().getY(), (int) ((ExtendedRectangle) shape).getWidth(), (int) ((ExtendedRectangle) shape).getLength());
+                                    ((ExtendedRectangle) shape).setRectangle(rectangle);
+
+                                    floor.getShapes().add(shape);
+                                    if (graph.graph.isEmpty()) {
+                                        graph.addInitialShape(shape);
+                                    } else {
+                                        addShapeToGraph((ExtendedRectangle) shape, floor.getShapes(), graph);
+                                        graph.setOrder();
                                     }
-                                    break;
-                                case "Bathroom":
-                                    shape = new Bathroom(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
-                                    break;
-                                case "Elevator":
-                                    shape = new Elevator(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
-                                    break;
-                                case "Office":
-                                    shape = new Office(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
-                                    JSONArray profs = (JSONArray) ((JSONObject) waypoint).get("professors");
-                                    for (Object p : profs) {
-                                        ((Office) shape).getProfessors().add(p.toString());
+
+                                }
+
+                                JSONArray hallways = (JSONArray) ((JSONObject) level).get("hallways");
+
+                                for (Object hallway : hallways) {
+
+                                    String shapeType = ((JSONObject) hallway).get("shapeType").toString();
+                                    ExtendedShape shape = new Hallway(new Point(Double.valueOf(((JSONObject) hallway).get("x").toString()), Double.valueOf(((JSONObject) hallway).get("y").toString())));
+
+                                    shape.setColor(((JSONObject) hallway).get("color").toString());
+                                    shape.setStartPoint(new Point(shape.getCenterPoint().getX() + Double.valueOf(((JSONObject) hallway).get("width").toString()) / 2, shape.getCenterPoint().getY() + Double.valueOf(((JSONObject) hallway).get("length").toString()) / 2));
+                                    ((ExtendedRectangle) shape).setWidth(Double.valueOf(((JSONObject) hallway).get("width").toString()));
+                                    ((ExtendedRectangle) shape).setLength(Double.valueOf(((JSONObject) hallway).get("length").toString()));
+                                    ((ExtendedRectangle) shape).setName(((JSONObject) hallway).get("name").toString());
+                                    ((ExtendedRectangle) shape).setShapeType(((JSONObject) hallway).get("shapeType").toString());
+                                    ((ExtendedRectangle) shape).setId(Integer.valueOf(((JSONObject) hallway).get("markerId").toString()));
+                                    Rectangle rectangle = new Rectangle();
+                                    rectangle.setBounds((int) shape.getCenterPoint().getX(), (int) shape.getCenterPoint().getY(), (int) ((ExtendedRectangle) shape).getWidth(), (int) ((ExtendedRectangle) shape).getLength());
+                                    ((ExtendedRectangle) shape).setRectangle(rectangle);
+
+                                    floor.getShapes().add(shape);
+                                    if (graph.graph.isEmpty()) {
+                                        graph.addInitialShape(shape);
+                                    } else {
+                                        addShapeToGraph((ExtendedRectangle) shape, floor.getShapes(), graph);
+                                        graph.setOrder();
                                     }
-                                    break;
-                                case "Stairs":
-                                    shape = new Stairs(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
-                                    break;
-                                default:
-                                    shape = new Stairs(new Point(Double.valueOf(((JSONObject) waypoint).get("x").toString()), Double.valueOf(((JSONObject) waypoint).get("y").toString())));
-                                    break;
+                                }
+
+                                build.getFloors().put(floor.getLevel(), floor);
                             }
 
-                            shape.setColor(((JSONObject) waypoint).get("color").toString());
-                            shape.setStartPoint(new Point(shape.getCenterPoint().getX() + Double.valueOf(((JSONObject) waypoint).get("width").toString()) / 2, shape.getCenterPoint().getY() + Double.valueOf(((JSONObject) waypoint).get("length").toString()) / 2));
-                            ((ExtendedRectangle) shape).setWidth(Double.valueOf(((JSONObject) waypoint).get("width").toString()));
-                            ((ExtendedRectangle) shape).setLength(Double.valueOf(((JSONObject) waypoint).get("length").toString()));
-                            ((ExtendedRectangle) shape).setName(((JSONObject) waypoint).get("name").toString());
-                            ((ExtendedRectangle) shape).setType(((JSONObject) waypoint).get("type").toString());
-                            ((ExtendedRectangle) shape).setShapeType(((JSONObject) waypoint).get("shapeType").toString());
-                            ((ExtendedRectangle) shape).setId(Integer.valueOf(((JSONObject) waypoint).get("markerId").toString()));
-                            Rectangle rectangle = new Rectangle();
-                            rectangle.setBounds((int) shape.getCenterPoint().getX(), (int) shape.getCenterPoint().getY(), (int) ((ExtendedRectangle) shape).getWidth(), (int) ((ExtendedRectangle) shape).getLength());
-                            ((ExtendedRectangle) shape).setRectangle(rectangle);
+                            Platform.runLater(() -> {
+                                HBox buildingHBox = new HBox();
+                                buildingHBox.setPadding(new Insets(5, 5, 5, 5));
+                                buildingHBox.setAlignment(Pos.CENTER);
+                                buildingHBox.setSpacing(10);
+                                buildingHBox.setStyle("-fx-border-color: black;"
+                                        + "-fx-background-color: white;"
+                                        + "-fx-background-radius: 5;"
+                                        + "-fx-border-width: 1;"
+                                        + "-fx-border-style: dashed;"
+                                        + "-fx-border-radius: 5;");
+                                TextField buildName = new TextField(objct.toString().replaceFirst("[.][^.]+$", ""));
+                                Label nameLabel = new Label("Building Name:");
+                                HBox leftBox = new HBox(nameLabel, buildName);
+                                leftBox.setAlignment(Pos.CENTER_LEFT);
+                                leftBox.setPadding(new Insets(5, 5, 5, 5));
+                                leftBox.setSpacing(10);
+                                HBox.setHgrow(leftBox, Priority.ALWAYS);
+                                Button editBtn = new Button("Edit");
+                                editBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
+                                editBtn.setSkin(new FadeButtonSkin(editBtn));
+                                Button deleteBtn = new Button("X");
+                                deleteBtn.setStyle("-fx-background-color: rgb(240,128,128);");
+                                deleteBtn.setSkin(new FadeButtonSkin(deleteBtn));
+                                HBox rightBox = new HBox(editBtn, deleteBtn);
+                                rightBox.setAlignment(Pos.CENTER_RIGHT);
+                                rightBox.setPadding(new Insets(5, 5, 5, 5));
+                                rightBox.setSpacing(10);
+                                HBox.setHgrow(rightBox, Priority.ALWAYS);
+                                buildingHBox.getChildren().addAll(leftBox, rightBox);
+                                centerScrollPaneVBox.getChildren().add(buildingHBox);
+                                editBtn.setOnAction(ev -> {
 
-                            floor.getShapes().add(shape);
-                            if (graph.graph.isEmpty()) {
-                                graph.addInitialShape(shape);
-                            } else {
-                                addShapeToGraph((ExtendedRectangle) shape, floor.getShapes(), graph);
-                                graph.setOrder();
-                            }
+                                    build.name = buildName.getText();
+                                    MainFrame mainFrame = new MainFrame(stage, build, false);
+                                    mainFrame.init();
+                                });
+                                
+                                deleteBtn.setOnAction(ev -> {
+
+                                    CustomAnimation.animateOutToLeftAndRemove(scene, buildingHBox, centerScrollPaneVBox.getChildren());
+                                });
+                                
+                                CustomAnimation.animateInFromRightWithBounce(scene, buildingHBox);
+                            });
 
                         }
-                        
-                        JSONArray hallways = (JSONArray) ((JSONObject) level).get("hallways");
-
-                        for (Object hallway : hallways) {
-                            
-                            String shapeType = ((JSONObject) hallway).get("shapeType").toString();
-                            ExtendedShape shape = new Hallway(new Point(Double.valueOf(((JSONObject) hallway).get("x").toString()), Double.valueOf(((JSONObject) hallway).get("y").toString())));
-                            
-                            
-                            shape.setColor(((JSONObject) hallway).get("color").toString());
-                            shape.setStartPoint(new Point(shape.getCenterPoint().getX() + Double.valueOf(((JSONObject) hallway).get("width").toString()) / 2, shape.getCenterPoint().getY() + Double.valueOf(((JSONObject) hallway).get("length").toString()) / 2));
-                            ((ExtendedRectangle) shape).setWidth(Double.valueOf(((JSONObject) hallway).get("width").toString()));
-                            ((ExtendedRectangle) shape).setLength(Double.valueOf(((JSONObject) hallway).get("length").toString()));
-                            ((ExtendedRectangle) shape).setName(((JSONObject) hallway).get("name").toString());
-                            ((ExtendedRectangle) shape).setShapeType(((JSONObject) hallway).get("shapeType").toString());
-                            ((ExtendedRectangle) shape).setId(Integer.valueOf(((JSONObject) hallway).get("markerId").toString()));
-                            Rectangle rectangle = new Rectangle();
-                            rectangle.setBounds((int) shape.getCenterPoint().getX(), (int) shape.getCenterPoint().getY(), (int) ((ExtendedRectangle) shape).getWidth(), (int) ((ExtendedRectangle) shape).getLength());
-                            ((ExtendedRectangle) shape).setRectangle(rectangle);
-
-                            floor.getShapes().add(shape);
-                            if (graph.graph.isEmpty()) {
-                                graph.addInitialShape(shape);
-                            } else {
-                                addShapeToGraph((ExtendedRectangle) shape, floor.getShapes(), graph);
-                                graph.setOrder();
-                            }
-                        }
-
-                        build.getFloors().put(floor.getLevel(), floor);
+                    } catch (Exception ex) {
+                        Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    HBox buildingHBox = new HBox();
-                    buildingHBox.setPadding(new Insets(5, 5, 5, 5));
-                    buildingHBox.setAlignment(Pos.CENTER);
-                    buildingHBox.setSpacing(10);
-                    buildingHBox.setStyle("-fx-border-color: black;"
-                            + "-fx-border-insets: 5;"
-                            + "-fx-border-width: 1;"
-                            + "-fx-border-radius: 1;");
-                    TextField buildName = new TextField(objct.toString().replaceFirst("[.][^.]+$", ""));
-                    HBox leftBox = new HBox(buildName);
-                    leftBox.setAlignment(Pos.CENTER_LEFT);
-                    leftBox.setPadding(new Insets(5, 5, 5, 5));
-                    leftBox.setSpacing(10);
-                    HBox.setHgrow(leftBox, Priority.ALWAYS);
-                    Button editBtn = new Button("Edit");
-                    editBtn.setStyle("-fx-background-color: white;");
-                    Button exportBtn = new Button("Export");
-                    exportBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
-                    Button deleteBtn = new Button("X");
-                    deleteBtn.setStyle("-fx-background-color: rgb(240,128,128);");
-                    HBox rightBox = new HBox(editBtn, exportBtn, deleteBtn);
-                    rightBox.setAlignment(Pos.CENTER_RIGHT);
-                    rightBox.setPadding(new Insets(5, 5, 5, 5));
-                    rightBox.setSpacing(10);
-                    HBox.setHgrow(rightBox, Priority.ALWAYS);
-                    buildingHBox.getChildren().addAll(leftBox, rightBox);
-                    centerScrollPaneVBox.getChildren().add(buildingHBox);
-                    editBtn.setOnAction(ev -> {
+                    Platform.runLater(new Runnable() {
 
-                        build.name = buildName.getText();
-                        MainFrame mainFrame = new MainFrame(stage, build, false);
-                        mainFrame.init();
-                    });
-                    exportBtn.setOnAction(ev -> {
-                        System.out.println(build.toJson().toJSONString());
-                        String response = executePost("http://localhost:5000/building", build.toJson().toJSONString());
-                        System.out.println(response);
-                        PrintWriter pw = null;
-                        try {
-                            pw = new PrintWriter("building.json");
-                            pw.write(build.toJson().toJSONString());
-                            pw.flush();
-                            pw.close();
-                        } catch (FileNotFoundException ex) {
-                            ex.printStackTrace();
+                        @Override
+                        public void run() {
+                            centerVBox.getChildren().remove(progress);
                         }
                     });
-                    deleteBtn.setOnAction(ev -> {
-
-                        centerScrollPaneVBox.getChildren().remove(buildingHBox);
-                    });
-
                 }
-            } catch (Exception ex) {
-                Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
+            }).start();
+            /*
+            
+             */
         });
 
         scene = new Scene(pane, 800, 600);
@@ -470,4 +497,5 @@ public class MainMenu {
         }
         r.getRectangle().setSize((int) r.getRectangle().getWidth() - 1, (int) r.getRectangle().getHeight() - 1);
     }
+    
 }

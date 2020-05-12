@@ -135,6 +135,7 @@ public class UpdateStairsPopUp extends Application {
                     drawingPanel.drawAll();
                     drawingPanel.getIds().add(rectangle.getId());
                 }
+                rectangle.setStartPoint(new Point(rectangle.getCenterPoint().getX() + rectangle.getWidth() / 2, rectangle.getCenterPoint().getY() + rectangle.getLength() / 2));
                 rectangle.getRectangle().setBounds((int) rectangle.getCenterPoint().getX(), (int) rectangle.getCenterPoint().getY(), (int) rectangle.getWidth(), (int) rectangle.getLength());
             });
 

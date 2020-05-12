@@ -5,7 +5,6 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,9 +16,7 @@ import javafx.util.Pair;
 /**
  * @author Alex
  */
-public class Graph implements Serializable {
-
-    static final long serialVersionUID = 1L;
+public class Graph {
 
     Map<ExtendedShape, List<Pair<ExtendedShape, String>>> graph;
     Map<ExtendedShape, List<Pair<ExtendedShape, String>>> neighborGraph;
@@ -172,10 +169,9 @@ public class Graph implements Serializable {
                     ExtendedShape leftNeighbor = findLeftNeighbor(entry.getKey(), directionToHallway, orderToHallway, hallway);
                     ExtendedShape rightNeighbor = findRightNeighbor(entry.getKey(), directionToHallway, orderToHallway, hallway);
                     ExtendedShape straightNeighbor = findStraightNeighbor(entry.getKey(), directionToHallway, orderToHallway, hallway);
-                    if(neighborGraph.get(straightNeighbor) != null)
-                    {
-                        for(Pair<ExtendedShape, String> pair : neighborGraph.get(straightNeighbor)) {
-                            if(pair.getValue().equals("Straight")) {
+                    if (neighborGraph.get(straightNeighbor) != null) {
+                        for (Pair<ExtendedShape, String> pair : neighborGraph.get(straightNeighbor)) {
+                            if (pair.getValue().equals("Straight") && pair.getKey() != entry.getKey()) {
                                 straightNeighbor = null;
                             }
                         }
@@ -255,6 +251,7 @@ public class Graph implements Serializable {
 
     private ExtendedShape findLeftNeighbor(ExtendedShape sh, String dth, int otw, Hallway hallway) {
         List<ExtendedShape> hallwaysToAvoid = new ArrayList<>();
+        List<ExtendedShape> traversedHallways = new ArrayList<>();
         String searchDirection = "";
         if (dth.equals("Left")) {
             searchDirection = "Down";
@@ -283,8 +280,9 @@ public class Graph implements Serializable {
                             if (searchDirection.equals("Up")) {
                                 if (dth.equals(directionToHallway) && orderToHallway == otw + minOrderToSearch) {
                                     if (entry.getKey() instanceof Hallway) {
-                                        hallwaysToAvoid.add(hallway);
-                                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), dth, sh, hallway, hallwaysToAvoid);
+                                        //   hallwaysToAvoid.add(hallway);
+                                        traversedHallways.add(entry.getKey());
+                                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), traversedHallways, dth, sh, hallway, hallwaysToAvoid);
                                         if (neighbor != null) {
                                             return neighbor;
                                         } else {
@@ -298,8 +296,9 @@ public class Graph implements Serializable {
                             } else {
                                 if (dth.equals(directionToHallway) && orderToHallway == otw - minOrderToSearch) {
                                     if (entry.getKey() instanceof Hallway) {
-                                        hallwaysToAvoid.add(hallway);
-                                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), dth, sh, hallway, hallwaysToAvoid);
+                                        //hallwaysToAvoid.add(hallway);
+                                        traversedHallways.add(entry.getKey());
+                                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), traversedHallways, dth, sh, hallway, hallwaysToAvoid);
                                         if (neighbor != null) {
                                             return neighbor;
                                         } else {
@@ -346,8 +345,9 @@ public class Graph implements Serializable {
                             if (searchDirection.equals("Up") || searchDirection.equals("Right")) {
                                 if (searchDirection.equals(directionToHallway) && orderToHallway == minOrderToSearch) {
                                     if (entry.getKey() instanceof Hallway) {
-                                        hallwaysToAvoid.add(hallway);
-                                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), searchDirection, sh, hallway, hallwaysToAvoid);
+//                                        hallwaysToAvoid.add(hallway);
+                                        traversedHallways.add(entry.getKey());
+                                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                                         if (neighbor != null) {
                                             return neighbor;
                                         } else {
@@ -373,8 +373,9 @@ public class Graph implements Serializable {
         if (searchDirection.equals("Down") || searchDirection.equals("Left")) {
             if (max != 0) {
                 if (currentShape instanceof Hallway) {
-                    hallwaysToAvoid.add(hallway);
-                    ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(currentShape, searchDirection, sh, hallway, hallwaysToAvoid);
+//                    hallwaysToAvoid.add(hallway);
+                    traversedHallways.add(currentShape);
+                    ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(currentShape, traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                     if (neighbor != null) {
                         return neighbor;
                     }
@@ -416,8 +417,9 @@ public class Graph implements Serializable {
                             if (searchDirection.equals("Up") || searchDirection.equals("Right")) {
                                 if (searchDirection.equals(directionToHallway) && orderToHallway == minOrderToSearch) {
                                     if (entry.getKey() instanceof Hallway) {
-                                        hallwaysToAvoid.add(hallway);
-                                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), searchDirection, sh, hallway, hallwaysToAvoid);
+                                        //hallwaysToAvoid.add(hallway);
+                                        traversedHallways.add(entry.getKey());
+                                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                                         if (neighbor != null) {
                                             return neighbor;
                                         } else {
@@ -443,8 +445,9 @@ public class Graph implements Serializable {
         if (searchDirection.equals("Down") || searchDirection.equals("Left")) {
             if (max != 0) {
                 if (currentShape instanceof Hallway) {
-                    hallwaysToAvoid.add(hallway);
-                    ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(currentShape, searchDirection, sh, hallway, hallwaysToAvoid);
+                    //hallwaysToAvoid.add(hallway);
+                    traversedHallways.add(currentShape);
+                    ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(currentShape, traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                     if (neighbor != null) {
                         return neighbor;
                     }
@@ -486,8 +489,9 @@ public class Graph implements Serializable {
                             if (searchDirection.equals("Up") || searchDirection.equals("Right")) {
                                 if (searchDirection.equals(directionToHallway) && orderToHallway == minOrderToSearch) {
                                     if (entry.getKey() instanceof Hallway) {
-                                        hallwaysToAvoid.add(hallway);
-                                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), searchDirection, sh, hallway, hallwaysToAvoid);
+                                        //hallwaysToAvoid.add(hallway);
+                                        traversedHallways.add(entry.getKey());
+                                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                                         if (neighbor != null) {
                                             return neighbor;
                                         } else {
@@ -513,8 +517,9 @@ public class Graph implements Serializable {
         if (searchDirection.equals("Down") || searchDirection.equals("Left")) {
             if (max != 0) {
                 if (currentShape instanceof Hallway) {
-                    hallwaysToAvoid.add(hallway);
-                    ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(currentShape, searchDirection, sh, hallway, hallwaysToAvoid);
+                    //hallwaysToAvoid.add(hallway);
+                    traversedHallways.add(currentShape);
+                    ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(currentShape, traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                     if (neighbor != null) {
                         return neighbor;
                     }
@@ -530,6 +535,7 @@ public class Graph implements Serializable {
     private ExtendedShape findRightNeighbor(ExtendedShape sh, String dth, int otw, Hallway hallway) {
         // System.out.println(((ExtendedRectangle) sh).getName());
         List<ExtendedShape> hallwaysToAvoid = new ArrayList<>();
+        List<ExtendedShape> traversedHallways = new ArrayList<>();
         String searchDirection = "";
         if (dth.equals("Left")) {
             searchDirection = "Up";
@@ -558,8 +564,9 @@ public class Graph implements Serializable {
                             if (searchDirection.equals("Up")) {
                                 if (dth.equals(directionToHallway) && orderToHallway == otw + minOrderToSearch) {
                                     if (entry.getKey() instanceof Hallway) {
-                                        hallwaysToAvoid.add(hallway);
-                                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), dth, sh, hallway, hallwaysToAvoid);
+                                        //hallwaysToAvoid.add(hallway);
+                                        traversedHallways.add(entry.getKey());
+                                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), traversedHallways, dth, sh, hallway, hallwaysToAvoid);
                                         if (neighbor != null) {
                                             return neighbor;
                                         } else {
@@ -574,8 +581,9 @@ public class Graph implements Serializable {
                             } else {
                                 if (dth.equals(directionToHallway) && orderToHallway == otw - minOrderToSearch) {
                                     if (entry.getKey() instanceof Hallway) {
-                                        hallwaysToAvoid.add(hallway);
-                                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), dth, sh, hallway, hallwaysToAvoid);
+                                        // hallwaysToAvoid.add(hallway);
+                                        traversedHallways.add(entry.getKey());
+                                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), traversedHallways, dth, sh, hallway, hallwaysToAvoid);
                                         if (neighbor != null) {
                                             return neighbor;
                                         } else {
@@ -623,8 +631,9 @@ public class Graph implements Serializable {
                             if (searchDirection.equals("Down") || searchDirection.equals("Left")) {
                                 if (searchDirection.equals(directionToHallway) && orderToHallway == minOrderToSearch) {
                                     if (entry.getKey() instanceof Hallway) {
-                                        hallwaysToAvoid.add(hallway);
-                                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), searchDirection, sh, hallway, hallwaysToAvoid);
+                                        // hallwaysToAvoid.add(hallway);
+                                        traversedHallways.add(entry.getKey());
+                                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                                         if (neighbor != null) {
                                             return neighbor;
                                         } else {
@@ -649,8 +658,9 @@ public class Graph implements Serializable {
         if (searchDirection.equals("Up") || searchDirection.equals("Right")) {
             if (max != 0) {
                 if (currentShape instanceof Hallway) {
-                    hallwaysToAvoid.add(hallway);
-                    ExtendedShape neighbor = findFirstShapeInHallwayFromRight(currentShape, searchDirection, sh, hallway, hallwaysToAvoid);
+                    // hallwaysToAvoid.add(hallway);
+                    traversedHallways.add(currentShape);
+                    ExtendedShape neighbor = findFirstShapeInHallwayFromRight(currentShape, traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                     if (neighbor != null) {
                         return neighbor;
                     }
@@ -689,8 +699,9 @@ public class Graph implements Serializable {
                             if (searchDirection.equals("Down") || searchDirection.equals("Left")) {
                                 if (searchDirection.equals(directionToHallway) && orderToHallway == minOrderToSearch) {
                                     if (entry.getKey() instanceof Hallway) {
-                                        hallwaysToAvoid.add(hallway);
-                                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), searchDirection, sh, hallway, hallwaysToAvoid);
+                                        //  hallwaysToAvoid.add(hallway);
+                                        traversedHallways.add(entry.getKey());
+                                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                                         if (neighbor != null) {
                                             return neighbor;
                                         } else {
@@ -715,8 +726,9 @@ public class Graph implements Serializable {
         if (searchDirection.equals("Up") || searchDirection.equals("Right")) {
             if (max != 0) {
                 if (currentShape instanceof Hallway) {
-                    hallwaysToAvoid.add(hallway);
-                    ExtendedShape neighbor = findFirstShapeInHallwayFromRight(currentShape, searchDirection, sh, hallway, hallwaysToAvoid);
+                    //hallwaysToAvoid.add(hallway);
+                    traversedHallways.add(currentShape);
+                    ExtendedShape neighbor = findFirstShapeInHallwayFromRight(currentShape, traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                     if (neighbor != null) {
                         return neighbor;
                     }
@@ -754,8 +766,9 @@ public class Graph implements Serializable {
                             if (searchDirection.equals("Down") || searchDirection.equals("Left")) {
                                 if (searchDirection.equals(directionToHallway) && orderToHallway == minOrderToSearch) {
                                     if (entry.getKey() instanceof Hallway) {
-                                        hallwaysToAvoid.add(hallway);
-                                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), searchDirection, sh, hallway, hallwaysToAvoid);
+                                        // hallwaysToAvoid.add(hallway);
+                                        traversedHallways.add(entry.getKey());
+                                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                                         if (neighbor != null) {
                                             return neighbor;
                                         } else {
@@ -781,7 +794,8 @@ public class Graph implements Serializable {
             if (max != 0) {
                 if (currentShape instanceof Hallway) {
                     hallwaysToAvoid.add(hallway);
-                    ExtendedShape neighbor = findFirstShapeInHallwayFromRight(currentShape, searchDirection, sh, hallway, hallwaysToAvoid);
+                    traversedHallways.add(currentShape);
+                    ExtendedShape neighbor = findFirstShapeInHallwayFromRight(currentShape, traversedHallways, searchDirection, sh, hallway, hallwaysToAvoid);
                     if (neighbor != null) {
                         return neighbor;
                     }
@@ -840,7 +854,6 @@ public class Graph implements Serializable {
     private Hallway findShapeHallway(ExtendedShape shape) {
         for (Pair<ExtendedShape, String> list : graph.get(shape)) {
             if (list.getKey() instanceof Hallway) {
-              //  System.out.println(((ExtendedRectangle) shape).getName() + " " + ((ExtendedRectangle) list.getKey()).getName());
                 return (Hallway) list.getKey();
             }
         }
@@ -852,7 +865,7 @@ public class Graph implements Serializable {
     // shape - forma la care tre sa gasesc vecinul
     // hallwayToAvoid - holul initial
     // otw - al catalea e holul in care caut fata de holul initial
-    private ExtendedShape findFirstShapeInHallwayFromLeft(ExtendedShape hallway, String dth, ExtendedShape shape, ExtendedShape hallwayToAvoid, List<ExtendedShape> hallwaysToAvoid) {
+    private ExtendedShape findFirstShapeInHallwayFromLeft(ExtendedShape hallway, List<ExtendedShape> traversedHallways, String dth, ExtendedShape shape, ExtendedShape hallwayToAvoid, List<ExtendedShape> hallwaysToAvoid) {
         int otw = 0;
         int otwMin = 0;
         int otwMax = 0;
@@ -953,7 +966,7 @@ public class Graph implements Serializable {
                     }
                 }
 
-                if (entry.getKey() != hallway && entry.getKey() != shape && ok == true && !(hallwaysToAvoid.contains(entry.getKey()))) {
+                if (entry.getKey() != hallway && entry.getKey() != shape && ok == true && !(hallwaysToAvoid.contains(entry.getKey())) && !(traversedHallways.contains(entry.getKey()))) {
                     String relationToHallway = "";
                     String directionToHallway = "";
                     int orderToHallway = 0;
@@ -967,8 +980,9 @@ public class Graph implements Serializable {
                                 if (s.equals(searchDirections.get(0))) {
                                     if (s.equals(directionToHallway) && orderToHallway == otw + 1) {
                                         if (entry.getKey() instanceof Hallway) {
-                                            hallwaysToAvoid.add(hallway);
-                                            ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), directionToHallway, shape, hallway, hallwaysToAvoid);
+                                            //hallwaysToAvoid.add(hallway);
+                                            traversedHallways.add(entry.getKey());
+                                            ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), traversedHallways, directionToHallway, shape, traversedHallways.get(traversedHallways.size() - 1), hallwaysToAvoid);
                                             if (neighbor != null) {
                                                 return neighbor;
                                             }
@@ -979,8 +993,9 @@ public class Graph implements Serializable {
                                 } else {
                                     if (s.equals(directionToHallway) && orderToHallway == minOrderToSearch) {
                                         if (entry.getKey() instanceof Hallway) {
-                                            hallwaysToAvoid.add(hallway);
-                                            ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), directionToHallway, shape, hallway, hallwaysToAvoid);
+                                            //  hallwaysToAvoid.add(hallway);
+                                            traversedHallways.add(entry.getKey());
+                                            ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), traversedHallways, directionToHallway, shape, traversedHallways.get(traversedHallways.size() - 1), hallwaysToAvoid);
                                             if (neighbor != null) {
                                                 return neighbor;
                                             }
@@ -993,8 +1008,9 @@ public class Graph implements Serializable {
                                 if (s.equals(searchDirections.get(0))) {
                                     if (s.equals(directionToHallway) && orderToHallway == otw - 1) {
                                         if (entry.getKey() instanceof Hallway) {
-                                            hallwaysToAvoid.add(hallway);
-                                            ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), directionToHallway, shape, hallway, hallwaysToAvoid);
+                                            //hallwaysToAvoid.add(hallway);
+                                            traversedHallways.add(entry.getKey());
+                                            ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(entry.getKey(), traversedHallways, directionToHallway, shape, traversedHallways.get(traversedHallways.size() - 1), hallwaysToAvoid);
                                             if (neighbor != null) {
                                                 return neighbor;
                                             }
@@ -1017,8 +1033,9 @@ public class Graph implements Serializable {
             if (!(downDirections.contains(s))) {
                 if (max != 0) {
                     if (currentShape instanceof Hallway) {
-                        hallwaysToAvoid.add(hallway);
-                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(currentShape, currentShapeDirectionToHallway, shape, hallway, hallwaysToAvoid);
+                        //hallwaysToAvoid.add(hallway);
+                        traversedHallways.add(currentShape);
+                        ExtendedShape neighbor = findFirstShapeInHallwayFromLeft(currentShape, traversedHallways, currentShapeDirectionToHallway, shape, traversedHallways.get(traversedHallways.size() - 1), hallwaysToAvoid);
                         if (neighbor != null) {
                             return neighbor;
                         }
@@ -1028,7 +1045,20 @@ public class Graph implements Serializable {
                 }
             }
         }
-
+        hallwaysToAvoid.add(hallway);
+        traversedHallways.remove(hallway);
+        if (!(traversedHallways.isEmpty())) {
+            if (dth.equals("Left")) {
+                dth = "Right";
+            } else if (dth.equals("Right")) {
+                dth = "Left";
+            } else if (dth.equals("Down")) {
+                dth = "Up";
+            } else if (dth.equals("Up")) {
+                dth = "Down";
+            }
+            return findFirstShapeInHallwayFromLeft(traversedHallways.get(traversedHallways.size() - 1), traversedHallways, dth, shape, hallwaysToAvoid.get(hallwaysToAvoid.size() - 1), hallwaysToAvoid);
+        }
         return null;
     }
 
@@ -1037,8 +1067,8 @@ public class Graph implements Serializable {
     // shape - forma la care tre sa gasesc vecinul
     // hallwayToAvoid - holul initial
     // otw - al catalea e holul in care caut fata de holul initial
-    private ExtendedShape findFirstShapeInHallwayFromRight(ExtendedShape hallway, String dth, ExtendedShape shape, ExtendedShape hallwayToAvoid, List<ExtendedShape> hallwaysToAvoid) {
-        System.out.println(((ExtendedRectangle)hallway).getName() + " " + ((ExtendedRectangle)shape).getName());
+    private ExtendedShape findFirstShapeInHallwayFromRight(ExtendedShape hallway, List<ExtendedShape> traversedHallways, String dth, ExtendedShape shape, ExtendedShape hallwayToAvoid, List<ExtendedShape> hallwaysToAvoid) {
+        // System.out.println(((ExtendedRectangle) hallway).getName() + " " + ((ExtendedRectangle) shape).getName());
         int otw = 0;
         int otwMin = 0;
         int otwMax = 0;
@@ -1079,7 +1109,10 @@ public class Graph implements Serializable {
             searchDirections.add("Down");
             searchDirections.add("Right");
         }
-
+        System.out.println(((ExtendedRectangle)hallway).getName());
+        System.out.println(dth);
+        System.out.println(((ExtendedRectangle)shape).getName());
+        System.out.println("");
         List<String> downDirections = new ArrayList<>();
         if (dth.equals("Right")) {
             //downDirections.add("Left");
@@ -1147,8 +1180,9 @@ public class Graph implements Serializable {
                                 if (s.equals(searchDirections.get(0))) {
                                     if (s.equals(directionToHallway) && orderToHallway == otw + 1) {
                                         if (entry.getKey() instanceof Hallway) {
-                                            hallwaysToAvoid.add(hallway);
-                                            ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), directionToHallway, shape, hallway, hallwaysToAvoid);
+                                            //   hallwaysToAvoid.add(hallway);
+                                            traversedHallways.add(entry.getKey());
+                                            ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), traversedHallways, directionToHallway, shape, hallway, hallwaysToAvoid);
                                             if (neighbor != null) {
                                                 return neighbor;
                                             }
@@ -1159,8 +1193,9 @@ public class Graph implements Serializable {
                                 } else {
                                     if (s.equals(directionToHallway) && orderToHallway == minOrderToSearch) {
                                         if (entry.getKey() instanceof Hallway) {
-                                            hallwaysToAvoid.add(hallway);
-                                            ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), directionToHallway, shape, hallway, hallwaysToAvoid);
+                                            // hallwaysToAvoid.add(hallway);
+                                            traversedHallways.add(entry.getKey());
+                                            ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), traversedHallways, directionToHallway, shape, hallway, hallwaysToAvoid);
                                             if (neighbor != null) {
                                                 return neighbor;
                                             }
@@ -1173,8 +1208,9 @@ public class Graph implements Serializable {
                                 if (s.equals(searchDirections.get(0))) {
                                     if (s.equals(directionToHallway) && orderToHallway == otw - 1) {
                                         if (entry.getKey() instanceof Hallway) {
-                                            hallwaysToAvoid.add(hallway);
-                                            ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), directionToHallway, shape, hallway, hallwaysToAvoid);
+                                            //  hallwaysToAvoid.add(hallway);
+                                            traversedHallways.add(entry.getKey());
+                                            ExtendedShape neighbor = findFirstShapeInHallwayFromRight(entry.getKey(), traversedHallways, directionToHallway, shape, hallway, hallwaysToAvoid);
                                             if (neighbor != null) {
                                                 return neighbor;
                                             }
@@ -1197,8 +1233,9 @@ public class Graph implements Serializable {
             if (!(downDirections.contains(s))) {
                 if (max != 0) {
                     if (currentShape instanceof Hallway) {
-                        hallwaysToAvoid.add(hallway);
-                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(currentShape, currentShapeDirectionToHallway, shape, hallway, hallwaysToAvoid);
+                       // hallwaysToAvoid.add(hallway);
+                        traversedHallways.add(currentShape);
+                        ExtendedShape neighbor = findFirstShapeInHallwayFromRight(currentShape, traversedHallways, currentShapeDirectionToHallway, shape, hallway, hallwaysToAvoid);
                         if (neighbor != null) {
                             return neighbor;
                         }
@@ -1208,7 +1245,20 @@ public class Graph implements Serializable {
                 }
             }
         }
-
+        hallwaysToAvoid.add(hallway);
+        traversedHallways.remove(hallway);
+        if (!(traversedHallways.isEmpty())) {
+            if (dth.equals("Left")) {
+                dth = "Right";
+            } else if (dth.equals("Right")) {
+                dth = "Left";
+            } else if (dth.equals("Down")) {
+                dth = "Up";
+            } else if (dth.equals("Up")) {
+                dth = "Down";
+            }
+            return findFirstShapeInHallwayFromRight(traversedHallways.get(traversedHallways.size() - 1), traversedHallways, dth, shape, hallwaysToAvoid.get(hallwaysToAvoid.size() - 1), hallwaysToAvoid);
+        }
         return null;
     }
 

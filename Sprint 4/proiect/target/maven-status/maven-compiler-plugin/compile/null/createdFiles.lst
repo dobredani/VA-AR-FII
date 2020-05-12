@@ -8,8 +8,12 @@ com\amihaeseisergiu\proiect\UpdateStairsPopUp.class
 com\amihaeseisergiu\proiect\Graph.class
 com\amihaeseisergiu\proiect\Elevator.class
 com\amihaeseisergiu\proiect\Stairs.class
+com\amihaeseisergiu\proiect\CustomAnimation$1.class
 com\amihaeseisergiu\proiect\App.class
+com\amihaeseisergiu\proiect\CustomAnimation.class
+com\amihaeseisergiu\proiect\MainMenu$1$1.class
 com\amihaeseisergiu\proiect\DrawingPanel.class
+com\amihaeseisergiu\proiect\FadeButtonSkin.class
 com\amihaeseisergiu\proiect\SavePanel.class
 com\amihaeseisergiu\proiect\DrawingPanel$2.class
 com\amihaeseisergiu\proiect\ExtendedRectangle.class
@@ -21,6 +25,7 @@ com\amihaeseisergiu\proiect\Hallway.class
 com\amihaeseisergiu\proiect\Bathroom.class
 com\amihaeseisergiu\proiect\ConfigPanel.class
 com\amihaeseisergiu\proiect\SortByX.class
+com\amihaeseisergiu\proiect\MainMenu$2.class
 com\amihaeseisergiu\proiect\Classroom.class
 com\amihaeseisergiu\proiect\Point.class
 com\amihaeseisergiu\proiect\MainFrame.class

@@ -9,6 +9,8 @@ package com.amihaeseisergiu.proiect;
  *
  * @author Alex
  */
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -27,6 +29,9 @@ public class MainFrame {
         this.stage = stage;
         this.building = build;
         BorderPane pane = new BorderPane();
+        pane.setPadding(new Insets(5, 5, 5, 5));
+        pane.setStyle("-fx-background-color: linear-gradient(#4facfe, #00f2fe)");
+        
         configPanel = new ConfigPanel(this);
         drawingPanel = new DrawingPanel(this);
         if (build.floors != null) {
@@ -42,15 +47,49 @@ public class MainFrame {
         pane.setLeft(controlPanel);
         pane.setCenter(drawingPanel);
         pane.setBottom(savePanel);
+        
+        drawingPanel.setStyle("-fx-background-radius: 5;"
+                + "-fx-background-color: white;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
+        configPanel.setStyle("-fx-background-radius: 5;"
+                + "-fx-background-color: white;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
+        
+        controlPanel.setStyle("-fx-background-radius: 5;"
+                + "-fx-background-color: white;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
+        
+        savePanel.setStyle("-fx-background-radius: 5;"
+                + "-fx-background-color: white;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
 
+        BorderPane.setMargin(drawingPanel, new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(configPanel, new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(controlPanel, new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(savePanel, new Insets(5, 5, 5, 5));
+        
         scene = new Scene(pane, 800, 600);
+        
+        CustomAnimation.animateInFromLeft(scene.getWidth(), controlPanel);
+        CustomAnimation.animateInFromRight(scene.getWidth(), drawingPanel);
+        CustomAnimation.animateInFromTop(scene.getHeight(), configPanel);
+        CustomAnimation.animateInFromBottom(scene.getHeight(), savePanel);
     }
 
     public void init() {
         stage.setScene(scene);
-        stage.setAlwaysOnTop(true);
-        stage.setFullScreen(true);
+        //stage.setAlwaysOnTop(true);
+        //stage.setFullScreen(true);
         stage.show();
+        
     }
 
     public Stage getStage() {

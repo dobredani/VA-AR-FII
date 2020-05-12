@@ -62,12 +62,17 @@ public class DrawingPanel extends HBox {
         canvas.setVisible(false);
 
         mf.stage.widthProperty().addListener((obs, oldVal, newVal) -> {
-            this.setWidth(newVal.doubleValue() - mf.controlPanel.getWidth());
+            this.setWidth(newVal.doubleValue() - mf.controlPanel.getWidth() - 50);
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawAll();
         });
 
         mf.stage.heightProperty().addListener((obs, oldVal, newVal) -> {
             this.setHeight(newVal.doubleValue() - 2 * (mf.configPanel.getHeight() + mf.savePanel.getHeight()));
+            gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+            drawAll();
         });
+        
     }
 
     public void setMainFrame(MainFrame mf) {

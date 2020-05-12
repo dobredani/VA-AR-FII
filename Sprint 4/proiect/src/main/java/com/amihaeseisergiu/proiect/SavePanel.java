@@ -5,24 +5,20 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import static com.amihaeseisergiu.proiect.MainMenu.executePost;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
 
 /**
@@ -40,16 +36,34 @@ public class SavePanel extends HBox {
         this.setSpacing(10);
         this.setAlignment(Pos.CENTER);
 
+        Button mainMenuBtn = new Button("Main Menu");
+        mainMenuBtn.setStyle("-fx-background-color: #0099ff;");
+        mainMenuBtn.setSkin(new FadeButtonSkin(mainMenuBtn));
+        HBox leftBox = new HBox(mainMenuBtn);
+        leftBox.setAlignment(Pos.CENTER_LEFT);
+        leftBox.setPadding(new Insets(5, 5, 5, 5));
+        leftBox.setSpacing(10);
+        HBox.setHgrow(leftBox, Priority.ALWAYS);
+        
         Button saveBtn = new Button("Save Building");
-        this.getChildren().addAll(saveBtn);
+        saveBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
+        saveBtn.setSkin(new FadeButtonSkin(saveBtn));
+        HBox rightBox = new HBox(saveBtn);
+        rightBox.setAlignment(Pos.CENTER_RIGHT);
+        rightBox.setPadding(new Insets(5, 5, 5, 5));
+        rightBox.setSpacing(10);
+        HBox.setHgrow(rightBox, Priority.ALWAYS);
+        this.getChildren().addAll(leftBox, rightBox);
 
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setInitialDirectory(new File("C:/"));
-
+        mainMenuBtn.setOnAction(e -> {
+            MainMenu menu = new MainMenu(frame.stage);
+        });
+        
         saveBtn.setOnAction(e -> {
             System.out.println(frame.building.toJson().toJSONString());
             String response = executePost("http://localhost:5000/building", frame.building.toJson().toJSONString());
             System.out.println(response);
+            MainMenu menu = new MainMenu(frame.stage);
         });
     }
 

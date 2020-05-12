@@ -9,8 +9,6 @@ package com.amihaeseisergiu.proiect;
  * @author Alex
  */
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -41,30 +39,41 @@ public class ControlPanel extends VBox {
         this.building = building;
 
         eraserBtn = new Button("Eraser: Off");
+        eraserBtn.setSkin(new FadeButtonSkin(eraserBtn));
+        eraserBtn.setStyle("-fx-background-color: #ffff00;");
         comboBox = new ComboBox();
+        comboBox.setStyle("-fx-background-color: transparent;"
+                + "-fx-border-color: #ffff00;"
+                + "-fx-border-width: 3;"
+        );
 
         ScrollPane addFloorScrollPane = new ScrollPane();
         Label nrFloorsLabel = new Label("Floors: 0");
         VBox addFloorVBox = new VBox();
         Button addFloorBtn = new Button("Add Floor");
         addFloorBtn.setMaxWidth(Double.MAX_VALUE);
+        addFloorBtn.setSkin(new FadeButtonSkin(addFloorBtn));
+        addFloorBtn.setStyle("-fx-background-color: #ffff00;");
         addFloorScrollPane.setContent(addFloorVBox);
         addFloorScrollPane.setStyle("-fx-background-color:transparent;");
         addFloorScrollPane.setFitToWidth(true);
+        addFloorScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         addFloorVBox.setAlignment(Pos.TOP_CENTER);
         addFloorVBox.setSpacing(10);
+        addFloorVBox.setPadding(new Insets(5, 5, 5, 5));
+        addFloorVBox.setStyle("-fx-background-radius: 5;"
+                + "-fx-background-color: white;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
 
 
         comboBox.setItems(FXCollections.observableArrayList(new String[]{"Class Room", "Hall Way", "Office", "Bathroom", "Stairs", "Elevator"}));
         comboBox.getSelectionModel().select(0);
         comboBox.setMaxWidth(Double.MAX_VALUE);
         eraserBtn.setMaxWidth(Double.MAX_VALUE);
-        Button graph = new Button("Graph");
-        
-        graph.setOnAction(e -> {
-            System.out.println(frame.drawingPanel.getGraph());
-        });
-        this.getChildren().addAll(eraserBtn, comboBox, graph, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
+
+        this.getChildren().addAll(eraserBtn, comboBox, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10, 10, 10, 10));
         this.setSpacing(10);
@@ -80,6 +89,8 @@ public class ControlPanel extends VBox {
             Floor floor = new Floor(level);
             frame.building.getFloors().put(level, floor);
             newFloorBtn.setMaxWidth(Double.MAX_VALUE);
+            newFloorBtn.setStyle("-fx-background-color: #ff6600;");
+            newFloorBtn.setSkin(new FadeButtonSkin(newFloorBtn));
             addFloorVBox.getChildren().add(newFloorBtn);
             nrFloorsLabel.setText("Floors: " + (addFloorVBox.getChildren().size()));
 
@@ -91,6 +102,7 @@ public class ControlPanel extends VBox {
                 frame.drawingPanel.setStyle("");
             }
 
+            CustomAnimation.animateInFromRightWithBounceSmall(addFloorVBox.getWidth(), newFloorBtn);
             newFloorBtn.setOnMousePressed(event2 -> {
                 if (event2.isPrimaryButtonDown()) {
                     String nrFloor = newFloorBtn.getText().substring(6, 7);

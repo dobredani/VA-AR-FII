@@ -19,6 +19,8 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 /**
  *
@@ -39,7 +41,9 @@ public class ConfigPanel extends HBox {
         this.mainFrame = mainFrame;
 
         widthLabel = new Label("Width:");
+        widthLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 12));
         heightLabel = new Label("Heigth:");
+        heightLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 12));
         widthSlider = new Slider(1, 200, 0.1);
         widthSlider.setStyle("-fx-control-inner-background: #03b6fc;");
         heightSlider = new Slider(1, 200, 0.1);

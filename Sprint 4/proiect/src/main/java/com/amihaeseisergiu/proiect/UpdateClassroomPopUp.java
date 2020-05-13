@@ -25,6 +25,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -84,7 +86,7 @@ public class UpdateClassroomPopUp extends Application {
 
         ExtendedRectangle rectangle = (ExtendedRectangle) shape;
         Label info = new Label("Information About Classroom");
-        info.setStyle("-fx-font: 18 arial;");
+        info.setFont(Font.font("Helvetica", FontWeight.BOLD, 18));
         HBox topHBox = new HBox();
         topHBox.getChildren().addAll(info);
         topHBox.setAlignment(Pos.CENTER);

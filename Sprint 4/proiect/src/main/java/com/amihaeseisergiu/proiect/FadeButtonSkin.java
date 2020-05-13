@@ -3,6 +3,8 @@ package com.amihaeseisergiu.proiect;
 import javafx.animation.FadeTransition;
 import javafx.scene.control.Button;
 import javafx.scene.control.skin.ButtonSkin;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 
 public class FadeButtonSkin extends ButtonSkin {

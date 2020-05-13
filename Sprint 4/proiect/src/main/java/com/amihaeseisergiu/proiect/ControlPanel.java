@@ -193,9 +193,6 @@ public class ControlPanel extends VBox {
             }
         });
         
-        Platform.runLater(() -> {
-            CustomAnimation.animateTypeWriterText(nrFloorsLabel, "Floors: " + addFloorVBox.getChildren().size());
-        });
     }
 
     public ComboBox getComboBox() {

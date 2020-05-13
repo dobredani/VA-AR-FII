@@ -38,6 +38,7 @@ public class MainMenu {
 
     Stage stage;
     Scene scene;
+    boolean created;
 
     public MainMenu(Stage stage) {
         this.stage = stage;
@@ -110,56 +111,61 @@ public class MainMenu {
 
         createNewBuilding.setOnAction(e -> {
 
-            HBox buildingHBox = new HBox();
-            buildingHBox.setPadding(new Insets(5, 5, 5, 5));
-            buildingHBox.setAlignment(Pos.CENTER);
-            buildingHBox.setSpacing(10);
-            buildingHBox.setStyle("-fx-border-color: black;"
-                    + "-fx-background-color: white;"
-                    + "-fx-background-radius: 5;"
-                    + "-fx-border-width: 1;"
-                    + "-fx-border-style: dashed;"
-                    + "-fx-border-radius: 5;");
+            if(!created)
+            {
+                created = true;
+                HBox buildingHBox = new HBox();
+                buildingHBox.setPadding(new Insets(5, 5, 5, 5));
+                buildingHBox.setAlignment(Pos.CENTER);
+                buildingHBox.setSpacing(10);
+                buildingHBox.setStyle("-fx-border-color: black;"
+                        + "-fx-background-color: white;"
+                        + "-fx-background-radius: 5;"
+                        + "-fx-border-width: 1;"
+                        + "-fx-border-style: dashed;"
+                        + "-fx-border-radius: 5;");
 
-            TextField buildName = new TextField();
-            Label nameLabel = new Label("Building Name:");
-            HBox leftBox = new HBox(nameLabel, buildName);
-            leftBox.setAlignment(Pos.CENTER_LEFT);
-            leftBox.setPadding(new Insets(5, 5, 5, 5));
-            leftBox.setSpacing(10);
-            HBox.setHgrow(leftBox, Priority.ALWAYS);
+                TextField buildName = new TextField();
+                Label nameLabel = new Label("Building Name:");
+                HBox leftBox = new HBox(nameLabel, buildName);
+                leftBox.setAlignment(Pos.CENTER_LEFT);
+                leftBox.setPadding(new Insets(5, 5, 5, 5));
+                leftBox.setSpacing(10);
+                HBox.setHgrow(leftBox, Priority.ALWAYS);
 
-            Button editBtn = new Button("Edit");
-            editBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
-            editBtn.setSkin(new FadeButtonSkin(editBtn));
-            Button deleteBtn = new Button("X");
-            deleteBtn.setSkin(new FadeButtonSkin(deleteBtn));
-            deleteBtn.setStyle("-fx-background-color: rgb(240,128,128);");
-            HBox rightBox = new HBox(editBtn, deleteBtn);
-            rightBox.setAlignment(Pos.CENTER_RIGHT);
-            rightBox.setPadding(new Insets(5, 5, 5, 5));
-            rightBox.setSpacing(10);
-            HBox.setHgrow(rightBox, Priority.ALWAYS);
+                Button editBtn = new Button("Edit");
+                editBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
+                editBtn.setSkin(new FadeButtonSkin(editBtn));
+                Button deleteBtn = new Button("X");
+                deleteBtn.setSkin(new FadeButtonSkin(deleteBtn));
+                deleteBtn.setStyle("-fx-background-color: rgb(240,128,128);");
+                HBox rightBox = new HBox(editBtn, deleteBtn);
+                rightBox.setAlignment(Pos.CENTER_RIGHT);
+                rightBox.setPadding(new Insets(5, 5, 5, 5));
+                rightBox.setSpacing(10);
+                HBox.setHgrow(rightBox, Priority.ALWAYS);
 
-            buildingHBox.getChildren().addAll(leftBox, rightBox);
-            centerScrollPaneVBox.getChildren().add(buildingHBox);
+                buildingHBox.getChildren().addAll(leftBox, rightBox);
+                centerScrollPaneVBox.getChildren().add(buildingHBox);
 
-            editBtn.setOnAction(ev -> {
+                editBtn.setOnAction(ev -> {
 
-                if (!buildName.getText().isEmpty()) {
-                    Building build = new Building();
-                    build.name = buildName.getText();
-                    MainFrame mainFrame = new MainFrame(stage, build, true);
-                    mainFrame.init();
-                }
-            });
+                    if (!buildName.getText().isEmpty()) {
+                        Building build = new Building();
+                        build.name = buildName.getText();
+                        MainFrame mainFrame = new MainFrame(stage, build, true);
+                        mainFrame.init();
+                    }
+                });
 
-            deleteBtn.setOnAction(ev -> {
-                CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), buildingHBox, centerScrollPaneVBox.getChildren());
-            });
+                deleteBtn.setOnAction(ev -> {
+                    created = false;
+                    CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), buildingHBox, centerScrollPaneVBox.getChildren());
+                });
 
-            CustomAnimation.animateInFromRightWithBounce(scene.getWidth(), buildingHBox);
-            
+                CustomAnimation.animateInFromRightWithBounce(scene.getWidth(), buildingHBox);
+
+            }
         });
 
         selectFolder.setOnAction(e -> {

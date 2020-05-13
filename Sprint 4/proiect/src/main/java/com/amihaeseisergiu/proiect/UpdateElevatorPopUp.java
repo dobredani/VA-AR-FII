@@ -8,6 +8,7 @@ package com.amihaeseisergiu.proiect;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -125,11 +127,25 @@ public class UpdateElevatorPopUp extends Application {
 
         pane.setStyle("-fx-background-color: transparent;");
 
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds();
+        if(x + 10 + scene.getWidth() > screenBounds.getWidth())
+        {
+            x = x - ((x + 10 + scene.getWidth()) - screenBounds.getWidth());
+        }
+        if(y + scene.getHeight() / 2 > screenBounds.getHeight())
+        {
+            y = screenBounds.getHeight() - (scene.getHeight() / 2) - 50;
+        }
+        if(y - scene.getHeight() / 2 < 0)
+        {
+            y = scene.getHeight() / 2;
+        }
         stage.setX(x + 10);
         stage.setY(y - scene.getHeight() / 2);
         stage.initStyle(StageStyle.TRANSPARENT);
         scene.setFill(new Color(0.6, 0.6, 0.6, 0.2));
         stage.setScene(scene);
+        stage.setAlwaysOnTop(true);
         stage.show();
     }
 }

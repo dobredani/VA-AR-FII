@@ -810,4 +810,15 @@ public class DrawingPanel extends HBox {
         this.ids = ids;
     }
 
+    void removeIds(List<ExtendedShape> shapes) {
+        int[] indexes = new int[shapes.size()];
+        int contor = 0;
+        for (ExtendedShape s : shapes) {
+            System.out.println(((ExtendedRectangle)s).getId());
+            indexes[contor++] = ((ExtendedRectangle) s).getId();
+        }
+        for (int i = 0; i < contor; i++) {
+            ids.remove((Integer)indexes[i]);
+        }
+    }
 }

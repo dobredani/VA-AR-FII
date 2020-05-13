@@ -148,7 +148,7 @@ public class UpdateOfficePopUp extends Application {
             hbox.setAlignment(Pos.CENTER);
             hbox.setSpacing(10);
             hbox.getChildren().addAll(profName, profNameField, del);
-            centerScrollPaneVBox.getChildren().addAll(hbox);
+            centerScrollPaneVBox.getChildren().add(1, hbox);
             del.setOnAction(e -> {
                 ((Office) shape).getProfessors().remove(s);
                 
@@ -225,7 +225,7 @@ public class UpdateOfficePopUp extends Application {
             hbox.setAlignment(Pos.CENTER);
             hbox.setSpacing(10);
             hbox.getChildren().addAll(profName, profNameField, del);
-            centerScrollPaneVBox.getChildren().addAll(hbox);
+            centerScrollPaneVBox.getChildren().add(1, hbox);
             del.setOnAction(ev -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), hbox, centerScrollPaneVBox.getChildren());
             });

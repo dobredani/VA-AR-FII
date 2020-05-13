@@ -200,7 +200,7 @@ public class UpdateClassroomPopUp extends Application {
                         removeLuni.setStyle("-fx-background-color: rgb(240,128,128);");
                         removeLuni.setSkin(new FadeButtonSkin(removeLuni));
                         grupareInputuri.getChildren().add(removeLuni);
-                        listaVboxuri.get(0).getChildren().add(grupareInputuri);
+                        listaVboxuri.get(0).getChildren().add(1, grupareInputuri);
                         removeLuni.setOnAction(event2 -> {
                             CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(0).getChildren());
                             localLista.remove(input);
@@ -213,7 +213,7 @@ public class UpdateClassroomPopUp extends Application {
                         removeMarti.setStyle("-fx-background-color: rgb(240,128,128);");
                         removeMarti.setSkin(new FadeButtonSkin(removeMarti));
                         grupareInputuri.getChildren().add(removeMarti);
-                        listaVboxuri.get(1).getChildren().add(grupareInputuri);
+                        listaVboxuri.get(1).getChildren().add(1, grupareInputuri);
                         removeMarti.setOnAction(event2 -> {
                             CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(1).getChildren());
                             localLista.remove(input);
@@ -226,7 +226,7 @@ public class UpdateClassroomPopUp extends Application {
                         removeMiercuri.setStyle("-fx-background-color: rgb(240,128,128);");
                         removeMiercuri.setSkin(new FadeButtonSkin(removeMiercuri));
                         grupareInputuri.getChildren().add(removeMiercuri);
-                        listaVboxuri.get(2).getChildren().add(grupareInputuri);
+                        listaVboxuri.get(2).getChildren().add(1, grupareInputuri);
                         removeMiercuri.setOnAction(event2 -> {
                             CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(2).getChildren());
                             localLista.remove(input);
@@ -239,7 +239,7 @@ public class UpdateClassroomPopUp extends Application {
                         removeJoi.setStyle("-fx-background-color: rgb(240,128,128);");
                         removeJoi.setSkin(new FadeButtonSkin(removeJoi));
                         grupareInputuri.getChildren().add(removeJoi);
-                        listaVboxuri.get(3).getChildren().add(grupareInputuri);
+                        listaVboxuri.get(3).getChildren().add(1, grupareInputuri);
                         removeJoi.setOnAction(event2 -> {
                             CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(3).getChildren());
                             localLista.remove(input);
@@ -252,7 +252,7 @@ public class UpdateClassroomPopUp extends Application {
                         removeVineri.setStyle("-fx-background-color: rgb(240,128,128);");
                         removeVineri.setSkin(new FadeButtonSkin(removeVineri));
                         grupareInputuri.getChildren().add(removeVineri);
-                        listaVboxuri.get(4).getChildren().add(grupareInputuri);
+                        listaVboxuri.get(4).getChildren().add(1, grupareInputuri);
                         removeVineri.setOnAction(event2 -> {
                             CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(4).getChildren());
                             localLista.remove(input);
@@ -264,7 +264,7 @@ public class UpdateClassroomPopUp extends Application {
                         removeSambata.setStyle("-fx-background-color: rgb(240,128,128);");
                         removeSambata.setSkin(new FadeButtonSkin(removeSambata));
                         grupareInputuri.getChildren().add(removeSambata);
-                        listaVboxuri.get(5).getChildren().add(grupareInputuri);
+                        listaVboxuri.get(5).getChildren().add(1, grupareInputuri);
                         removeSambata.setOnAction(event2 -> {
                             CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(5).getChildren());
                             localLista.remove(input);
@@ -276,7 +276,7 @@ public class UpdateClassroomPopUp extends Application {
                         removeDuminica.setStyle("-fx-background-color: rgb(240,128,128);");
                         removeDuminica.setSkin(new FadeButtonSkin(removeDuminica));
                         grupareInputuri.getChildren().add(removeDuminica);
-                        listaVboxuri.get(6).getChildren().add(grupareInputuri);
+                        listaVboxuri.get(6).getChildren().add(1, grupareInputuri);
                         removeDuminica.setOnAction(event2 -> {
                             CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(6).getChildren());
                             localLista.remove(input);
@@ -294,7 +294,7 @@ public class UpdateClassroomPopUp extends Application {
             removeLuni.setSkin(new FadeButtonSkin(removeLuni));
             HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeLuni);
-            listaVboxuri.get(0).getChildren().add(grupareInputuri);
+            listaVboxuri.get(0).getChildren().add(1, grupareInputuri);
             removeLuni.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(0).getChildren());
             });
@@ -307,7 +307,7 @@ public class UpdateClassroomPopUp extends Application {
             removeMarti.setSkin(new FadeButtonSkin(removeMarti));
             HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeMarti);
-            listaVboxuri.get(1).getChildren().add(grupareInputuri);
+            listaVboxuri.get(1).getChildren().add(1, grupareInputuri);
             removeMarti.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(1).getChildren());
             });
@@ -320,7 +320,7 @@ public class UpdateClassroomPopUp extends Application {
             removeMiercuri.setSkin(new FadeButtonSkin(removeMiercuri));
             HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeMiercuri);
-            listaVboxuri.get(2).getChildren().add(grupareInputuri);
+            listaVboxuri.get(2).getChildren().add(1, grupareInputuri);
             removeMiercuri.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(2).getChildren());
             });
@@ -333,7 +333,7 @@ public class UpdateClassroomPopUp extends Application {
             removeJoi.setSkin(new FadeButtonSkin(removeJoi));
             HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeJoi);
-            listaVboxuri.get(3).getChildren().add(grupareInputuri);
+            listaVboxuri.get(3).getChildren().add(1, grupareInputuri);
             removeJoi.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(3).getChildren());
             });
@@ -346,7 +346,7 @@ public class UpdateClassroomPopUp extends Application {
             removeVineri.setSkin(new FadeButtonSkin(removeVineri));
             HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeVineri);
-            listaVboxuri.get(4).getChildren().add(grupareInputuri);
+            listaVboxuri.get(4).getChildren().add(1, grupareInputuri);
             removeVineri.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(4).getChildren());
             });
@@ -359,7 +359,7 @@ public class UpdateClassroomPopUp extends Application {
             removeSambata.setSkin(new FadeButtonSkin(removeSambata));
             HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeSambata);
-            listaVboxuri.get(5).getChildren().add(grupareInputuri);
+            listaVboxuri.get(5).getChildren().add(1, grupareInputuri);
             removeSambata.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(5).getChildren());
             });
@@ -372,7 +372,7 @@ public class UpdateClassroomPopUp extends Application {
             removeDuminica.setSkin(new FadeButtonSkin(removeDuminica));
             HBox grupareInputuri = adaugareInputuri();
             grupareInputuri.getChildren().add(removeDuminica);
-            listaVboxuri.get(6).getChildren().add(grupareInputuri);
+            listaVboxuri.get(6).getChildren().add(1, grupareInputuri);
             removeDuminica.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(6).getChildren());
             });

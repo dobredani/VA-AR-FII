@@ -89,7 +89,7 @@ public class ControlPanel extends VBox {
             newFloorBtn.setMaxWidth(Double.MAX_VALUE);
             newFloorBtn.setStyle("-fx-background-color: #ff6600;");
             newFloorBtn.setSkin(new FadeButtonSkin(newFloorBtn));
-            addFloorVBox.getChildren().add(newFloorBtn);
+            addFloorVBox.getChildren().add(0, newFloorBtn);
             addFloorScrollPane.setVisible(true);
             nrFloorsLabel.setText("Floors: " + (addFloorVBox.getChildren().size()));
 
@@ -112,11 +112,24 @@ public class ControlPanel extends VBox {
                     frame.drawingPanel.drawAll();
                 } else if (event2.isSecondaryButtonDown()) {
                     int index = Integer.valueOf(newFloorBtn.getText().split(" ")[1]);
+                    frame.drawingPanel.removeIds(frame.building.getFloors().get(index).getShapes());
                     int size = addFloorVBox.getChildren().size() - 1;
                     CustomAnimation.animateOutToLeftAndRemove(frame.scene.getWidth(), newFloorBtn, addFloorVBox.getChildren());
                     frame.building.getFloors().remove(index);
-                    existingFloors.remove(index);
+                    existingFloors.remove((Integer)index);
                     nrFloorsLabel.setText("Floors: " + size);
+                    if (existingFloors.size() > 0) {
+                        int nrFloor = existingFloors.get(0);
+                        Floor f = frame.building.getFloors().get(nrFloor);
+                        frame.drawingPanel.setGraph(f.getGraph());
+                        frame.drawingPanel.setShapes(f.getShapes());
+                        frame.drawingPanel.deleteAllShapes();
+                        frame.drawingPanel.drawAll();
+                    }
+                    else
+                    {
+                        frame.drawingPanel.deleteAllShapes();
+                    }
 
                     if(frame.building.getFloors().size() >= 1)
                     {
@@ -138,7 +151,7 @@ public class ControlPanel extends VBox {
                 }
             });
 
-            if (!initiateFloor) {
+            if (!initiateFloor || existingFloors.size() == 1) {
                 initiateFloor = true;
                 Platform.runLater(() -> {
                     Floor f = frame.building.getFloors().get(0);
@@ -164,7 +177,7 @@ public class ControlPanel extends VBox {
                     newFloorBtn.setMaxWidth(Double.MAX_VALUE);
                     newFloorBtn.setStyle("-fx-background-color: #ff6600;");
                     newFloorBtn.setSkin(new FadeButtonSkin(newFloorBtn));
-                    addFloorVBox.getChildren().add(newFloorBtn);
+                    addFloorVBox.getChildren().add(0, newFloorBtn);
                     nrFloorsLabel.setText("Floors: " + (addFloorVBox.getChildren().size()));
 
                     if (addFloorVBox.getChildren().size() >= 1) {
@@ -185,11 +198,24 @@ public class ControlPanel extends VBox {
                             frame.drawingPanel.drawAll();
                         } else if (event2.isSecondaryButtonDown()) {
                             int index = Integer.valueOf(newFloorBtn.getText().split(" ")[1]);
+                            frame.drawingPanel.removeIds(frame.building.getFloors().get(index).getShapes());
                             int size = addFloorVBox.getChildren().size() - 1;
                             CustomAnimation.animateOutToLeftAndRemove(frame.scene.getWidth(), newFloorBtn, addFloorVBox.getChildren());
                             frame.building.getFloors().remove(index);
-                            existingFloors.remove(index);
+                            existingFloors.remove((Integer)index);
                             nrFloorsLabel.setText("Floors: " + size);
+                            if (existingFloors.size() > 0) {
+                                int nrFloor = existingFloors.get(0);
+                                Floor f = frame.building.getFloors().get(nrFloor);
+                                frame.drawingPanel.setGraph(f.getGraph());
+                                frame.drawingPanel.setShapes(f.getShapes());
+                                frame.drawingPanel.deleteAllShapes();
+                                frame.drawingPanel.drawAll();
+                            }
+                            else
+                            {
+                                frame.drawingPanel.deleteAllShapes();
+                            }
 
                             if(frame.building.getFloors().size() >= 1)
                             {

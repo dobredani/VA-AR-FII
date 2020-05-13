@@ -127,6 +127,7 @@ public class MainMenu {
                         + "-fx-border-radius: 5;");
 
                 TextField buildName = new TextField();
+                buildName.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
                 Label nameLabel = new Label("Building Name:");
                 HBox leftBox = new HBox(nameLabel, buildName);
                 leftBox.setAlignment(Pos.CENTER_LEFT);
@@ -323,6 +324,7 @@ public class MainMenu {
                                         + "-fx-border-style: dashed;"
                                         + "-fx-border-radius: 5;");
                                 TextField buildName = new TextField(objct.toString().replaceFirst("[.][^.]+$", ""));
+                                buildName.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
                                 Label nameLabel = new Label("Building Name:");
                                 HBox leftBox = new HBox(nameLabel, buildName);
                                 leftBox.setAlignment(Pos.CENTER_LEFT);

@@ -1109,10 +1109,6 @@ public class Graph {
             searchDirections.add("Down");
             searchDirections.add("Right");
         }
-        System.out.println(((ExtendedRectangle)hallway).getName());
-        System.out.println(dth);
-        System.out.println(((ExtendedRectangle)shape).getName());
-        System.out.println("");
         List<String> downDirections = new ArrayList<>();
         if (dth.equals("Right")) {
             //downDirections.add("Left");

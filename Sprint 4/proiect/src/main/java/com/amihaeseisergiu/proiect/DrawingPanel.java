@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -137,8 +138,9 @@ public class DrawingPanel extends HBox {
                     r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
                     shapes.add(r);
                     setId(r);
-                    r.setName(r.getType() + " " + String.valueOf(r.getId()));
-                    gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth());
+                    r.setName(mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().toString().split(" ")[0] + " " + String.valueOf(r.getId()));
+                //    gc.setFont(new Font("Sans-serif", r.getWidth() / 10 + 5));
+                    gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth() - 2);
                     if (initialShape == null) {
                         initialShape = r;
                         graph.addInitialShape(initialShape);
@@ -206,7 +208,8 @@ public class DrawingPanel extends HBox {
         gc.setStroke(Color.valueOf(s.getColor()));
         gc.rect(s.getCenterPoint().getX(), s.getCenterPoint().getY(), ((ExtendedRectangle) s).getWidth(), ((ExtendedRectangle) s).getLength());
         // gc.fill();
-        gc.fillText(((ExtendedRectangle) s).getName(), ((ExtendedRectangle) s).getStartPoint().getX() - ((ExtendedRectangle) s).getName().length() * 2 - 3, ((ExtendedRectangle) s).getStartPoint().getY() - 1, ((ExtendedRectangle) s).getWidth());
+      //  gc.setFont(new Font("Sans-serif", ((ExtendedRectangle) s).getWidth() / 10));
+        gc.fillText(((ExtendedRectangle) s).getName(), ((ExtendedRectangle) s).getStartPoint().getX() - ((ExtendedRectangle) s).getName().length() * 2 - 3, ((ExtendedRectangle) s).getStartPoint().getY() - 1, ((ExtendedRectangle) s).getWidth() - 2);
         gc.stroke();
     }
 
@@ -356,8 +359,9 @@ public class DrawingPanel extends HBox {
                 r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
                 shapes.add(r);
                 setId(r);
-                r.setName(r.getType() + " " + String.valueOf(r.getId()));
-                gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth());
+                r.setName(mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().toString().split(" ")[0] + " " + String.valueOf(r.getId()));
+               // gc.setFont(new Font("Sans-serif", r.getWidth() / 15 + 10));
+                gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth() - 2);
                 addShapeToGraph(r);
                 setOrder();
                 //  System.out.println(graph);

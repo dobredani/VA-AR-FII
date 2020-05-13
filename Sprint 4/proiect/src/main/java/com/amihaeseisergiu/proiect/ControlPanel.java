@@ -8,7 +8,6 @@ package com.amihaeseisergiu.proiect;
 /**
  * @author Alex
  */
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -67,7 +66,6 @@ public class ControlPanel extends VBox {
                 + "-fx-border-style: dashed;"
                 + "-fx-border-radius: 5;");
 
-
         comboBox.setItems(FXCollections.observableArrayList(new String[]{"Class Room", "Hall Way", "Office", "Bathroom", "Stairs", "Elevator"}));
         comboBox.getSelectionModel().select(0);
         comboBox.setMaxWidth(Double.MAX_VALUE);
@@ -77,9 +75,9 @@ public class ControlPanel extends VBox {
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10, 10, 10, 10));
         this.setSpacing(10);
-        
+
         addFloorBtn.setOnAction(event -> {
-            AtomicBoolean popupOpen = new AtomicBoolean(false);
+            
             int level = 0;
             while (existingFloors.contains(level)) {
                 level++;
@@ -92,6 +90,7 @@ public class ControlPanel extends VBox {
             newFloorBtn.setStyle("-fx-background-color: #ff6600;");
             newFloorBtn.setSkin(new FadeButtonSkin(newFloorBtn));
             addFloorVBox.getChildren().add(newFloorBtn);
+            addFloorScrollPane.setVisible(true);
             nrFloorsLabel.setText("Floors: " + (addFloorVBox.getChildren().size()));
 
             if (addFloorVBox.getChildren().size() >= 1) {
@@ -111,15 +110,35 @@ public class ControlPanel extends VBox {
                     frame.drawingPanel.setShapes(f.getShapes());
                     frame.drawingPanel.deleteAllShapes();
                     frame.drawingPanel.drawAll();
-                } else if (event2.isSecondaryButtonDown() && !popupOpen.get()) {
-                    popupOpen.set(true);
-                    UpdateFloorPopUp popup = new UpdateFloorPopUp(frame, Integer.parseInt(newFloorBtn.getText().substring(6, 7)), addFloorVBox, newFloorBtn, nrFloorsLabel, popupOpen, event2.getScreenX(), event2.getScreenY());
-                    popup.start(new Stage());
+                } else if (event2.isSecondaryButtonDown()) {
+                    int index = addFloorVBox.getChildren().indexOf(newFloorBtn);
+                    int size = addFloorVBox.getChildren().size() - 1;
+                    CustomAnimation.animateOutToLeftAndRemove(frame.scene.getWidth(), newFloorBtn, addFloorVBox.getChildren());
+                    frame.building.getFloors().remove(index);
+                    existingFloors.remove(index);
+                    nrFloorsLabel.setText("Floors: " + size);
+
+                    if(frame.building.getFloors().size() >= 1)
+                    {
+                        Platform.runLater(() -> {
+                        frame.drawingPanel.getCanvas().setVisible(true);
+                        frame.drawingPanel.setStyle("-fx-background-color: white");
+                        });
+                        
+                    }
+
+                    if(size == 0)
+                    {
+                        addFloorScrollPane.setVisible(false);
+                        Platform.runLater(() -> {
+                        frame.drawingPanel.getCanvas().setVisible(false);
+                        frame.drawingPanel.setStyle("");
+                        });
+                    }
                 }
             });
-            
-            if(!initiateFloor)
-            {
+
+            if (!initiateFloor) {
                 initiateFloor = true;
                 Platform.runLater(() -> {
                     Floor f = frame.building.getFloors().get(0);
@@ -130,57 +149,80 @@ public class ControlPanel extends VBox {
                 });
             }
         });
-        
-        if(state && !initiateFloor)
-        {
+
+        if (state && !initiateFloor) {
             Platform.runLater(() -> {
                 addFloorBtn.fire();
             });
         }
-        
-        for(int i = 0; i < building.getFloors().size(); i++)
-        {
-            AtomicBoolean popupOpen = new AtomicBoolean(false);
-            existingFloors.add(i);
-            Button newFloorBtn = new Button("Floor " + i);
-            newFloorBtn.setMaxWidth(Double.MAX_VALUE);
-            addFloorVBox.getChildren().add(newFloorBtn);
-            nrFloorsLabel.setText("Floors: " + (addFloorVBox.getChildren().size()));
+        if (!state) {
+            Platform.runLater(() -> {
+                for (int i = 0; i < building.getFloors().size(); i++) {
 
-            if (addFloorVBox.getChildren().size() >= 1) {
-                frame.drawingPanel.getCanvas().setVisible(true);
-                frame.drawingPanel.setStyle("-fx-background-color: white");
-            } else {
-                frame.drawingPanel.getCanvas().setVisible(false);
-                frame.drawingPanel.setStyle("");
-            }
+                    existingFloors.add(i);
+                    Button newFloorBtn = new Button("Floor " + i);
+                    newFloorBtn.setMaxWidth(Double.MAX_VALUE);
+                    newFloorBtn.setStyle("-fx-background-color: #ff6600;");
+                    newFloorBtn.setSkin(new FadeButtonSkin(newFloorBtn));
+                    addFloorVBox.getChildren().add(newFloorBtn);
+                    nrFloorsLabel.setText("Floors: " + (addFloorVBox.getChildren().size()));
 
-            newFloorBtn.setOnMousePressed(event2 -> {
-                if (event2.isPrimaryButtonDown()) {
-                    String nrFloor = newFloorBtn.getText().substring(6, 7);
-                    Floor f = frame.building.getFloors().get(Integer.parseInt(nrFloor));
-                    frame.drawingPanel.setGraph(f.getGraph());
-                    frame.drawingPanel.setShapes(f.getShapes());
-                    frame.drawingPanel.deleteAllShapes();
-                    frame.drawingPanel.drawAll();
-                } else if (event2.isSecondaryButtonDown() && !popupOpen.get()) {
-                    popupOpen.set(true);
-                    UpdateFloorPopUp popup = new UpdateFloorPopUp(frame, Integer.parseInt(newFloorBtn.getText().substring(6, 7)), addFloorVBox, newFloorBtn, nrFloorsLabel, popupOpen, event2.getScreenX(), event2.getScreenY());
-                    popup.start(new Stage());
+                    if (addFloorVBox.getChildren().size() >= 1) {
+                        frame.drawingPanel.getCanvas().setVisible(true);
+                        frame.drawingPanel.setStyle("-fx-background-color: white");
+                    } else {
+                        frame.drawingPanel.getCanvas().setVisible(false);
+                        frame.drawingPanel.setStyle("");
+                    }
+                    CustomAnimation.animateInFromRightWithBounceSmall(addFloorVBox.getWidth(), newFloorBtn);
+                    newFloorBtn.setOnMousePressed(event2 -> {
+                        if (event2.isPrimaryButtonDown()) {
+                            String nrFloor = newFloorBtn.getText().substring(6, 7);
+                            Floor f = frame.building.getFloors().get(Integer.parseInt(nrFloor));
+                            frame.drawingPanel.setGraph(f.getGraph());
+                            frame.drawingPanel.setShapes(f.getShapes());
+                            frame.drawingPanel.deleteAllShapes();
+                            frame.drawingPanel.drawAll();
+                        } else if (event2.isSecondaryButtonDown()) {
+                            int index = addFloorVBox.getChildren().indexOf(newFloorBtn);
+                            int size = addFloorVBox.getChildren().size() - 1;
+                            CustomAnimation.animateOutToLeftAndRemove(frame.scene.getWidth(), newFloorBtn, addFloorVBox.getChildren());
+                            frame.building.getFloors().remove(index);
+                            existingFloors.remove(index);
+                            nrFloorsLabel.setText("Floors: " + size);
+
+                            if(frame.building.getFloors().size() >= 1)
+                            {
+                                Platform.runLater(() -> {
+                                frame.drawingPanel.getCanvas().setVisible(true);
+                                frame.drawingPanel.setStyle("-fx-background-color: white");
+                                });
+
+                            }
+
+                            if(size == 0)
+                            {
+                                addFloorScrollPane.setVisible(false);
+                                Platform.runLater(() -> {
+                                frame.drawingPanel.getCanvas().setVisible(false);
+                                frame.drawingPanel.setStyle("");
+                                });
+                            }
+                        }
+                    });
+
+                    if (i == 0) {
+                        Platform.runLater(() -> {
+
+                            Floor f = frame.building.getFloors().get(0);
+                            frame.drawingPanel.setGraph(f.getGraph());
+                            frame.drawingPanel.setShapes(f.getShapes());
+                            frame.drawingPanel.deleteAllShapes();
+                            frame.drawingPanel.drawAll();
+                        });
+                    }
                 }
             });
-            
-            if(i == 0)
-            {
-                Platform.runLater(() -> {
-                    
-                    Floor f = frame.building.getFloors().get(0);
-                    frame.drawingPanel.setGraph(f.getGraph());
-                    frame.drawingPanel.setShapes(f.getShapes());
-                    frame.drawingPanel.deleteAllShapes();
-                    frame.drawingPanel.drawAll();
-                });
-            }
         }
 
         eraserBtn.setOnAction(event -> {
@@ -192,7 +234,7 @@ public class ControlPanel extends VBox {
                 eraserBtn.setText("Eraser: On");
             }
         });
-        
+
     }
 
     public ComboBox getComboBox() {

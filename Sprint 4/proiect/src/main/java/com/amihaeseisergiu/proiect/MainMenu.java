@@ -97,11 +97,13 @@ public class MainMenu {
         centerScrollPaneVBox.setSpacing(10);
         centerScrollPaneVBox.setStyle("-fx-background-color:transparent;");
         centerScrollPane.setContent(centerScrollPaneVBox);
-        if(stage.isShowing())
+        if (stage.isShowing()) {
             Platform.runLater(() -> {
                 centerScrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;");
             });
-        else stage.setOnShown(e -> centerScrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
+        } else {
+            stage.setOnShown(e -> centerScrollPane.lookup(".viewport").setStyle("-fx-background-color: transparent;"));
+        }
 
         centerVBox.getChildren().addAll(centerScrollPane);
 
@@ -111,8 +113,7 @@ public class MainMenu {
 
         createNewBuilding.setOnAction(e -> {
 
-            if(!created)
-            {
+            if (!created) {
                 created = true;
                 HBox buildingHBox = new HBox();
                 buildingHBox.setPadding(new Insets(5, 5, 5, 5));
@@ -342,17 +343,16 @@ public class MainMenu {
                                 buildingHBox.getChildren().addAll(leftBox, rightBox);
                                 centerScrollPaneVBox.getChildren().add(buildingHBox);
                                 editBtn.setOnAction(ev -> {
-
                                     build.name = buildName.getText();
                                     MainFrame mainFrame = new MainFrame(stage, build, false);
                                     mainFrame.init();
                                 });
-                                
+
                                 deleteBtn.setOnAction(ev -> {
 
                                     CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), buildingHBox, centerScrollPaneVBox.getChildren());
                                 });
-                                
+
                                 CustomAnimation.animateInFromRightWithBounce(scene.getWidth(), buildingHBox);
                             });
 
@@ -378,13 +378,13 @@ public class MainMenu {
         BorderPane.setMargin(leftVBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(topHBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(centerVBox, new Insets(5, 5, 5, 5));
-        
+
         scene = new Scene(pane, 800, 600);
-        
+
         CustomAnimation.animateInFromLeft(scene.getWidth(), leftVBox);
         CustomAnimation.animateInFromTop(scene.getHeight(), topHBox);
         CustomAnimation.animateTypeWriterText(topLabel, "Building Creator");
-        
+
         stage.setScene(scene);
         stage.setTitle("Building Creator");
         //stage.setAlwaysOnTop(true);
@@ -511,5 +511,5 @@ public class MainMenu {
         }
         r.getRectangle().setSize((int) r.getRectangle().getWidth() - 1, (int) r.getRectangle().getHeight() - 1);
     }
-    
+
 }

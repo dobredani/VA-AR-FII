@@ -72,14 +72,14 @@ public class ConfigPanel extends HBox {
         heightSlider.valueProperty().addListener((obs, oldval, newVal) -> heightSlider.setValue(Math.round(newVal.intValue())));
 
         widthTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                widthTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
             if (!widthTextField.getText().isBlank() && Integer.valueOf(widthTextField.getText()) % 2 != 0) {
                 widthTextField.setText(String.valueOf(Integer.valueOf(widthTextField.getText()) + 1));
             }
             if (Integer.valueOf(widthTextField.getText()) < 50) {
                 widthTextField.setText(String.valueOf(Integer.valueOf("50")));
-            }
-            if (!newValue.matches("\\d*")) {
-                widthTextField.setText(newValue.replaceAll("[^\\d]", ""));
             }
             if (!widthTextField.getText().isBlank() && (widthTextField.getText().length() > 3 || Integer.valueOf(widthTextField.getText()) > 200)) {
                 String s = widthTextField.getText().substring(0, widthTextField.getText().length() - 1);
@@ -92,14 +92,14 @@ public class ConfigPanel extends HBox {
         });
 
         heightTextField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                heightTextField.setText(newValue.replaceAll("[^\\d]", ""));
+            }
             if (!heightTextField.getText().isBlank() && Integer.valueOf(heightTextField.getText()) % 2 != 0) {
                 heightTextField.setText(String.valueOf(Integer.valueOf(heightTextField.getText()) + 1));
             }
             if (Integer.valueOf(heightTextField.getText()) < 50) {
                 heightTextField.setText(String.valueOf(Integer.valueOf("50")));
-            }
-            if (!newValue.matches("\\d*")) {
-                heightTextField.setText(newValue.replaceAll("[^\\d]", ""));
             }
             if (!heightTextField.getText().isBlank() && (heightTextField.getText().length() > 3 || Integer.valueOf(heightTextField.getText()) > 200)) {
                 String s = heightTextField.getText().substring(0, heightTextField.getText().length() - 1);

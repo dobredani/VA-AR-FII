@@ -39,95 +39,124 @@ public class UpdateHallwayPopUp extends Application {
     @Override
     public void start(Stage stage) {
         BorderPane pane = new BorderPane();
+        pane.setPadding(new Insets(5, 5, 5, 5));
+        pane.setStyle("-fx-background-color: linear-gradient(#4facfe, #00f2fe)");
 
-        if (shape instanceof ExtendedRectangle) {
-            ExtendedRectangle rectangle = (ExtendedRectangle) shape;
-            Label info = new Label("Information About Hallway");
-            info.setStyle("-fx-font: 18 arial;");
+        ExtendedRectangle rectangle = (ExtendedRectangle) shape;
+        Label info = new Label("Information About Hallway");
+        info.setStyle("-fx-font: 18 arial;");
 
-            HBox topHBox = new HBox();
-            topHBox.getChildren().addAll(info);
-            topHBox.setAlignment(Pos.CENTER);
-            topHBox.setPadding(new Insets(10, 10, 10, 10));
+        HBox topHBox = new HBox();
+        topHBox.getChildren().addAll(info);
+        topHBox.setAlignment(Pos.CENTER);
+        topHBox.setPadding(new Insets(10, 10, 10, 10));
+        topHBox.setStyle("-fx-border-color: black;"
+            + "-fx-background-color: white;"
+            + "-fx-background-radius: 5;"
+            + "-fx-border-width: 1;"
+            + "-fx-border-style: dashed;"
+            + "-fx-border-radius: 5;");
 
-            Label name = new Label("Name:");
-            TextField nameField = new TextField(rectangle.getName());
-            HBox nameHBox = new HBox();
-            nameHBox.setAlignment(Pos.CENTER);
-            nameHBox.setSpacing(10);
-            nameHBox.getChildren().addAll(name, nameField);
-            VBox centerVBox = new VBox();
-            centerVBox.getChildren().addAll(nameHBox);
+        Label name = new Label("Name:");
+        TextField nameField = new TextField(rectangle.getName());
+        nameField.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
+        HBox nameHBox = new HBox();
+        nameHBox.setAlignment(Pos.CENTER);
+        nameHBox.setSpacing(10);
+        nameHBox.getChildren().addAll(name, nameField);
+        VBox centerVBox = new VBox();
+        centerVBox.setStyle("-fx-border-color: black;"
+            + "-fx-background-color: white;"
+            + "-fx-background-radius: 5;"
+            + "-fx-border-width: 1;"
+            + "-fx-border-style: dashed;"
+            + "-fx-border-radius: 5;");
+        centerVBox.getChildren().addAll(nameHBox);
 
-            Label widthLabel = new Label("Width: ");
-            Label heightLabel = new Label("Height: ");
-            TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
-            TextField heightField = new TextField(String.valueOf(((ExtendedRectangle) shape).getLength()));
-            HBox width = new HBox();
-            width.getChildren().addAll(widthLabel, widthField);
-            HBox height = new HBox();
-            height.getChildren().addAll(heightLabel, heightField);
-            centerVBox.getChildren().addAll(width, height);
-            width.setAlignment(Pos.CENTER);
-            height.setAlignment(Pos.CENTER);
+        Label widthLabel = new Label("Width: ");
+        Label heightLabel = new Label("Height: ");
+        TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
+        widthField.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
+        TextField heightField = new TextField(String.valueOf(((ExtendedRectangle) shape).getLength()));
+        heightField.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
+        HBox width = new HBox();
+        width.setAlignment(Pos.CENTER);
+        width.setSpacing(10);
+        width.getChildren().addAll(widthLabel, widthField);
+        HBox height = new HBox();
+        height.setAlignment(Pos.CENTER);
+        height.setSpacing(10);
+        height.getChildren().addAll(heightLabel, heightField);
+        centerVBox.getChildren().addAll(width, height);
+        width.setAlignment(Pos.CENTER);
+        height.setAlignment(Pos.CENTER);
 
-            centerVBox.setAlignment(Pos.TOP_CENTER);
-            centerVBox.setPadding(new Insets(10, 10, 10, 10));
-            centerVBox.setSpacing(10);
-            centerVBox.setStyle("-fx-border-color: black;\n"
-                    + "-fx-border-radius: 5;\n"
-                    + "-fx-border-insets: 5;\n"
-                    + "-fx-border-width: 3;\n");
+        centerVBox.setAlignment(Pos.TOP_CENTER);
+        centerVBox.setPadding(new Insets(10, 10, 10, 10));
+        centerVBox.setSpacing(10);
 
-            nameField.setOnAction(event -> {
-                rectangle.setName(nameField.getText());
-            });
+        nameField.setOnAction(event -> {
+            rectangle.setName(nameField.getText());
+        });
 
-            HBox bottomHBox = new HBox();
-            bottomHBox.setAlignment(Pos.CENTER);
-            bottomHBox.setSpacing(10);
-            bottomHBox.setPadding(new Insets(10, 10, 10, 10));
-            Button closeBtn = new Button("Save");
-            bottomHBox.getChildren().addAll(closeBtn);
-            int btnCount = bottomHBox.getChildren().size();
-            closeBtn.prefWidthProperty().bind(bottomHBox.widthProperty().divide(btnCount));
+        HBox bottomHBox = new HBox();
+        bottomHBox.setAlignment(Pos.CENTER);
+        bottomHBox.setSpacing(10);
+        bottomHBox.setPadding(new Insets(10, 10, 10, 10));
+        bottomHBox.setStyle("-fx-border-color: black;"
+            + "-fx-background-color: white;"
+            + "-fx-background-radius: 5;"
+            + "-fx-border-width: 1;"
+            + "-fx-border-style: dashed;"
+            + "-fx-border-radius: 5;");
+        Button closeBtn = new Button("Save");
+        closeBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
+        closeBtn.setSkin(new FadeButtonSkin(closeBtn));
+        bottomHBox.getChildren().addAll(closeBtn);
+        int btnCount = bottomHBox.getChildren().size();
+        closeBtn.prefWidthProperty().bind(bottomHBox.widthProperty().divide(btnCount));
 
-            closeBtn.setOnAction(event -> {
-                stage.close();
-                rectangle.setName(nameField.getText());
+        closeBtn.setOnAction(event -> {
+            stage.close();
+            rectangle.setName(nameField.getText());
 
-                drawingPanel.deleteShape(rectangle);
-                double initialWidth = rectangle.getWidth();
-                double initialHeight = rectangle.getLength();
-                rectangle.setLength(Double.valueOf(heightField.getText()));
-                rectangle.setWidth(Double.valueOf(widthField.getText()));
-                rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
-                if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
-                    rectangle.setLength(initialHeight);
-                    rectangle.setWidth(initialWidth);
-                    rectangle.getRectangle().setSize((int)rectangle.getWidth(), (int)rectangle.getLength());
-                    drawingPanel.drawAll();
-                } else {
-                    drawingPanel.deleteShapeFromGraph(rectangle);
-                    drawingPanel.getShapes().add(rectangle);
-                    drawingPanel.addShapeToGraph(rectangle);
-                    drawingPanel.setOrder();
-                    drawingPanel.drawAll();
-                    drawingPanel.getIds().add(rectangle.getId());
-                    // System.out.println(drawingPanel.getGraph());
-                }
-                rectangle.setStartPoint(new Point(rectangle.getCenterPoint().getX() + rectangle.getWidth() / 2, rectangle.getCenterPoint().getY() + rectangle.getLength() / 2));
-                rectangle.getRectangle().setBounds((int) rectangle.getCenterPoint().getX(), (int) rectangle.getCenterPoint().getY(), (int) rectangle.getWidth(), (int) rectangle.getLength());
-            });
+            drawingPanel.deleteShape(rectangle);
+            double initialWidth = rectangle.getWidth();
+            double initialHeight = rectangle.getLength();
+            rectangle.setLength(Double.valueOf(heightField.getText()));
+            rectangle.setWidth(Double.valueOf(widthField.getText()));
+            rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
+            if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
+                rectangle.setLength(initialHeight);
+                rectangle.setWidth(initialWidth);
+                rectangle.getRectangle().setSize((int)rectangle.getWidth(), (int)rectangle.getLength());
+                drawingPanel.drawAll();
+            } else {
+                drawingPanel.deleteShapeFromGraph(rectangle);
+                drawingPanel.getShapes().add(rectangle);
+                drawingPanel.addShapeToGraph(rectangle);
+                drawingPanel.setOrder();
+                drawingPanel.drawAll();
+                drawingPanel.getIds().add(rectangle.getId());
+                // System.out.println(drawingPanel.getGraph());
+            }
+            rectangle.setStartPoint(new Point(rectangle.getCenterPoint().getX() + rectangle.getWidth() / 2, rectangle.getCenterPoint().getY() + rectangle.getLength() / 2));
+            rectangle.getRectangle().setBounds((int) rectangle.getCenterPoint().getX(), (int) rectangle.getCenterPoint().getY(), (int) rectangle.getWidth(), (int) rectangle.getLength());
+        });
 
-            pane.setTop(topHBox);
-            pane.setCenter(centerVBox);
-            pane.setBottom(bottomHBox);
-        }
+        pane.setTop(topHBox);
+        pane.setCenter(centerVBox);
+        pane.setBottom(bottomHBox);
+        
+        BorderPane.setMargin(topHBox, new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(centerVBox, new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(bottomHBox, new Insets(5, 5, 5, 5));
 
         scene = new Scene(pane, 300, 300);
-
-        pane.setStyle("-fx-background-color: transparent;");
+        
+        CustomAnimation.animateInFromLeftWithBounceSmall(scene.getWidth(), centerVBox);
+        CustomAnimation.animateInFromTopWithBounceSmall(scene.getHeight(), topHBox);
+        CustomAnimation.animateInFromBottomWithBounceSmall(scene.getHeight(), bottomHBox);
 
         Rectangle2D screenBoundsTest = Screen.getPrimary().getBounds();
         if(x + 10 + scene.getWidth() > screenBoundsTest.getWidth())

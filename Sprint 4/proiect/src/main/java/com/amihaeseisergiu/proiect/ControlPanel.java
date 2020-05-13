@@ -104,14 +104,14 @@ public class ControlPanel extends VBox {
             CustomAnimation.animateInFromRightWithBounceSmall(addFloorVBox.getWidth(), newFloorBtn);
             newFloorBtn.setOnMousePressed(event2 -> {
                 if (event2.isPrimaryButtonDown()) {
-                    String nrFloor = newFloorBtn.getText().substring(6, 7);
+                    String nrFloor = newFloorBtn.getText().split(" ")[1];
                     Floor f = frame.building.getFloors().get(Integer.parseInt(nrFloor));
                     frame.drawingPanel.setGraph(f.getGraph());
                     frame.drawingPanel.setShapes(f.getShapes());
                     frame.drawingPanel.deleteAllShapes();
                     frame.drawingPanel.drawAll();
                 } else if (event2.isSecondaryButtonDown()) {
-                    int index = addFloorVBox.getChildren().indexOf(newFloorBtn);
+                    int index = Integer.valueOf(newFloorBtn.getText().split(" ")[1]);
                     int size = addFloorVBox.getChildren().size() - 1;
                     CustomAnimation.animateOutToLeftAndRemove(frame.scene.getWidth(), newFloorBtn, addFloorVBox.getChildren());
                     frame.building.getFloors().remove(index);
@@ -121,8 +121,8 @@ public class ControlPanel extends VBox {
                     if(frame.building.getFloors().size() >= 1)
                     {
                         Platform.runLater(() -> {
-                        frame.drawingPanel.getCanvas().setVisible(true);
-                        frame.drawingPanel.setStyle("-fx-background-color: white");
+                            frame.drawingPanel.getCanvas().setVisible(true);
+                            frame.drawingPanel.setStyle("-fx-background-color: white");
                         });
                         
                     }
@@ -177,14 +177,14 @@ public class ControlPanel extends VBox {
                     CustomAnimation.animateInFromRightWithBounceSmall(addFloorVBox.getWidth(), newFloorBtn);
                     newFloorBtn.setOnMousePressed(event2 -> {
                         if (event2.isPrimaryButtonDown()) {
-                            String nrFloor = newFloorBtn.getText().substring(6, 7);
+                            String nrFloor = newFloorBtn.getText().split(" ")[1];
                             Floor f = frame.building.getFloors().get(Integer.parseInt(nrFloor));
                             frame.drawingPanel.setGraph(f.getGraph());
                             frame.drawingPanel.setShapes(f.getShapes());
                             frame.drawingPanel.deleteAllShapes();
                             frame.drawingPanel.drawAll();
                         } else if (event2.isSecondaryButtonDown()) {
-                            int index = addFloorVBox.getChildren().indexOf(newFloorBtn);
+                            int index = Integer.valueOf(newFloorBtn.getText().split(" ")[1]);
                             int size = addFloorVBox.getChildren().size() - 1;
                             CustomAnimation.animateOutToLeftAndRemove(frame.scene.getWidth(), newFloorBtn, addFloorVBox.getChildren());
                             frame.building.getFloors().remove(index);
@@ -194,8 +194,8 @@ public class ControlPanel extends VBox {
                             if(frame.building.getFloors().size() >= 1)
                             {
                                 Platform.runLater(() -> {
-                                frame.drawingPanel.getCanvas().setVisible(true);
-                                frame.drawingPanel.setStyle("-fx-background-color: white");
+                                    frame.drawingPanel.getCanvas().setVisible(true);
+                                    frame.drawingPanel.setStyle("-fx-background-color: white");
                                 });
 
                             }

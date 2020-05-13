@@ -5,17 +5,12 @@
  */
 package com.amihaeseisergiu.proiect;
 
-import java.util.ArrayList;
-import java.util.List;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -26,24 +21,18 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-/**
- *
- * @author Sergiu
- */
-public class UpdateStairsPopUp extends Application {
+public class UpdateBathroomPopUp extends Application {
 
     Scene scene;
-    List<ExtendedShape> stairs = new ArrayList<>();
     ExtendedShape shape;
     double x;
     double y;
     DrawingPanel drawingPanel;
 
-    public UpdateStairsPopUp(DrawingPanel drawingPanel, List<ExtendedShape> stairs, ExtendedShape shape, double x, double y) {
+    public UpdateBathroomPopUp(DrawingPanel drawingPanel, ExtendedShape shape, double x, double y) {
         this.shape = shape;
         this.x = x;
         this.y = y;
-        this.stairs = stairs;
         this.drawingPanel = drawingPanel;
     }
 
@@ -54,7 +43,7 @@ public class UpdateStairsPopUp extends Application {
         pane.setStyle("-fx-background-color: linear-gradient(#4facfe, #00f2fe)");
 
         ExtendedRectangle rectangle = (ExtendedRectangle) shape;
-        Label info = new Label("Information About Stairs");
+        Label info = new Label("Information About Bathroom");
         info.setStyle("-fx-font: 18 arial;");
 
         HBox topHBox = new HBox();
@@ -75,29 +64,20 @@ public class UpdateStairsPopUp extends Application {
         nameHBox.setAlignment(Pos.CENTER);
         nameHBox.setSpacing(10);
         nameHBox.getChildren().addAll(name, nameField);
-
-        List<String> stairsNames = new ArrayList<>();
-
-        for (ExtendedShape s : stairs) {
-            if (!(stairsNames.contains(((ExtendedRectangle) s).getName()))) {
-                stairsNames.add(((ExtendedRectangle) s).getName());
-            }
-        }
-
-        ObservableList<String> options = FXCollections.observableArrayList(stairsNames);
-        final ComboBox comboBox = new ComboBox(options);
-        comboBox.setStyle("-fx-background-color: transparent;"
-                + "-fx-border-color: #ffff00;"
-                + "-fx-border-width: 3;"
-        );
         VBox centerVBox = new VBox();
-        centerVBox.getChildren().addAll(nameHBox, comboBox);
+        centerVBox.setStyle("-fx-border-color: black;"
+            + "-fx-background-color: white;"
+            + "-fx-background-radius: 5;"
+            + "-fx-border-width: 1;"
+            + "-fx-border-style: dashed;"
+            + "-fx-border-radius: 5;");
+        centerVBox.getChildren().addAll(nameHBox);
 
         Label widthLabel = new Label("Width: ");
         Label heightLabel = new Label("Height: ");
-        TextField widthField = new TextField(String.valueOf(((ExtendedRectangle)shape).getWidth()));
+        TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
         widthField.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
-        TextField heightField = new TextField(String.valueOf(((ExtendedRectangle)shape).getLength()));
+        TextField heightField = new TextField(String.valueOf(((ExtendedRectangle) shape).getLength()));
         heightField.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
         HBox width = new HBox();
         width.setAlignment(Pos.CENTER);
@@ -114,12 +94,10 @@ public class UpdateStairsPopUp extends Application {
         centerVBox.setAlignment(Pos.TOP_CENTER);
         centerVBox.setPadding(new Insets(10, 10, 10, 10));
         centerVBox.setSpacing(10);
-        centerVBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+
+        nameField.setOnAction(event -> {
+            rectangle.setName(nameField.getText());
+        });
 
         HBox bottomHBox = new HBox();
         bottomHBox.setAlignment(Pos.CENTER);
@@ -140,11 +118,7 @@ public class UpdateStairsPopUp extends Application {
 
         closeBtn.setOnAction(event -> {
             stage.close();
-            if (comboBox.getValue() != null) {
-                rectangle.setName(comboBox.getValue().toString());
-            } else {
-                rectangle.setName(nameField.getText());
-            }
+            rectangle.setName(nameField.getText());
 
             drawingPanel.deleteShape(rectangle);
             double initialWidth = rectangle.getWidth();
@@ -164,6 +138,7 @@ public class UpdateStairsPopUp extends Application {
                 drawingPanel.setOrder();
                 drawingPanel.drawAll();
                 drawingPanel.getIds().add(rectangle.getId());
+                // System.out.println(drawingPanel.getGraph());
             }
             rectangle.setStartPoint(new Point(rectangle.getCenterPoint().getX() + rectangle.getWidth() / 2, rectangle.getCenterPoint().getY() + rectangle.getLength() / 2));
             rectangle.getRectangle().setBounds((int) rectangle.getCenterPoint().getX(), (int) rectangle.getCenterPoint().getY(), (int) rectangle.getWidth(), (int) rectangle.getLength());
@@ -172,11 +147,11 @@ public class UpdateStairsPopUp extends Application {
         pane.setTop(topHBox);
         pane.setCenter(centerVBox);
         pane.setBottom(bottomHBox);
-
+        
         BorderPane.setMargin(topHBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(centerVBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(bottomHBox, new Insets(5, 5, 5, 5));
-        
+
         scene = new Scene(pane, 300, 300);
         
         CustomAnimation.animateInFromLeftWithBounceSmall(scene.getWidth(), centerVBox);

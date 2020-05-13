@@ -19,12 +19,12 @@ com\amihaeseisergiu\proiect\DrawingPanel$2.class
 com\amihaeseisergiu\proiect\ExtendedRectangle.class
 com\amihaeseisergiu\proiect\InputSchedule.class
 com\amihaeseisergiu\proiect\SortByY.class
-com\amihaeseisergiu\proiect\UpdateShapePopUp.class
 com\amihaeseisergiu\proiect\UpdateOfficePopUp.class
 com\amihaeseisergiu\proiect\Hallway.class
 com\amihaeseisergiu\proiect\Bathroom.class
 com\amihaeseisergiu\proiect\ConfigPanel.class
 com\amihaeseisergiu\proiect\SortByX.class
+com\amihaeseisergiu\proiect\UpdateBathroomPopUp.class
 com\amihaeseisergiu\proiect\MainMenu$2.class
 com\amihaeseisergiu\proiect\Classroom.class
 com\amihaeseisergiu\proiect\Point.class

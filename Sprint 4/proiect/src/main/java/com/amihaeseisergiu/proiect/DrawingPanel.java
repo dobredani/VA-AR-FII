@@ -7,19 +7,15 @@ package com.amihaeseisergiu.proiect;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -134,7 +130,7 @@ public class DrawingPanel extends HBox {
                     // gc.fill();
                     gc.stroke();
                     r.setLength(Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                    r.setWidth(Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
+                    r.setWidth((int)(Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText())));
                     r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
                     shapes.add(r);
                     setId(r);
@@ -219,134 +215,137 @@ public class DrawingPanel extends HBox {
         gc.setStroke(mainFrame.getConfigPanel().getColorPicker().getValue());
         ExtendedRectangle r = null;
         if (s instanceof ExtendedRectangle) {
-            if (t == 1) {
-                if (checkCenter == false) {
-                    gc.rect(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                    if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
-                        r = new Classroom(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
-                        r = new Hallway(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
-                        r = new Stairs(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
-                        r = new Elevator(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
-                        r = new Office(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
-                        r = new Bathroom(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    }
-                } else {
-                    gc.rect(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                    if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
-                        r = new Classroom(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
-                        r = new Hallway(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
-                        r = new Stairs(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
-                        r = new Elevator(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
-                        r = new Office(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
-                        r = new Bathroom(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
-                    }
-                }
-            } else if (t == 2) {
-                if (checkCenter == false) {
-                    gc.rect(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength(), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                    if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
-                        r = new Classroom(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
-                        r = new Hallway(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
-                        r = new Stairs(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
-                        r = new Elevator(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
-                        r = new Office(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
-                        r = new Bathroom(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    }
-                } else {
-                    gc.rect(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength(), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                    if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
-                        r = new Classroom(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
-                        r = new Hallway(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
-                        r = new Stairs(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
-                        r = new Elevator(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
-                        r = new Office(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
-                        r = new Bathroom(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
-                    }
-                }
-            } else if (t == 3) {
-                if (checkCenter == false) {
-                    gc.rect(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                    if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
-                        r = new Classroom(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
-                        r = new Hallway(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
-                        r = new Stairs(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
-                        r = new Elevator(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
-                        r = new Office(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
-                        r = new Bathroom(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
-                    }
-                } else {
-                    gc.rect(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                    if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
-                        r = new Classroom(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
-                        r = new Hallway(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
-                        r = new Stairs(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
-                        r = new Elevator(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
-                        r = new Office(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
-                        r = new Bathroom(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    }
-                }
-            } else if (t == 4) {
-                if (checkCenter == false) {
-                    gc.rect(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                    if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
-                        r = new Classroom(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
-                        r = new Hallway(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
-                        r = new Stairs(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
-                        r = new Elevator(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
-                        r = new Office(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
-                        r = new Bathroom(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
-                    }
-                } else {
-                    gc.rect(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                    if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
-                        r = new Classroom(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
-                        r = new Hallway(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
-                        r = new Stairs(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
-                        r = new Elevator(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
-                        r = new Office(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
-                        r = new Elevator(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
-                    }
-                }
+            switch (t) {
+                case 1:
+                    if (checkCenter == false) {
+                        gc.rect(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                        if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
+                            r = new Classroom(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                            r = new Hallway(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
+                            r = new Stairs(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
+                            r = new Elevator(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
+                            r = new Office(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
+                            r = new Bathroom(new Point(x, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        }
+                    } else {
+                        gc.rect(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                        if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
+                            r = new Classroom(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                            r = new Hallway(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
+                            r = new Stairs(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
+                            r = new Elevator(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
+                            r = new Office(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
+                            r = new Bathroom(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                        }
+                    }   break;
+                case 2:
+                    if (checkCenter == false) {
+                        gc.rect(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength(), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                        if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
+                            r = new Classroom(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                            r = new Hallway(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
+                            r = new Stairs(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
+                            r = new Elevator(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
+                            r = new Office(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
+                            r = new Bathroom(new Point(x, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        }
+                    } else {
+                        gc.rect(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength(), Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                        if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
+                            r = new Classroom(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                            r = new Hallway(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
+                            r = new Stairs(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
+                            r = new Elevator(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
+                            r = new Office(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
+                            r = new Bathroom(new Point(s.getStartPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()) / 2, s.getCenterPoint().getY() + ((ExtendedRectangle) s).getLength()));
+                        }
+                    }   break;
+                case 3:
+                    if (checkCenter == false) {
+                        gc.rect(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                        if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
+                            r = new Classroom(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                            r = new Hallway(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
+                            r = new Stairs(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
+                            r = new Elevator(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
+                            r = new Office(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
+                            r = new Bathroom(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), y));
+                        }
+                    } else {
+                        gc.rect(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                        if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
+                            r = new Classroom(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                            r = new Hallway(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
+                            r = new Stairs(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
+                            r = new Elevator(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
+                            r = new Office(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
+                            r = new Bathroom(new Point(s.getCenterPoint().getX() - Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        }
+                    }   break;
+                case 4:
+                    if (checkCenter == false) {
+                        gc.rect(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                        if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
+                            r = new Classroom(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                            r = new Hallway(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
+                            r = new Stairs(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
+                            r = new Elevator(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
+                            r = new Office(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
+                            r = new Bathroom(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), y));
+                        }
+                    } else {
+                        gc.rect(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2, Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()), Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
+                        if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Class Room")) {
+                            r = new Classroom(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Hall Way")) {
+                            r = new Hallway(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Stairs")) {
+                            r = new Stairs(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Elevator")) {
+                            r = new Elevator(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Office")) {
+                            r = new Office(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        } else if (mainFrame.controlPanel.comboBox.getSelectionModel().getSelectedItem().equals("Bathroom")) {
+                            r = new Elevator(new Point(s.getCenterPoint().getX() + ((ExtendedRectangle) s).getWidth(), s.getStartPoint().getY() - Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()) / 2));
+                        }
+                    }   break;
+                default:
+                    break;
             }
         }
         if (r != null) {
@@ -354,8 +353,8 @@ public class DrawingPanel extends HBox {
             if (checkCollision(r, 0) == false) {
                 gc.stroke();
                 // gc.fill();
-                r.setLength(Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText()));
-                r.setWidth(Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText()));
+                r.setLength((int)(Double.parseDouble(mainFrame.getConfigPanel().getHeightTextField().getText())));
+                r.setWidth((int)(Double.parseDouble(mainFrame.getConfigPanel().getWidthTextField().getText())));
                 r.setColor(mainFrame.getConfigPanel().getColorPicker().getValue().toString());
                 shapes.add(r);
                 setId(r);
@@ -450,7 +449,10 @@ public class DrawingPanel extends HBox {
                             } else if (((ExtendedRectangle) shape).getShapeType().equals("Office")) {
                                 UpdateOfficePopUp popUpFrame = new UpdateOfficePopUp(this, shape, x, y);
                                 popUpFrame.start(new Stage());
-                            }
+                            } else if (((ExtendedRectangle) shape).getShapeType().equals("Bathroom")) {
+                                UpdateBathroomPopUp popUpFrame = new UpdateBathroomPopUp(this, shape, x, y);
+                                popUpFrame.start(new Stage());
+                            } 
                         }
                     }
                 }
@@ -492,14 +494,14 @@ public class DrawingPanel extends HBox {
                         double beforeY = castedShape.getCenterPoint().getY();
                         if (isMouseInCenter == false) {
                             if (getRectangleHalf(draggedShape, event.getX(), event.getY()) == false) {
-                                castedShape.setLength(castedShape.getLength() + (event.getY() - initialY));
-                                castedShape.setWidth(castedShape.getWidth() + (event.getX() - initialX));
+                                castedShape.setLength((int)(castedShape.getLength() + (event.getY() - initialY)));
+                                castedShape.setWidth((int)(castedShape.getWidth() + (event.getX() - initialX)));
                                 castedShape.getRectangle().setSize((int) castedShape.getWidth(), (int) castedShape.getLength());
                             } else {
-                                castedShape.setLength(castedShape.getLength() - (event.getY() - initialY));
-                                castedShape.setWidth(castedShape.getWidth() - (event.getX() - initialX));
-                                castedShape.getCenterPoint().setX(castedShape.getCenterPoint().getX() + (event.getX() - initialX));
-                                castedShape.getCenterPoint().setY(castedShape.getCenterPoint().getY() + (event.getY() - initialY));
+                                castedShape.setLength((int)(castedShape.getLength() - (event.getY() - initialY)));
+                                castedShape.setWidth((int)(castedShape.getWidth() - (event.getX() - initialX)));
+                                castedShape.getCenterPoint().setX((int)(castedShape.getCenterPoint().getX() + (event.getX() - initialX)));
+                                castedShape.getCenterPoint().setY((int)(castedShape.getCenterPoint().getY() + (event.getY() - initialY)));
                                 castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
                                 castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
                                 castedShape.getRectangle().setBounds((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY(), (int) castedShape.getWidth(), (int) castedShape.getLength());
@@ -507,8 +509,8 @@ public class DrawingPanel extends HBox {
                             initialX = event.getX();
                             initialY = event.getY();
                         } else {
-                            castedShape.getCenterPoint().setX(castedShape.getCenterPoint().getX() + (event.getX() - initialX));
-                            castedShape.getCenterPoint().setY(castedShape.getCenterPoint().getY() + (event.getY() - initialY));
+                            castedShape.getCenterPoint().setX((int)(castedShape.getCenterPoint().getX() + (event.getX() - initialX)));
+                            castedShape.getCenterPoint().setY((int)(castedShape.getCenterPoint().getY() + (event.getY() - initialY)));
                             castedShape.getRectangle().setLocation((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY());
                             castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
                             castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
@@ -516,18 +518,18 @@ public class DrawingPanel extends HBox {
                             initialY = event.getY();
                         }
                         if (checkCollision(castedShape, 0) == true || castedShape.getWidth() < 50 || castedShape.getLength() < 50) {
-                            castedShape.setLength(beforeHeight);
-                            castedShape.setWidth(beforeWidth);
-                            castedShape.getCenterPoint().setX(beforeX);
-                            castedShape.getCenterPoint().setY(beforeY);
+                            castedShape.setLength((int)(beforeHeight));
+                            castedShape.setWidth((int)(beforeWidth));
+                            castedShape.getCenterPoint().setX((int)(beforeX));
+                            castedShape.getCenterPoint().setY((int)(beforeY));
                             castedShape.getStartPoint().setX(castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2);
                             castedShape.getStartPoint().setY(castedShape.getCenterPoint().getY() + castedShape.getLength() / 2);
                             castedShape.getRectangle().setBounds((int) castedShape.getCenterPoint().getX(), (int) castedShape.getCenterPoint().getY(), (int) castedShape.getWidth(), (int) castedShape.getLength());
                             setOrder();
                         }
                         ExtendedRectangle oldShape = new ExtendedRectangle(new Point(beforeX, beforeY));
-                        oldShape.setLength(beforeHeight);
-                        oldShape.setWidth(beforeWidth);
+                        oldShape.setLength((int)(beforeHeight));
+                        oldShape.setWidth((int)(beforeWidth));
                         deleteShape(oldShape);
                         deleteShapeFromGraph(draggedShape);
                         shapes.add(draggedShape);

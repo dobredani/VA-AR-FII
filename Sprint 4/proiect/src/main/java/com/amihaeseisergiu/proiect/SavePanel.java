@@ -30,6 +30,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.DirectoryChooser;
 
 /**
@@ -39,6 +41,7 @@ import javafx.stage.DirectoryChooser;
 public class SavePanel extends HBox {
 
     MainFrame frame;
+    Label editingFloorLabel = new Label("Editing Floor 0");
 
     public SavePanel(MainFrame frame) {
         this.frame = frame;
@@ -55,6 +58,13 @@ public class SavePanel extends HBox {
         leftBox.setPadding(new Insets(5, 5, 5, 5));
         leftBox.setSpacing(10);
         HBox.setHgrow(leftBox, Priority.ALWAYS);
+        
+        editingFloorLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 16));
+        HBox middleBox = new HBox(editingFloorLabel);
+        middleBox.setAlignment(Pos.CENTER);
+        middleBox.setPadding(new Insets(5, 5, 5, 5));
+        middleBox.setSpacing(10);
+        HBox.setHgrow(middleBox, Priority.ALWAYS);
 
         Button saveBtn = new Button("Save Building");
         saveBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
@@ -64,7 +74,7 @@ public class SavePanel extends HBox {
         rightBox.setPadding(new Insets(5, 5, 5, 5));
         rightBox.setSpacing(10);
         HBox.setHgrow(rightBox, Priority.ALWAYS);
-        this.getChildren().addAll(leftBox, rightBox);
+        this.getChildren().addAll(leftBox, middleBox, rightBox);
 
         mainMenuBtn.setOnAction(e -> {
             MainMenu menu = new MainMenu(frame.stage);

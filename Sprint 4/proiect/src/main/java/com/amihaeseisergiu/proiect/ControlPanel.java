@@ -108,6 +108,7 @@ public class ControlPanel extends VBox {
             newFloorBtn.setOnMousePressed(event2 -> {
                 if (event2.isPrimaryButtonDown()) {
                     String nrFloor = newFloorBtn.getText().split(" ")[1];
+                    frame.savePanel.editingFloorLabel.setText("Editing Floor " + nrFloor);
                     Floor f = frame.building.getFloors().get(Integer.parseInt(nrFloor));
                     frame.drawingPanel.setGraph(f.getGraph());
                     frame.drawingPanel.setShapes(f.getShapes());
@@ -123,6 +124,7 @@ public class ControlPanel extends VBox {
                     nrFloorsLabel.setText("Floors: " + size);
                     if (existingFloors.size() > 0) {
                         int nrFloor = existingFloors.get(0);
+                        frame.savePanel.editingFloorLabel.setText("Editing Floor " + nrFloor);
                         Floor f = frame.building.getFloors().get(nrFloor);
                         frame.drawingPanel.setGraph(f.getGraph());
                         frame.drawingPanel.setShapes(f.getShapes());
@@ -147,8 +149,9 @@ public class ControlPanel extends VBox {
                     {
                         addFloorScrollPane.setVisible(false);
                         Platform.runLater(() -> {
-                        frame.drawingPanel.getCanvas().setVisible(false);
-                        frame.drawingPanel.setStyle("");
+                            frame.savePanel.editingFloorLabel.setText("");
+                            frame.drawingPanel.getCanvas().setVisible(false);
+                            frame.drawingPanel.setStyle("");
                         });
                     }
                 }
@@ -157,6 +160,7 @@ public class ControlPanel extends VBox {
             if (!initiateFloor || existingFloors.size() == 1) {
                 initiateFloor = true;
                 Platform.runLater(() -> {
+                    frame.savePanel.editingFloorLabel.setText("Editing Floor 0");
                     Floor f = frame.building.getFloors().get(0);
                     frame.drawingPanel.setGraph(f.getGraph());
                     frame.drawingPanel.setShapes(f.getShapes());
@@ -194,6 +198,7 @@ public class ControlPanel extends VBox {
                     newFloorBtn.setOnMousePressed(event2 -> {
                         if (event2.isPrimaryButtonDown()) {
                             String nrFloor = newFloorBtn.getText().split(" ")[1];
+                            frame.savePanel.editingFloorLabel.setText("Editing Floor " + nrFloor);
                             Floor f = frame.building.getFloors().get(Integer.parseInt(nrFloor));
                             frame.drawingPanel.setGraph(f.getGraph());
                             frame.drawingPanel.setShapes(f.getShapes());
@@ -209,6 +214,7 @@ public class ControlPanel extends VBox {
                             nrFloorsLabel.setText("Floors: " + size);
                             if (existingFloors.size() > 0) {
                                 int nrFloor = existingFloors.get(0);
+                                frame.savePanel.editingFloorLabel.setText("Editing Floor " + nrFloor);
                                 Floor f = frame.building.getFloors().get(nrFloor);
                                 frame.drawingPanel.setGraph(f.getGraph());
                                 frame.drawingPanel.setShapes(f.getShapes());
@@ -233,8 +239,9 @@ public class ControlPanel extends VBox {
                             {
                                 addFloorScrollPane.setVisible(false);
                                 Platform.runLater(() -> {
-                                frame.drawingPanel.getCanvas().setVisible(false);
-                                frame.drawingPanel.setStyle("");
+                                    frame.savePanel.editingFloorLabel.setText("");
+                                    frame.drawingPanel.getCanvas().setVisible(false);
+                                    frame.drawingPanel.setStyle("");
                                 });
                             }
                         }

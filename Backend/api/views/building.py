@@ -219,7 +219,7 @@ class BuildingView(FlaskView):
             return str(e), 500
 
     @use_args(BuildingSchema)
-    def patch(self, args):
+    def put(self, args):
         res, status_code = self.delete(args["name"])
         if (status_code != 200):
             return res, status_code

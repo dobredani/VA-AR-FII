@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -240,18 +239,18 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
         List<String> locationsList = new ArrayList<String>(Arrays.asList(locations));
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1, locationsList) {
+                (this, R.layout.custom_list_item, locationsList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 // Get the Item from ListView
                 View view = super.getView(position, convertView, parent);
 
                 // Initialize a TextView for ListView each Item
-                TextView tv = (TextView) view.findViewById(android.R.id.text1);
+                TextView tv = (TextView) view.findViewById(R.id.list_item_text);
 
                 // Set the text color of TextView (ListView Item)
-                tv.setTextColor(Color.BLACK);
-                tv.setBackgroundColor(Color.parseColor("#F1F6FB"));
+                //tv.setTextColor(Color.BLACK);
+               // tv.setBackgroundColor(Color.parseColor("#F1F6FB"));
 
                 // Generate ListView Item using TextView
                 return view;

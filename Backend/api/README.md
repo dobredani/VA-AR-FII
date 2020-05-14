@@ -27,6 +27,21 @@ If it is running you can access the Neo4j browser on http://localhost:7474/
 docker start neo4j
 ```
 
+## Install Graph Algorithms plugin for neo4j 
+
+For chocolatey installations:
+Download the following jar file https://github.com/neo4j-contrib/neo4j-graph-algorithms/releases/download/3.3.2.0/graph-algorithms-algo-3.3.2.0.jar
+
+Place it in neo4jDirectory\plugins (by default C:\tools\neo4j-community\neo4j-community-3.3.3\plugins)
+
+Open neo4jDirectory\conf\neo4j.conf (by default C:\tools\neo4j-community\neo4j-community-3.3.3\conf\neo4j.conf) and add 'dbms.security.procedures.unrestricted=algo.*' (without quotes) at the end of the file.
+
+Restart the neo4j service by going in the neo4jDirectory\bin folder (by default C:\tools\neo4j-community\neo4j-community-3.3.3\bin), opening a cmd console in that folder with administrator rights and using the command 'neo4j.bat restart'.
+
+Test it by running 'CALL algo.list()' in the neo4j console. The first in the list should be "algo.allShortestPaths.stream".
+
+
+
 When the container is running you can access the neo4j browser by going to http://localhost:7474/
 
 ## Python Version Compatibility

@@ -91,7 +91,11 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 startActivityForResult(intent, 1);
             }
         });
+        startNavigationButton();
+        generateSuggestedPlaces(4);
+    }
 
+    private void startNavigationButton() {
         final Button startNavigation = findViewById(R.id.navigationBtn);
         startNavigation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,12 +133,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                     }
                 }
 
-
             }
         });
-
-        generateSuggestedPlaces(4);
-
     }
 
     @Override

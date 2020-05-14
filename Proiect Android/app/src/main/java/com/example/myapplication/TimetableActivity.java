@@ -73,7 +73,8 @@ public class TimetableActivity extends AppCompatActivity {
         List<Location> locations = appData.getCurrentBuilding().getLocations();
         List<String> locationStrings = new ArrayList<>();
         for (Location temp:locations)
-            if (temp.getName().toLowerCase().contains(lookupText))
+            if ((temp.getLocationType() == LocationType.CLASSROOM ||
+                    temp.getLocationType() == LocationType.OFFICE) && temp.getName().toLowerCase().contains(lookupText))
                 locationStrings.add(temp.getName());
 
         List<String> locationsList = new ArrayList<String>(locationStrings);

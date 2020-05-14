@@ -74,8 +74,15 @@ public class JsonParser {
                             Log.e("location", "Parsed Current Building Location " + location.getName());
 
                         } else if (object.getString("type").equals("office")){
+                            List<String> professors = new ArrayList<>();
+                            JSONArray professorList = object.getJSONArray("professors");
+
+                            for(int k=0;k<professorList.length();k++)
+                                professors.add(professorList.getString(k));
+
                             Location location = new Location(object.getInt("markerId"), object.getString("name"),
-                                    LocationType.OFFICE);
+                                    professors, LocationType.OFFICE);
+                            
                             locations.add(location);
                             Log.e("location", "Parsed Current Building Location " + location.getName());
                         }else if (object.getString("type").equals("connector")){

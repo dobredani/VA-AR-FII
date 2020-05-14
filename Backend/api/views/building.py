@@ -48,7 +48,7 @@ BuildingSchema = {
 
 class BuildingView(FlaskView):
     base_args = ['args']
-    excluded_methods = ['createBuilding']
+    excluded_methods = ['createBuilding', 'checkBuilding']
 
     # findAll
     def index(self):
@@ -77,7 +77,8 @@ class BuildingView(FlaskView):
                         if ClassRoom.__name__ in waypoint.labels():
                             map["floors"][-1]["waypoints"][-1]["type"] = WAYPOINT_TYPES["ClassRoom"]
                             map["floors"][-1]["waypoints"][-1]["schedule"] = []
-                            for group in [group for group in Group.nodes.filter(buildingName=name).has(classes=True) if group.classes.relationship(waypoint)]:
+                            for group in [group for group in Group.nodes.filter(buildingName=name).has(classes=True) if
+                                          group.classes.relationship(waypoint)]:
                                 classes = group.classes.all_relationships(
                                     waypoint)
                                 for cclass in classes:
@@ -87,7 +88,9 @@ class BuildingView(FlaskView):
                         elif Office.__name__ in waypoint.labels():
                             map["floors"][-1]["waypoints"][-1]["type"] = WAYPOINT_TYPES["Office"]
                             map["floors"][-1]["waypoints"][-1]["professors"] = []
-                            for teacher in [teacher for teacher in Teacher.nodes.filter(buildingName=name).has(office=True) if teacher.office.relationship(waypoint)]:
+                            for teacher in [teacher for teacher in
+                                            Teacher.nodes.filter(buildingName=name).has(office=True) if
+                                            teacher.office.relationship(waypoint)]:
                                 map["floors"][-1]["waypoints"][-1]["professors"].append(
                                     teacher.name)
                         elif Connector.__name__ in waypoint.labels():
@@ -119,6 +122,13 @@ class BuildingView(FlaskView):
         except Exception as e:
             return str(e), 500
 
+    def checkBuilding(self, buildingName):
+        [[count]], meta = db.cypher_query(
+            f"CALL algo.scc('match (w:Waypoint) where w.buildingName = \"{buildingName}\" return id(w) as id','MATCH (w1:Waypoint)-[:GOES_TO]->(w2:Waypoint) RETURN id(w1) as source,id(w2) as target', {{write:true,partitionProperty:'partition', graph:'cypher'}}) YIELD setCount",
+        resolve_objects = True)
+        if count > 1:
+            raise Exception('The building is not connected')
+
     def createBuilding(self, building):
         db.begin()
         try:
@@ -135,8 +145,10 @@ class BuildingView(FlaskView):
                                     classRoom = ClassRoom(
                                         name=waypoint.get("name"), markerId=waypoint.get("markerId"),
                                         buildingName=building.get("name"), floorLevel=floor.get("level"),
-                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"), width=waypoint.get("width"),
-                                        length=waypoint.get("length"), x=waypoint.get("x"), y=waypoint.get("y")).save()
+                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"),
+                                        width=waypoint.get("width"),
+                                        length=waypoint.get("length"), x=waypoint.get("x"),
+                                        y=waypoint.get("y")).save()
                                     for schedule in waypoint["schedule"]:
                                         group = Group(
                                             name=schedule["group"], buildingName=building.get("name")).save()
@@ -148,8 +160,10 @@ class BuildingView(FlaskView):
                                     office = Office(
                                         name=waypoint.get("name"), markerId=waypoint.get("markerId"),
                                         buildingName=building.get("name"), floorLevel=floor.get("level"),
-                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"), width=waypoint.get("width"),
-                                        length=waypoint.get("length"), x=waypoint.get("x"), y=waypoint.get("y")).save()
+                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"),
+                                        width=waypoint.get("width"),
+                                        length=waypoint.get("length"), x=waypoint.get("x"),
+                                        y=waypoint.get("y")).save()
                                     for prof in waypoint["professors"]:
                                         teacher = Teacher(
                                             name=prof, buildingName=building.get("name")).save()
@@ -158,19 +172,24 @@ class BuildingView(FlaskView):
                                     Connector(
                                         name=waypoint.get("name"), markerId=waypoint.get("markerId"),
                                         buildingName=building.get("name"), floorLevel=floor.get("level"),
-                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"), width=waypoint.get("width"),
-                                        length=waypoint.get("length"), x=waypoint.get("x"), y=waypoint.get("y")).save()
+                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"),
+                                        width=waypoint.get("width"),
+                                        length=waypoint.get("length"), x=waypoint.get("x"),
+                                        y=waypoint.get("y")).save()
                                 else:
                                     Waypoint(
                                         name=waypoint.get("name"), markerId=waypoint.get("markerId"),
                                         buildingName=building.get("name"), floorLevel=floor.get("level"),
-                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"), width=waypoint.get("width"),
-                                        length=waypoint.get("length"), x=waypoint.get("x"), y=waypoint.get("y")).save()
+                                        shapeType=waypoint.get("shapeType"), color=waypoint.get("color"),
+                                        width=waypoint.get("width"),
+                                        length=waypoint.get("length"), x=waypoint.get("x"),
+                                        y=waypoint.get("y")).save()
                             else:
                                 Waypoint(
                                     name=waypoint.get("name"), markerId=waypoint.get("markerId"),
                                     buildingName=building.get("name"), floorLevel=floor.get("level"),
-                                    shapeType=waypoint.get("shapeType"), color=waypoint.get("color"), width=waypoint.get("width"),
+                                    shapeType=waypoint.get("shapeType"), color=waypoint.get("color"),
+                                    width=waypoint.get("width"),
                                     length=waypoint.get("length"), x=waypoint.get("x"), y=waypoint.get("y")).save()
 
                     if floor.get("hallways") is not None:
@@ -186,12 +205,15 @@ class BuildingView(FlaskView):
                         if floor.get("waypoints") is not None:
                             for waypoint in floor.get("waypoints"):
                                 base = Waypoint.nodes.get(
-                                    name=waypoint.get("name"), floorLevel=floor.get("level"), buildingName=building.get("name"))
+                                    name=waypoint.get("name"), floorLevel=floor.get("level"),
+                                    buildingName=building.get("name"))
                                 for neighbor in waypoint["neighbors"]:
                                     base.neighbors.connect(
                                         Waypoint.nodes.get(
-                                            name=neighbor.get("name"), floorLevel=floor.get("level"), buildingName=building.get("name")), {'direction': neighbor.get("direction")})
-
+                                            name=neighbor.get("name"), floorLevel=floor.get("level"),
+                                            buildingName=building.get("name")),
+                                        {'direction': neighbor.get("direction")})
+            self.checkBuilding(building.get("name"))
             db.commit()
             return self.get(building.get("name")), 200
         except Exception as e:
@@ -219,7 +241,7 @@ class BuildingView(FlaskView):
             return str(e), 500
 
     @use_args(BuildingSchema)
-    def patch(self, args):
+    def put(self, args):
         res, status_code = self.delete(args["name"])
         if (status_code != 200):
             return res, status_code
@@ -240,17 +262,21 @@ class BuildingView(FlaskView):
                     if ClassRoom.__name__ in waypoint.labels():
                         floors[-1]["waypoints"][-1]["type"] = WAYPOINT_TYPES["ClassRoom"]
                         floors[-1]["waypoints"][-1]["schedule"] = []
-                        for group in [group for group in Group.nodes.filter(buildingName=buildingName).has(classes=True) if group.classes.relationship(waypoint)]:
+                        for group in [group for group in
+                                      Group.nodes.filter(buildingName=buildingName).has(classes=True) if
+                                      group.classes.relationship(waypoint)]:
                             classes = group.classes.all_relationships(
                                 waypoint)
                             for cclass in classes:
                                 floors[-1]["waypoints"][-1]["schedule"].append(
                                     {"group": group.name, "course": cclass.course, "dayOfWeek": cclass.dayOfWeek,
-                                        "startTime": cclass.startTime, "finishTime": cclass.finishTime})
+                                     "startTime": cclass.startTime, "finishTime": cclass.finishTime})
                     elif Office.__name__ in waypoint.labels():
                         floors[-1]["waypoints"][-1]["type"] = WAYPOINT_TYPES["Office"]
                         floors[-1]["waypoints"][-1]["professors"] = []
-                        for teacher in [teacher for teacher in Teacher.nodes.filter(buildingName=buildingName).has(office=True) if teacher.office.relationship(waypoint)]:
+                        for teacher in [teacher for teacher in
+                                        Teacher.nodes.filter(buildingName=buildingName).has(office=True) if
+                                        teacher.office.relationship(waypoint)]:
                             floors[-1]["waypoints"][-1]["professors"].append(
                                 teacher.name)
                     elif Connector.__name__ in waypoint.labels():

@@ -126,7 +126,7 @@ class BuildingView(FlaskView):
         [[count]], meta = db.cypher_query(
             f"CALL algo.scc('match (w:Waypoint) where w.buildingName = \"{buildingName}\" return id(w) as id','MATCH (w1:Waypoint)-[:GOES_TO]->(w2:Waypoint) RETURN id(w1) as source,id(w2) as target', {{write:true,partitionProperty:'partition', graph:'cypher'}}) YIELD setCount",
         resolve_objects = True)
-        if count != 1:
+        if count > 1:
             raise Exception('The building is not connected')
 
     def createBuilding(self, building):

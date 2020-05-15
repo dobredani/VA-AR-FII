@@ -18,11 +18,13 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.Schedule.SchedView;
 import com.example.myapplication.problem.Building;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -107,15 +109,16 @@ public class MainActivity extends AppCompatActivity {
         String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/building/";
 
         url = url.concat(buildingName);
+        url=url.concat("/waypoints");
         final RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         Log.d("JsonObject", "Response: " + response.toString());
-                        Building building = JsonParser.parseBuilding(response);
+                        Building building = JsonParser.parseBuilding(response,buildingName);
                         applicationData.getBuildingsData().add(building);
                         if (buildingName.equals("FII"))
                             applicationData.setCurrentBuilding(building);

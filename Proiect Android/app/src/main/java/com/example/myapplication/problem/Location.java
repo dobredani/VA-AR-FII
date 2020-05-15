@@ -13,6 +13,7 @@ public class Location {
     LocationType locationType;
 
     List<Lecture> schedules;
+    List<String> professors;
     List<List<SchedModel>> schedModels; // one list per weekday
 
     public List<SchedModel> getDaySchedule(int weekDay) {
@@ -54,6 +55,14 @@ public class Location {
             schedModels.get(lecture.dayNumer-1).add(new SchedModel(lecture.getCourse(),
                     lecture.getGroup(),lecture.getStartTime(),lecture.getFinishTime()));
         }
+    }
+
+    public Location(int id, String name,List<String> professors,  LocationType locationType){
+        this();
+        this.id = id;
+        this.name = name;
+        this.locationType = locationType;
+        this.professors = professors;
     }
 
     public int getId() {

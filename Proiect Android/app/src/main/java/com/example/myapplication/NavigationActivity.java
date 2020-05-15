@@ -24,7 +24,7 @@ public class NavigationActivity extends CameraActivity {
     List<Integer> codesToScan;
     int currentIndex = 1;
     Snackbar snackbar;
-    Dialog helpDialog;
+    Dialog helpDialog, endOfNavigationDialog;
     Button closePopup;
     LinearLayout popup;
 
@@ -37,6 +37,7 @@ public class NavigationActivity extends CameraActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         helpDialog = new Dialog(this);
+        endOfNavigationDialog = new Dialog(this);
 
         setContentView(R.layout.activity_navigation);
         displayController = new DisplayController();
@@ -77,7 +78,7 @@ public class NavigationActivity extends CameraActivity {
             else {
                 currentIndex++;
                 if (currentIndex == instructions.size()) {
-                    displayController.addSnackBar(snackbar, "Congratulations, you have reached your destination!");
+                    showEndNavigationMessage();
                     currentInstruction = instructions.get(currentIndex - 1);
                     Button button = findViewById(R.id.scanWaypointButton);
                     button.setClickable(false);
@@ -92,6 +93,23 @@ public class NavigationActivity extends CameraActivity {
         finish();
     }
 
+    public void showEndNavigationMessage(){
+        helpDialog.setContentView(R.layout.end_navigation_popup);
+        popup = (LinearLayout) helpDialog.findViewById(R.id.endNavInfo);
+        popup.setVisibility(View.VISIBLE);
+        closePopup = (Button) helpDialog.findViewById(R.id.goBackBtn);
+        closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpDialog.dismiss();
+                finish();
+            }
+        });
+        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        helpDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        helpDialog.show();
+
+    }
     public void showHelp(View view) {
         helpDialog.setContentView(R.layout.help_popup);
         popup = (LinearLayout) helpDialog.findViewById(R.id.helpInfo);

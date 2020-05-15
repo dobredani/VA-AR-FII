@@ -83,25 +83,16 @@ public class TimetableActivity extends AppCompatActivity {
             if ((temp.getLocationType() == LocationType.CLASSROOM ||
                     temp.getLocationType() == LocationType.OFFICE) && temp.getName().toLowerCase().contains(lookupText))
                 locationStrings.add(temp.getName());
-        for (int i = 1; i <= 50; i++) {
-            locationStrings.add("lala");
-        }
 
         List<String> locationsList = new ArrayList<String>(locationStrings);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1, locationsList) {
+                (this, R.layout.timetable_location_list_item, locationsList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
-                TextView tv = (TextView) view.findViewById(android.R.id.text1);
-                tv.setTextColor(Color.BLACK);
-                tv.setBackgroundResource(R.drawable.rounded_corners);
+                TextView tv = (TextView) view.findViewById(R.id.timetable_list_item_text);
 
-                GradientDrawable drawable = (GradientDrawable) tv.getBackground();
-                drawable.setColor(Color.WHITE);
-
-                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                /*final Location location = appData.getCurrentBuilding().getLocation(tv.getText().toString());
+                final Location location = appData.getCurrentBuilding().getLocation(tv.getText().toString());
                 if (location.getLocationType() == LocationType.CLASSROOM) {
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -120,7 +111,7 @@ public class TimetableActivity extends AppCompatActivity {
                             showOfficeData(location);
                         }
                     });
-                }*/
+                }
                 return view;
             }
         };

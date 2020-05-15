@@ -18,14 +18,17 @@ class RouteView(FlaskView):
 
     def formatRoute(self, route):
         formattedRoute = []
+        lastDirection = ''
         for index in range(len(route) - 1):
             currWaypoint = route[index]
             nextWaypoint = route[index + 1]
             direction = currWaypoint.neighbors.relationship(
                 nextWaypoint).direction
-            formattedRoute.append(
-                {'markerId': currWaypoint.markerId, 'name': currWaypoint.name,
-                 'floor': currWaypoint.floorLevel, 'direction': direction})
+            if lastDirection != 'straight' or lastDirection != direction:
+                formattedRoute.append(
+                    {'markerId': currWaypoint.markerId, 'name': currWaypoint.name,
+                     'floor': currWaypoint.floorLevel, 'direction': direction})
+            lastDirection = direction
         finalWaypoint = route[-1]
         formattedRoute.append(
             {'markerId': finalWaypoint.markerId, 'name': finalWaypoint.name,

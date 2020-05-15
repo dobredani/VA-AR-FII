@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -11,7 +13,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -29,6 +33,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TimetableActivity extends AppCompatActivity {
+    Dialog officeDialog;
     ApplicationData appData = new ApplicationData();
 
     @Override
@@ -36,6 +41,7 @@ public class TimetableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timetable);
         getSupportActionBar().hide();
+        officeDialog = new Dialog(this);
 
         SearchView searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -72,10 +78,14 @@ public class TimetableActivity extends AppCompatActivity {
         final GridView gv = (GridView) findViewById(R.id.gridView);
         List<Location> locations = appData.getCurrentBuilding().getLocations();
         List<String> locationStrings = new ArrayList<>();
+        lookupText = lookupText.toLowerCase();
         for (Location temp:locations)
             if ((temp.getLocationType() == LocationType.CLASSROOM ||
                     temp.getLocationType() == LocationType.OFFICE) && temp.getName().toLowerCase().contains(lookupText))
                 locationStrings.add(temp.getName());
+        for (int i = 1; i <= 50; i++) {
+            locationStrings.add("lala");
+        }
 
         List<String> locationsList = new ArrayList<String>(locationStrings);
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>
@@ -91,18 +101,47 @@ public class TimetableActivity extends AppCompatActivity {
                 drawable.setColor(Color.WHITE);
 
                 tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(TimetableActivity.this, SchedView.class);
-                        intent.putExtra("room", ((TextView)v).getText());
-                        startActivity(intent);
-                        System.out.println(((TextView)v).getText());
-                    }
-                });
+                /*final Location location = appData.getCurrentBuilding().getLocation(tv.getText().toString());
+                if (location.getLocationType() == LocationType.CLASSROOM) {
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(TimetableActivity.this, SchedView.class);
+                            intent.putExtra("room", ((TextView) v).getText());
+                            startActivity(intent);
+                            System.out.println(((TextView) v).getText());
+                        }
+                    });
+                }
+                else if (location.getLocationType() == LocationType.OFFICE) {
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            showOfficeData(location);
+                        }
+                    });
+                }*/
                 return view;
             }
         };
         gv.setAdapter(arrayAdapter);
+    }
+
+    public void showOfficeData(Location location) {
+        officeDialog.setContentView(R.layout.office_popup);
+        LinearLayout popup = (LinearLayout) officeDialog.findViewById(R.id.errorInfo);
+        popup.setVisibility(View.VISIBLE);
+        TextView infoTextView = (TextView) officeDialog.findViewById(R.id.officeInfo);
+        infoTextView.setText("test");
+        Button closePopup = (Button) officeDialog.findViewById(R.id.refreshBtn);
+        closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                officeDialog.dismiss();
+            }
+        });
+        officeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        officeDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        officeDialog.show();
     }
 }

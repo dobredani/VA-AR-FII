@@ -18,7 +18,7 @@
         <LinearLayout
             android:id="@+id/errorInfo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="253dp"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -27,8 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:textAlignment="center"
                 android:text="@string/error_message"
+                android:textAlignment="center"
                 android:textColor="#000"
                 android:textSize="20sp" />
 
@@ -39,9 +39,9 @@
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:background="@drawable/custom_button"
-                android:text="REFRESH"
-                android:paddingRight="10dp"
                 android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/close"
                 android:textColor="#FFF"
                 android:textSize="15sp" />
         </LinearLayout>

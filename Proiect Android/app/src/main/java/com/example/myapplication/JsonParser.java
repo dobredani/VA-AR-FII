@@ -36,14 +36,13 @@ public class JsonParser {
         return buildings;
     }
 
-    public static Building parseBuilding(JSONObject jsonObject) {
+    public static Building parseBuilding(JSONArray jsonObject,String buildingName) {
         List<Location> locations = new ArrayList<>();
 
 
         try {
-            JSONArray floors = jsonObject.getJSONArray("floors");
-            for (int i = 0; i < floors.length(); i++) {
-                JSONObject floor = floors.getJSONObject(i);
+            for (int i = 0; i < jsonObject.length(); i++) {
+                JSONObject floor = jsonObject.getJSONObject(i);
                 JSONArray floorLocations = floor.getJSONArray("waypoints");
                 for (int j = 0; j < floorLocations.length(); j++) {
                     JSONObject object = floorLocations.getJSONObject(j);
@@ -74,13 +73,23 @@ public class JsonParser {
 
                             Log.e("location", "Parsed Current Building Location " + location.getName());
 
-                        } else {
-                            Location location = new Location(object.getInt("markerId"), object.getString("name"));
+                        } else if (object.getString("type").equals("office")){
+                            List<String> professors = new ArrayList<>();
+                            JSONArray professorList = object.getJSONArray("professors");
 
+                            for(int k=0;k<professorList.length();k++)
+                                professors.add(professorList.getString(k));
+
+                            Location location = new Location(object.getInt("markerId"), object.getString("name"),
+                                    professors, LocationType.OFFICE);
+                            
                             locations.add(location);
-
                             Log.e("location", "Parsed Current Building Location " + location.getName());
-
+                        }else if (object.getString("type").equals("connector")){
+                            Location location = new Location(object.getInt("markerId"), object.getString("name"),
+                                    LocationType.CONNECTOR);
+                            locations.add(location);
+                            Log.e("location", "Parsed Current Building Location " + location.getName());
                         }
                     } else {
 
@@ -97,11 +106,7 @@ public class JsonParser {
             e.printStackTrace();
         }
         Building building = null;
-        try {
-            building = new Building(jsonObject.getString("name"), locations);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        building = new Building(buildingName, locations);
         return building;
     }
 

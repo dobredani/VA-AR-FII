@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.annotation.SuppressLint;
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -8,7 +9,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +43,12 @@ import com.android.volley.toolbox.Volley;
 import com.example.myapplication.problem.Location;
 import com.example.myapplication.problem.Waypoint;
 import com.google.android.material.navigation.NavigationView;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 
 import org.json.JSONArray;
 
@@ -86,8 +95,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         scanLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StartNavigationActivity.this, ScanLocationActivity.class);
-                startActivityForResult(intent, 1);
+                requestCameraPermission("cameraBtn");
+
             }
         });
         startNavigationButton();
@@ -111,24 +120,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                         makeText(getApplicationContext(), "Invalid Destination", LENGTH_SHORT).show();
                         startNavigation.setEnabled(true);
                     } else {
-                        start = ApplicationData.currentBuilding.getLocation(startName);
-                        destination = ApplicationData.currentBuilding.getLocation(destinationName);
-                        getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
-                        Timer buttonTimer = new Timer();
-                        buttonTimer.schedule(new TimerTask() {
-
-                            @Override
-                            public void run() {
-                                runOnUiThread(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        startNavigation.setEnabled(true);
-                                    }
-                                });
-                            }
-                        }, 5000);
-
+                        requestCameraPermission("navigationBtn");
                     }
                 }
 
@@ -193,7 +185,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/route/";
+        String url = "http://192.168.1.3:5000/route/";
 
         url = url.concat(appData.getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
         System.out.println(url);
@@ -309,5 +301,92 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     public void openTimetableActivity(MenuItem item) {
         Intent intent = new Intent(StartNavigationActivity.this, TimetableActivity.class);
         startActivity(intent);
+    }
+    public void requestCameraPermission(final String check) {
+
+        Dexter.withActivity(this)
+                .withPermission(Manifest.permission.CAMERA)
+                .withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse response) {
+                        // permission is granted
+                        if(check.equals("cameraBtn")){
+                            Intent intent = new Intent(StartNavigationActivity.this, ScanLocationActivity.class);
+                            startActivityForResult(intent, 1);}
+                        else{
+                            final Button startNavigation = findViewById(R.id.navigationBtn);
+                            String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
+                            String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
+                            Location start = ApplicationData.currentBuilding.getLocation(startName);
+                            Location destination = ApplicationData.currentBuilding.getLocation(destinationName);
+                            getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
+                            Timer buttonTimer = new Timer();
+                            buttonTimer.schedule(new TimerTask() {
+
+                                @Override
+                                public void run() {
+                                    runOnUiThread(new Runnable() {
+
+                                        @Override
+                                        public void run() {
+                                            startNavigation.setEnabled(true);
+                                        }
+                                    });
+                                }
+                            }, 5000);
+
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse response) {
+                        // check for permanent denial of permission
+                        if (response.isPermanentlyDenied()) {
+                            if (check.equals("navigationBtn")) {
+                                final Button startNavigation = findViewById(R.id.navigationBtn);
+                                startNavigation.setEnabled(true);
+                            }
+                            showSettingsDialog();
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
+                        if(check.equals("navigationBtn")){
+                            final Button startNavigation = findViewById(R.id.navigationBtn);
+                            startNavigation.setEnabled(true);}
+                        token.continuePermissionRequest();
+                    }
+                }).check();
+
+    }
+
+
+    private void showSettingsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(StartNavigationActivity.this);
+        builder.setTitle("Need Permissions");
+        builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.");
+        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                openSettings();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
+    }
+
+    private void openSettings() {
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
+        intent.setData(uri);
+        startActivityForResult(intent, 101);
     }
 }

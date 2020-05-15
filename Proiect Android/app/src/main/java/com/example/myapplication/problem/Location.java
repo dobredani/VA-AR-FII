@@ -13,6 +13,7 @@ public class Location {
     LocationType locationType;
 
     List<Lecture> schedules;
+    List<String> professors;
     List<List<SchedModel>> schedModels; // one list per weekday
 
     public List<SchedModel> getDaySchedule(int weekDay) {
@@ -56,7 +57,13 @@ public class Location {
         }
     }
 
-
+    public Location(int id, String name,List<String> professors,  LocationType locationType){
+        this();
+        this.id = id;
+        this.name = name;
+        this.locationType = locationType;
+        this.professors = professors;
+    }
 
     public int getId() {
         return id;

@@ -185,7 +185,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.1.3:5000/route/";
+        String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/route/";
 
         url = url.concat(appData.getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
         System.out.println(url);
@@ -317,8 +317,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                             final Button startNavigation = findViewById(R.id.navigationBtn);
                             String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
                             String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
-                            Location start = ApplicationData.currentBuilding.getLocation(startName);
-                            Location destination = ApplicationData.currentBuilding.getLocation(destinationName);
+                            start = ApplicationData.currentBuilding.getLocation(startName);
+                            destination = ApplicationData.currentBuilding.getLocation(destinationName);
                             getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
                             Timer buttonTimer = new Timer();
                             buttonTimer.schedule(new TimerTask() {

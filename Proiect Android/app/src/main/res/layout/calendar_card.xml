@@ -24,15 +24,28 @@
             android:padding="5dp"
             android:layout_margin="5dp"
             >
+            <TextView
+                android:id="@+id/sched_course"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="cursul"
+                android:layout_gravity="center"
+                android:textSize="16dp"
+                android:layout_weight=".7"/>
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight=".3">
-
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginBottom="5dp"
                     android:src="@drawable/baseline_schedule_black_18dp"
                     />
                 <TextView
@@ -40,10 +53,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="interval orar" />
-
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
                     android:src="@drawable/baseline_supervisor_account_black_18dp"
                     />
                 <TextView
@@ -51,21 +69,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="grupa" />
+                </LinearLayout>
             </LinearLayout>
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="10dp"
-                android:src="@drawable/baseline_menu_book_black_18dp"
-                />
-            <TextView
-                android:id="@+id/sched_course"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="cursul"
-                android:layout_gravity="center"
-                android:layout_weight=".7"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

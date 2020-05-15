@@ -16,7 +16,7 @@
         app:cardCornerRadius="10dp">
 
         <LinearLayout
-            android:id="@+id/errorInfo"
+            android:id="@+id/endNavInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -27,18 +27,18 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:textAlignment="center"
-                android:text="@string/error_message"
+                android:text="@string/end_navigation_message"
                 android:textColor="#000"
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/refreshBtn"
+                android:id="@+id/goBackBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:background="@drawable/custom_button"
-                android:text="REFRESH"
+                android:text="YES"
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
                 android:textColor="#FFF"

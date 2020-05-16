@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:text="Welcome"
         android:textColor="#F3EEDA"
-        android:textSize="50sp"
+        android:textSize="48sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.208"
@@ -56,7 +56,7 @@
         android:width="305sp"
         android:text="@string/first_description"
         android:textColor="#F3EEDA"
-        android:textSize="18sp"
+        android:textSize="16sp"
   
         app:layout_constraintBottom_toTopOf="@+id/divider3"
         app:layout_constraintEnd_toEndOf="parent"

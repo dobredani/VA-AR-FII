@@ -56,8 +56,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         themeUtils.onActivityCreateSetTheme(a);
 
+
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
         errorDialog = new Dialog(this);
 
         start = findViewById(R.id.startBtn);

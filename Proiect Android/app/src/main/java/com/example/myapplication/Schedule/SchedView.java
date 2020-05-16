@@ -1,5 +1,6 @@
 package com.example.myapplication.Schedule;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -8,6 +9,7 @@ import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.problem.Lecture;
 import com.example.myapplication.problem.Location;
+import com.example.myapplication.themeUtils;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -22,10 +24,13 @@ import androidx.viewpager.widget.ViewPager;
 
 public class SchedView extends AppCompatActivity {
 
+    Activity a;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        a=this;
+        themeUtils.onActivityCreateSetTheme(a);
         // show calendar_view layout
         setContentView(R.layout.calendar_view);
 

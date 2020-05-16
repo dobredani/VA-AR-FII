@@ -52,10 +52,12 @@
         android:id="@+id/descriptionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:width="305sp"
         android:text="@string/first_description"
         android:textColor="#F3EEDA"
         android:textSize="18sp"
+  
         app:layout_constraintBottom_toTopOf="@+id/divider3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.396"

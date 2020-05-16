@@ -1,5 +1,6 @@
 <resources>
 
+
     <attr name="BackgroundColor" format="reference"/>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -8,6 +9,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColorPrimary">@color/colorPrimaryDark</item>
+
         <item name="BackgroundColor">@drawable/background_image1</item>
     </style>
     <style name="DarkTheme" parent="Theme.AppCompat.Light.DarkActionBar">

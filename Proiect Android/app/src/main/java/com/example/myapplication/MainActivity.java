@@ -33,7 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
     public static Activity a;
+  
     private Dialog errorDialog;
     public final static ApplicationData applicationData = new ApplicationData();
     Button start;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onCreate(savedInstanceState);
         themeUtils.onActivityCreateSetTheme(a);
+
         setContentView(R.layout.activity_main);
 
         errorDialog = new Dialog(this);

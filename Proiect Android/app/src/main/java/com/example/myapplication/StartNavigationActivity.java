@@ -2,10 +2,12 @@ package com.example.myapplication;
 
 import android.annotation.SuppressLint;
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -68,10 +70,13 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     private ActionBar actionBar;
     private Location start, destination;
     private Dialog errorDialog;
+    public Activity a;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        a=this;
+        themeUtils.onActivityCreateSetTheme(a);
 
         errorDialog = new Dialog(this);
 
@@ -138,11 +143,56 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.chooseBuilding) {
-            showBuildings();
+        switch (item.getItemId()){
+            case R.id.chooseBuilding:
+                showBuildings();
+                return true;
+            case R.id.theme:
+                showThemes();
+                return true;
+            case R.id.help:
+                startSpecificActivity();
+                return true;
+            default: return false;
         }
-        return false;
+    }
+
+    public void startSpecificActivity() {
+        Intent intent = new Intent(StartNavigationActivity.this, HelpActivity.class);
+        startActivity(intent);
+    }
+
+    private void showThemes(){
+        final String[] themes ={"Purple Theme", "Blue Theme"};
+
+        AlertDialog.Builder bld=new AlertDialog.Builder(this);
+        bld.setTitle("Choose a theme");
+        bld.setItems(themes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                SharedPreferences mPrefs;
+                SharedPreferences.Editor mEditor;
+                switch(which){
+                    case 1:
+                        themeUtils.changeToTheme(MainActivity.a, themeUtils.Dark_Theme);
+                        themeUtils.changeToTheme(a, themeUtils.Dark_Theme);
+                        mPrefs = getSharedPreferences("THEME", 0);
+                        mEditor = mPrefs.edit();
+                        mEditor.putInt("theme", 1).commit();
+                        break;
+                    case 0:
+                        themeUtils.changeToTheme(MainActivity.a, themeUtils.Light_Theme);
+                        themeUtils.changeToTheme(a, themeUtils.Light_Theme);
+                        mPrefs = getSharedPreferences("THEME", 0);
+                        mEditor = mPrefs.edit();
+                        mEditor.putInt("theme", 0).commit();
+                        break;
+                    default:
+                        System.out.println(which);
+                }
+            }
+        });
+        bld.show();
     }
 
     private void showBuildings() {

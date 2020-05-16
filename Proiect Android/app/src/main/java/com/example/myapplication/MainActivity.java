@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -31,6 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static Activity a;
+  
     private Dialog errorDialog;
     public final static ApplicationData applicationData = new ApplicationData();
     Button start;
@@ -38,7 +43,19 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //super.onCreate(savedInstanceState);
+
+        a=this;
+        SharedPreferences mPrefs = getSharedPreferences("THEME", 0);
+        int theme = mPrefs.getInt("theme", 0);
+        if (theme==0) {
+            themeUtils.cTheme=themeUtils.Light_Theme;
+        } else {
+            themeUtils.cTheme=themeUtils.Dark_Theme;
+        }
         super.onCreate(savedInstanceState);
+        themeUtils.onActivityCreateSetTheme(a);
+
         setContentView(R.layout.activity_main);
 
         errorDialog = new Dialog(this);

@@ -1,10 +1,13 @@
 package com.example.myapplication;
 
+
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -13,9 +16,11 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -33,12 +38,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TimetableActivity extends AppCompatActivity {
-    Dialog officeDialog;
     ApplicationData appData = new ApplicationData();
+    Activity a;
+    Dialog officeDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        a=this;
+        themeUtils.onActivityCreateSetTheme(a);
         setContentView(R.layout.activity_timetable);
         getSupportActionBar().hide();
         officeDialog = new Dialog(this);
@@ -78,6 +87,7 @@ public class TimetableActivity extends AppCompatActivity {
         final GridView gv = (GridView) findViewById(R.id.gridView);
         List<Location> locations = appData.getCurrentBuilding().getLocations();
         List<String> locationStrings = new ArrayList<>();
+      
         lookupText = lookupText.toLowerCase();
         for (Location temp:locations)
             if ((temp.getLocationType() == LocationType.CLASSROOM ||

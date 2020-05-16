@@ -85,7 +85,7 @@
                 android:background="@drawable/ic_scan"
                 android:layout_gravity="center"/>
             <TextView
-                android:id="@+id/officeInfo"
+                android:id="@+id/scanBtnInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"

@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.myapplication.Schedule.SchedViewFragment"
-    android:background="@drawable/background_image1">
+
+    android:background="?attr/BackgroundColor">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCalendar"

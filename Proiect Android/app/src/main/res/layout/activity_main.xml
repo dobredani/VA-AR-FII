@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/background_image1" />
+        app:srcCompat="?attr/BackgroundColor" />
 
     <TextView
         android:id="@+id/welcomeText"
@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:text="Welcome"
         android:textColor="#F3EEDA"
-        android:textSize="48sp"
+        android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.208"
@@ -52,15 +52,18 @@
         android:id="@+id/descriptionText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:width="300sp"
+
+        android:width="305sp"
         android:text="@string/first_description"
         android:textColor="#F3EEDA"
+        android:textSize="18sp"
+  
         app:layout_constraintBottom_toTopOf="@+id/divider3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.396"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcomeText"
-        app:layout_constraintVertical_bias="0.305" />
+        app:layout_constraintVertical_bias="0.305"/>
 
     <ProgressBar
         android:id="@+id/mainProgressBar"

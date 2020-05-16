@@ -16,6 +16,11 @@
         android:onClick="openTimetableActivity"
         android:title="Timetables" />
     <item
+        android:id="@+id/theme"
+        android:title="Change Theme"
+        android:icon="@drawable/ic_theme"
+        />
+    <item
         android:id="@+id/help"
         android:title="Help"
         android:icon="@drawable/ic_help"

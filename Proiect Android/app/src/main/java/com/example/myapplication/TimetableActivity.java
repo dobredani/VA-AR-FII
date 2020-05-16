@@ -123,7 +123,12 @@ public class TimetableActivity extends AppCompatActivity {
         LinearLayout popup = (LinearLayout) officeDialog.findViewById(R.id.errorInfo);
         popup.setVisibility(View.VISIBLE);
         TextView infoTextView = (TextView) officeDialog.findViewById(R.id.officeInfo);
-        infoTextView.setText("test");
+        String officeText = "Teachers: ";
+        for (String professorName:location.getProfessors()) {
+            officeText += professorName + ", ";
+        }
+        officeText = officeText.substring(0, officeText.length() - 2) + '.';
+        infoTextView.setText(officeText);
         Button closePopup = (Button) officeDialog.findViewById(R.id.refreshBtn);
         closePopup.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ApplicationData {
+    private static ApplicationData instance =  null;
 
     static List<String> buildings = new ArrayList<>();
     static Building currentBuilding;
@@ -17,8 +18,14 @@ public class ApplicationData {
     static List<Waypoint> waypoints = new ArrayList<>();
     static List<Building> buildingsData = new ArrayList<>();
 
-    public ApplicationData() {
+    private ApplicationData() {
 
+    }
+
+    public static ApplicationData getInstance() {
+        if (instance == null)
+            instance = new ApplicationData();
+        return instance;
     }
 
     public Building getBuildingByName(String buildingName) {
@@ -33,7 +40,7 @@ public class ApplicationData {
     }
 
     public void setBuildingsData(List<Building> buildingsData) {
-        ApplicationData.buildingsData = buildingsData;
+        this.buildingsData = buildingsData;
     }
 
     public List<String> getBuildings() {

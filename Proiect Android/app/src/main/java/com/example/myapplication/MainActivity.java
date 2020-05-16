@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     public static Activity a;
   
     private Dialog errorDialog;
-    public final static ApplicationData applicationData = new ApplicationData();
     Button start;
     ProgressBar progressBar;
 
@@ -94,12 +93,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         Log.d("JsonObject", "Response: " + response.toString());
                         List<String> buildingList = JsonParser.parseBuildingList(response);
-                        applicationData.setBuildings(buildingList);
+                        ApplicationData.getInstance().setBuildings(buildingList);
                         Log.d("JsonObject", "Building List" + buildingList.toString());
 
                         List<Building> allBuildings = new ArrayList<>();
                       
-                        for (String buildingName:applicationData.getBuildings())
+                        for (String buildingName : ApplicationData.getInstance().getBuildings())
                             if (!buildingName.equals("FII"))
                                 getBuildingData(buildingName);
                        // applicationData.setCurrentBuilding(allBuildings.get(0));
@@ -136,9 +135,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         Log.d("JsonObject", "Response: " + response.toString());
                         Building building = JsonParser.parseBuilding(response,buildingName);
-                        applicationData.getBuildingsData().add(building);
+                        ApplicationData.getInstance().getBuildingsData().add(building);
                         if (buildingName.equals("FII"))
-                            applicationData.setCurrentBuilding(building);
+                            ApplicationData.getInstance().setCurrentBuilding(building);
                         start.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                         //Log.e("check", applicationData.getCurrentBuilding().getName());

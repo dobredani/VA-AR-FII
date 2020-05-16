@@ -34,7 +34,7 @@ public class SchedView extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.pagerCalendar);
 
         String room = getIntent().getStringExtra("room");
-        Location location = MainActivity.applicationData.getCurrentBuilding().getLocation(room);
+        Location location = ApplicationData.getInstance().getCurrentBuilding().getLocation(room);
 
         // setup tabs
         //TODO pass argument to fragment the data (ArrayList) of the respective weekday

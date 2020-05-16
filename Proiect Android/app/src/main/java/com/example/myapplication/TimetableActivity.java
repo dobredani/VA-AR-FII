@@ -38,7 +38,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TimetableActivity extends AppCompatActivity {
-    ApplicationData appData = new ApplicationData();
     Activity a;
     Dialog officeDialog;
 
@@ -85,7 +84,7 @@ public class TimetableActivity extends AppCompatActivity {
 
     private void populateListView(String lookupText) {
         final GridView gv = (GridView) findViewById(R.id.gridView);
-        List<Location> locations = appData.getCurrentBuilding().getLocations();
+        List<Location> locations = ApplicationData.getInstance().getCurrentBuilding().getLocations();
         List<String> locationStrings = new ArrayList<>();
       
         lookupText = lookupText.toLowerCase();
@@ -102,7 +101,7 @@ public class TimetableActivity extends AppCompatActivity {
                 View view = super.getView(position, convertView, parent);
                 TextView tv = (TextView) view.findViewById(R.id.timetable_list_item_text);
 
-                final Location location = appData.getCurrentBuilding().getLocation(tv.getText().toString());
+                final Location location = ApplicationData.getInstance().getCurrentBuilding().getLocation(tv.getText().toString());
                 if (location.getLocationType() == LocationType.CLASSROOM) {
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override

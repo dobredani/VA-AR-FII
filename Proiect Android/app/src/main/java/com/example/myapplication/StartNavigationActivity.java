@@ -66,7 +66,6 @@ import static android.widget.Toast.*;
 public class StartNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
-    private ApplicationData appData = new ApplicationData();
     private ActionBar actionBar;
     private Location start, destination;
     private Dialog errorDialog;
@@ -82,7 +81,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
         setContentView(R.layout.start_navigation);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(appData.getCurrentBuilding().getName());
+        actionBar.setTitle(ApplicationData.getInstance().getCurrentBuilding().getName());
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
@@ -115,13 +114,13 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             public void onClick(View v) {
                 startNavigation.setEnabled(false);
                 String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
-                if (appData.getCurrentBuilding().getLocation(startName) == null) {
+                if (ApplicationData.getInstance().getCurrentBuilding().getLocation(startName) == null) {
                     makeText(getApplicationContext(), "Invalid Starting Point", LENGTH_SHORT).show();
                     startNavigation.setEnabled(true);
 
                 } else {
                     String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
-                    if (appData.getCurrentBuilding().getLocation(destinationName) == null) {
+                    if (ApplicationData.getInstance().getCurrentBuilding().getLocation(destinationName) == null) {
                         makeText(getApplicationContext(), "Invalid Destination", LENGTH_SHORT).show();
                         startNavigation.setEnabled(true);
                     } else {
@@ -196,7 +195,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     }
 
     private void showBuildings() {
-        List<String> buildingNames = appData.getBuildings();
+        List<String> buildingNames = ApplicationData.getInstance().getBuildings();
         final String[] buildings = new String[buildingNames.size()];
         int i = 0;
         for (String temp : buildingNames) {
@@ -209,8 +208,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         builder.setItems(buildings, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                appData.setCurrentBuildingName(buildings[which]);
-                appData.setCurrentBuilding(appData.getBuildingByName(buildings[which]));
+                ApplicationData.getInstance().setCurrentBuildingName(buildings[which]);
+                ApplicationData.getInstance().setCurrentBuilding(ApplicationData.getInstance().getBuildingByName(buildings[which]));
                 generateSuggestedPlaces(4);
                 actionBar = getSupportActionBar();
                 actionBar.setTitle(buildings[which]);
@@ -224,7 +223,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == 1) {
             String msg = data.getStringExtra("returnedData");
-            Location location = appData.getCurrentBuilding().getLocationById(Integer.parseInt(msg));
+            Location location = ApplicationData.getInstance().getCurrentBuilding().getLocationById(Integer.parseInt(msg));
             EditText editText = findViewById(R.id.currentLocation);
             editText.setText(location.getName());
         }
@@ -237,7 +236,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
         String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/route/";
 
-        url = url.concat(appData.getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
+        url = url.concat(ApplicationData.getInstance().getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
         System.out.println(url);
         final RequestQueue requestQueue = Volley.newRequestQueue(StartNavigationActivity.this);
 
@@ -251,10 +250,10 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                         List<Waypoint> waypointList = JsonParser.parseRoute(response);
                         for (Waypoint waypoint : waypointList)
                             System.out.println(waypoint);
-                        appData.setWaypoints(waypointList);
+                        ApplicationData.getInstance().setWaypoints(waypointList);
                         Intent intent = new Intent(StartNavigationActivity.this, NavigationActivity.class);
-                        intent.putStringArrayListExtra("instructions", appData.getAllInstructions());
-                        intent.putIntegerArrayListExtra("codesToScan", appData.getAllCodesToScan());
+                        intent.putStringArrayListExtra("instructions", ApplicationData.getInstance().getAllInstructions());
+                        intent.putIntegerArrayListExtra("codesToScan", ApplicationData.getInstance().getAllCodesToScan());
                         startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
@@ -269,7 +268,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
     private void generateSuggestedPlaces(int howMany) {
         final ListView lv = (ListView) findViewById(R.id.listView);
-        List<Location> topLocations = appData.getCurrentBuilding().getTopLocations(howMany);
+        List<Location> topLocations = ApplicationData.getInstance().getCurrentBuilding().getTopLocations(howMany);
 
         String[] locations = new String[topLocations.size()];
 
@@ -308,11 +307,11 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
                 String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
                 if (startName.length()==0) {
-                    start = ApplicationData.currentBuilding.getLocation(myLocation);
+                    start = ApplicationData.getInstance().currentBuilding.getLocation(myLocation);
                     TextView mTextView = (TextView) findViewById(R.id.currentLocation);
                     mTextView.setText(myLocation);
                 } else if (destinationName.length()==0) {
-                    destination = ApplicationData.currentBuilding.getLocation(myLocation);
+                    destination = ApplicationData.getInstance().currentBuilding.getLocation(myLocation);
                     TextView mTextView = (TextView) findViewById(R.id.destination);
                     mTextView.setText(myLocation);
                 } else {
@@ -367,8 +366,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                             final Button startNavigation = findViewById(R.id.navigationBtn);
                             String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
                             String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
-                            start = ApplicationData.currentBuilding.getLocation(startName);
-                            destination = ApplicationData.currentBuilding.getLocation(destinationName);
+                            start = ApplicationData.getInstance().currentBuilding.getLocation(startName);
+                            destination = ApplicationData.getInstance().currentBuilding.getLocation(destinationName);
                             getWaypoints(String.valueOf(start.getId()), String.valueOf(destination.getId()));
                             Timer buttonTimer = new Timer();
                             buttonTimer.schedule(new TimerTask() {

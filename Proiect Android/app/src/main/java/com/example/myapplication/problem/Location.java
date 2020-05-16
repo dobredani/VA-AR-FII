@@ -92,5 +92,7 @@ public class Location {
     public LocationType getLocationType() {
         return locationType;
     }
+
+    public List<String> getProfessors() {return this.professors; }
   
 }

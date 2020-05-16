@@ -159,7 +159,7 @@ public class UpdateOfficePopUp extends Application {
         Button addProf = new Button("Add Professor");
         addProf.setStyle("-fx-background-color: #ffff00;");
         addProf.setSkin(new FadeButtonSkin(addProf));
-        addProf.setMaxWidth(100);
+        addProf.setMaxWidth(Double.MAX_VALUE);
         centerScrollPaneVBox.getChildren().add(addProf);
         for (String s : ((Office) shape).getProfessors()) {
             Label profName = new Label("Prof. Name: ");

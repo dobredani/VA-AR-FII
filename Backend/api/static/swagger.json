@@ -138,6 +138,12 @@
           }
         }
       },
+
+
+
+
+
+      
       "delete": {
         "tags": [
           "Building MAP operations"
@@ -167,6 +173,47 @@
           }
         }
       }
+    },
+    "building/{buildingName}/waypoints":{
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "Get the schedule of each waypoint",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "View Request with parameter"
+        ],
+        "summary": "Get the schedule of each waypoint",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "description": "Get the entire building that is stored in database",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/EntireBuilding"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Building request not found."
+          }
+        }
+      }
+
     },
     "/route/{name}?start={id1}&destination={id2}": {
       "parameters": [

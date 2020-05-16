@@ -34,6 +34,8 @@ public class SchedView extends AppCompatActivity {
         // show calendar_view layout
         setContentView(R.layout.calendar_view);
 
+        //hide action bar
+        getSupportActionBar().hide();
         // identify resources
         TabLayout weekDaysLayout = findViewById(R.id.weekDays);
         ViewPager viewPager = findViewById(R.id.pagerCalendar);

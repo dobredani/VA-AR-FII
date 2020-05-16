@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class NavigationActivity extends CameraActivity {
 
+    Activity a;
     DisplayController displayController;
     List<String> instructions;
     List<Integer> codesToScan;
@@ -31,6 +33,9 @@ public class NavigationActivity extends CameraActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        a = this;
+        themeUtils.onActivityCreateSetTheme(a);
         //hides the action bar
         getSupportActionBar().hide();
         //hides the status bar

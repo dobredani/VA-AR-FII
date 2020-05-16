@@ -8,31 +8,22 @@ package com.amihaeseisergiu.proiect;
 import static com.amihaeseisergiu.proiect.MainMenu.executeGet;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.DirectoryChooser;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
 
 /**
  *
@@ -58,7 +49,7 @@ public class SavePanel extends HBox {
         leftBox.setPadding(new Insets(5, 5, 5, 5));
         leftBox.setSpacing(10);
         HBox.setHgrow(leftBox, Priority.ALWAYS);
-        
+
         editingFloorLabel.setFont(Font.font("Helvetica", FontWeight.BOLD, 16));
         HBox middleBox = new HBox(editingFloorLabel);
         middleBox.setAlignment(Pos.CENTER);
@@ -85,12 +76,21 @@ public class SavePanel extends HBox {
                 System.out.println(frame.building.toJson().toJSONString());
                 String buildingNames = executeGet("http://localhost:5000/building");
                 String response = "";
-                if (buildingNames.contains(frame.building.name)) {
-                    response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "PUT");
-                } else {
+                JSONParser buildingParser = new JSONParser();
+                boolean ok = false;
+                JSONArray buildings = (JSONArray) buildingParser.parse(buildingNames);
+
+                for (Object objct : buildings) {
+                    if (objct.toString().equals(frame.building.name)) {
+                        ok = true;
+                        response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "PUT");
+                    }
+                }
+                if (ok == false) {
                     response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "POST");
                 }
                 System.out.println(response);
+                System.out.println("Succes");
                 MainMenu menu = new MainMenu(frame.stage);
             } catch (Exception ex) {
                 Logger.getLogger(SavePanel.class.getName()).log(Level.SEVERE, null, ex);

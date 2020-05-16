@@ -191,7 +191,7 @@ public class MainMenu {
                         JSONArray buildings = (JSONArray) buildingParser.parse(buildingNames);
 
                         for (Object objct : buildings) {
-                            String jsonBuilding = executeGet("http://localhost:5000/building/" + objct.toString());
+                            String jsonBuilding = executeGet("http://localhost:5000/building/" + objct.toString().replace(" ", "%20"));
                             JSONParser jsonParser = new JSONParser();
                             JSONObject obj = (JSONObject) jsonParser.parse(jsonBuilding);
 

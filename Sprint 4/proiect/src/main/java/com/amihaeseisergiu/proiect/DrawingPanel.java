@@ -796,6 +796,7 @@ public class DrawingPanel extends HBox {
     }
 
     public void setId(ExtendedRectangle r) {
+        System.out.println(ids);
         Collections.sort(ids);
         int i = 1;
         if (ids.isEmpty()) {

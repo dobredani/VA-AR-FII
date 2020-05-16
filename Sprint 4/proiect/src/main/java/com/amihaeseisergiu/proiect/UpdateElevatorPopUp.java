@@ -142,7 +142,15 @@ public class UpdateElevatorPopUp extends Application {
 
         closeBtn.setOnAction(event -> {
             stage.close();
-            rectangle.setName(nameField.getText());
+            boolean ok = true;
+            for (ExtendedShape shape : drawingPanel.getShapes()) {
+                if (((ExtendedRectangle) shape).getName().equals(nameField.getText())) {
+                    ok = false;
+                }
+            }
+            if (ok == true) {
+                rectangle.setName(nameField.getText());
+            }
             if (comboBoxHallways.getValue() != null) {
                 for (Hallway h : hallways) {
                     if (h.getName().equals(comboBoxHallways.getValue())) {

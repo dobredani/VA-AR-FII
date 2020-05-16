@@ -411,12 +411,12 @@ public class UpdateClassroomPopUp extends Application {
                 + "-fx-border-width: 1;"
                 + "-fx-border-style: dashed;"
                 + "-fx-border-radius: 5;");
-        
+
         HBox hallwayHBox = new HBox();
         Label hallwayLabel = new Label("Opens to ");
-        hallwayHBox.getChildren().addAll(hallwayLabel,comboBoxHallways);
+        hallwayHBox.getChildren().addAll(hallwayLabel, comboBoxHallways);
         hallwayHBox.setAlignment(Pos.CENTER);
-        
+
         Label widthLabel = new Label("Width: ");
         Label heightLabel = new Label("Height: ");
         TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
@@ -460,7 +460,15 @@ public class UpdateClassroomPopUp extends Application {
         closeBtn.prefWidthProperty().bind(bottomHBox.widthProperty().divide(btnCount));
         closeBtn.setOnAction(event -> {
             stage.close();
-            rectangle.setName(nameField.getText());
+            boolean ok2 = true;
+            for (ExtendedShape shape : drawingPanel.getShapes()) {
+                if (((ExtendedRectangle) shape).getName().equals(nameField.getText())) {
+                    ok2 = false;
+                }
+            }
+            if (ok2 == true) {
+                rectangle.setName(nameField.getText());
+            }
             if (comboBoxHallways.getValue() != null) {
                 for (Hallway h : hallways) {
                     if (h.getName().equals(comboBoxHallways.getValue())) {

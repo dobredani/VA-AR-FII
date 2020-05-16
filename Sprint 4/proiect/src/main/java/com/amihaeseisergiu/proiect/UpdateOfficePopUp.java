@@ -204,7 +204,15 @@ public class UpdateOfficePopUp extends Application {
 
         closeBtn.setOnAction(event -> {
             stage.close();
-            rectangle.setName(nameField.getText());
+            boolean ok = true;
+            for (ExtendedShape shape : drawingPanel.getShapes()) {
+                if (((ExtendedRectangle) shape).getName().equals(nameField.getText())) {
+                    ok = false;
+                }
+            }
+            if (ok == true) {
+                rectangle.setName(nameField.getText());
+            }
             for (TextField t : profsFields) {
                 if (!t.getText().equals("")) {
                     ((Office) shape).getProfessors().add(t.getText());

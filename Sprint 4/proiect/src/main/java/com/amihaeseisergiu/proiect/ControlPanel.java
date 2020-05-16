@@ -74,7 +74,10 @@ public class ControlPanel extends VBox {
         comboBox.getSelectionModel().select(0);
         comboBox.setMaxWidth(Double.MAX_VALUE);
         eraserBtn.setMaxWidth(Double.MAX_VALUE);
-
+        Button graph = new Button("Graph");
+        graph.setOnAction(e->{
+            System.out.println(frame.drawingPanel.getGraph());
+        });
         Button undo = new Button("Undo");
         undo.setSkin(new FadeButtonSkin(undo));
         undo.setStyle("-fx-background-color: #ffff00;");
@@ -91,6 +94,15 @@ public class ControlPanel extends VBox {
                         frame.drawingPanel.getShapes().add(pair.getValue());
                         frame.drawingPanel.addShapeToGraph(((ExtendedRectangle)pair.getValue()));
                         frame.drawingPanel.setId((ExtendedRectangle) pair.getValue());
+                        String name;
+                        if(((ExtendedRectangle)pair.getValue()).getShapeType().split(" ")[0].equals("Classroom")) {
+                            name = "Class";
+                        } else if(((ExtendedRectangle)pair.getValue()).getShapeType().split(" ")[0].equals("Bathroom")) {
+                            name = "Bath";
+                        } else {
+                            name = ((ExtendedRectangle)pair.getValue()).getShapeType().split(" ")[0];
+                        }
+                        ((ExtendedRectangle)pair.getValue()).setName(name + " " + ((ExtendedRectangle)pair.getValue()).getId());
                         frame.drawingPanel.setOrder();
                     }
                 }
@@ -99,7 +111,7 @@ public class ControlPanel extends VBox {
                 frame.drawingPanel.drawAll();
             }
         });
-        this.getChildren().addAll(eraserBtn, undo, comboBox, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
+        this.getChildren().addAll(eraserBtn, undo, comboBox, graph, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10, 10, 10, 10));
         this.setSpacing(10);

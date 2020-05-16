@@ -461,9 +461,11 @@ public class DrawingPanel extends HBox {
                             } else if (((ExtendedRectangle) shape).getShapeType().equals("Stairs")) {
                                 List<ExtendedShape> stairs = new ArrayList<>();
                                 mainFrame.building.getFloors().entrySet().forEach((floor) -> {
-                                    for (ExtendedShape s : floor.getValue().getShapes()) {
-                                        if (s instanceof Stairs) {
-                                            stairs.add(s);
+                                    if (floor.getValue().getGraph() != graph) {
+                                        for (ExtendedShape s : floor.getValue().getShapes()) {
+                                            if (s instanceof Stairs) {
+                                                stairs.add(s);
+                                            }
                                         }
                                     }
                                 });
@@ -796,7 +798,7 @@ public class DrawingPanel extends HBox {
     }
 
     public void setId(ExtendedRectangle r) {
-        System.out.println(ids);
+        // System.out.println(ids);
         Collections.sort(ids);
         int i = 1;
         if (ids.isEmpty()) {

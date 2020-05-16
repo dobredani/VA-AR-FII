@@ -107,15 +107,15 @@ public class UpdateStairsPopUp extends Application {
                 + "-fx-border-color: #ffff00;"
                 + "-fx-border-width: 3;"
         );
-        
+
         HBox hallwayHBox = new HBox();
         Label hallwayLabel = new Label("Opens to ");
         hallwayHBox.getChildren().addAll(hallwayLabel, comboBoxHallways);
         hallwayHBox.setAlignment(Pos.CENTER);
-        
+
         VBox centerVBox = new VBox();
         centerVBox.getChildren().addAll(nameHBox, comboBoxStairs, hallwayHBox);
-        
+
         Label widthLabel = new Label("Width: ");
         Label heightLabel = new Label("Height: ");
         TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
@@ -166,7 +166,15 @@ public class UpdateStairsPopUp extends Application {
             if (comboBoxStairs.getValue() != null) {
                 rectangle.setName(comboBoxStairs.getValue().toString());
             } else {
-                rectangle.setName(nameField.getText());
+                boolean ok = true;
+                for (ExtendedShape shape : drawingPanel.getShapes()) {
+                    if (((ExtendedRectangle) shape).getName().equals(nameField.getText())) {
+                        ok = false;
+                    }
+                }
+                if (ok == true) {
+                    rectangle.setName(nameField.getText());
+                }
             }
             if (comboBoxHallways.getValue() != null) {
                 for (Hallway h : hallways) {

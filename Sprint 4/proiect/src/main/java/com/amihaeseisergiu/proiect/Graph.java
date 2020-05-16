@@ -259,6 +259,7 @@ public class Graph {
     private ExtendedShape findLeftNeighbor(ExtendedShape sh, String dth, int otw, Hallway hallway) {
         List<ExtendedShape> hallwaysToAvoid = new ArrayList<>();
         List<ExtendedShape> traversedHallways = new ArrayList<>();
+        traversedHallways.add(hallway);
         String searchDirection = "";
         if (dth.equals("Left")) {
             searchDirection = "Down";
@@ -543,6 +544,7 @@ public class Graph {
         // System.out.println(((ExtendedRectangle) sh).getName());
         List<ExtendedShape> hallwaysToAvoid = new ArrayList<>();
         List<ExtendedShape> traversedHallways = new ArrayList<>();
+        traversedHallways.add(hallway);
         String searchDirection = "";
         if (dth.equals("Left")) {
             searchDirection = "Up";
@@ -900,12 +902,22 @@ public class Graph {
         int otw = 0;
         int otwMin = 0;
         int otwMax = 0;
+        String dth2 = "";
+        if(dth.equals("Down")) {
+            dth2 = "Up";
+        } else if(dth.equals("Up")) {
+            dth2 = "Down";
+        } else if(dth.equals("Left")) {
+            dth2 = "Right";
+        } else if(dth.equals("Right")) {
+            dth2 = "Left";
+        }
         for (Pair<ExtendedShape, String> pair : graph.get(hallway)) {
-            if (pair.getKey() == hallwayToAvoid) {
+            if (pair.getKey() == hallwayToAvoid && pair.getValue().split(" ")[0].equals(dth2)) {
                 //relationToHallway2 = pair.getValue();
                 //directionToHallway2 = relationToHallway2.split(" ")[0];
                 otwMin = Integer.valueOf(pair.getValue().split(" ")[1]);
-            } else if (pair.getKey() == shape) {
+            } else if (pair.getKey() == shape && pair.getValue().split(" ")[0].equals(dth2)) {
                 otwMax = Integer.valueOf(pair.getValue().split(" ")[1]);
             }
         }
@@ -914,7 +926,6 @@ public class Graph {
             otwMin = otwMax;
             otwMax = otw;
         }
-
         List<String> searchDirections = new ArrayList<>();
 
         if (dth.equals("Left")) {
@@ -1103,12 +1114,22 @@ public class Graph {
         int otw = 0;
         int otwMin = 0;
         int otwMax = 0;
+        String dth2 = "";
+        if(dth.equals("Down")) {
+            dth2 = "Up";
+        } else if(dth.equals("Up")) {
+            dth2 = "Down";
+        } else if(dth.equals("Left")) {
+            dth2 = "Right";
+        } else if(dth.equals("Right")) {
+            dth2 = "Left";
+        }
         for (Pair<ExtendedShape, String> pair : graph.get(hallway)) {
-            if (pair.getKey() == hallwayToAvoid) {
+            if (pair.getKey() == hallwayToAvoid && pair.getValue().split(" ")[0].equals(dth2)) {
                 //relationToHallway2 = pair.getValue();
                 //directionToHallway2 = relationToHallway2.split(" ")[0];
                 otwMin = Integer.valueOf(pair.getValue().split(" ")[1]);
-            } else if (pair.getKey() == shape) {
+            } else if (pair.getKey() == shape && pair.getValue().split(" ")[0].equals(dth2)) {
                 otwMax = Integer.valueOf(pair.getValue().split(" ")[1]);
             }
         }
@@ -1290,7 +1311,7 @@ public class Graph {
     }
 
     private ExtendedShape findFirstShapeInHallwayFromStraight(ExtendedShape hallway, String searchDirection, ExtendedShape sh) {
-      //  System.out.println(((ExtendedRectangle) hallway).getName() + " " + searchDirection);
+        //  System.out.println(((ExtendedRectangle) hallway).getName() + " " + searchDirection);
         ExtendedRectangle castedShape = (ExtendedRectangle) sh;
         List<Pair<ExtendedShape, String>> list = graph.get(hallway);
         if (list != null) {
@@ -1328,7 +1349,7 @@ public class Graph {
                         }
                     } else {
                         if (distanceBetweenCenters < 25) {
-                         //   System.out.println(distanceBetweenCenters);
+                            //   System.out.println(distanceBetweenCenters);
                             return pair.getKey();
                         }
                     }

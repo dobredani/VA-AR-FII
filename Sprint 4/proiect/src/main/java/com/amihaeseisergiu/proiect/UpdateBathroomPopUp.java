@@ -80,7 +80,7 @@ public class UpdateBathroomPopUp extends Application {
                 + "-fx-border-width: 1;"
                 + "-fx-border-style: dashed;"
                 + "-fx-border-radius: 5;");
-       
+
         centerVBox.getChildren().addAll(nameHBox);
         List<String> hallwaysNames = new ArrayList<>();
         for (Hallway h : hallways) {
@@ -96,7 +96,7 @@ public class UpdateBathroomPopUp extends Application {
         //
         HBox hallwayHBox = new HBox();
         Label hallwayLabel = new Label("Opens to ");
-        hallwayHBox.getChildren().addAll(hallwayLabel,comboBoxHallways);
+        hallwayHBox.getChildren().addAll(hallwayLabel, comboBoxHallways);
         hallwayHBox.setAlignment(Pos.CENTER);
         //
         Label widthLabel = new Label("Width: ");
@@ -144,7 +144,15 @@ public class UpdateBathroomPopUp extends Application {
 
         closeBtn.setOnAction(event -> {
             stage.close();
-            rectangle.setName(nameField.getText());
+            boolean ok = true;
+            for (ExtendedShape shape : drawingPanel.getShapes()) {
+                if (((ExtendedRectangle) shape).getName().equals(nameField.getText())) {
+                    ok = false;
+                }
+            }
+            if (ok == true) {
+                rectangle.setName(nameField.getText());
+            }
             if (comboBoxHallways.getValue() != null) {
                 for (Hallway h : hallways) {
                     if (h.getName().equals(comboBoxHallways.getValue())) {

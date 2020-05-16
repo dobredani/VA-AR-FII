@@ -70,7 +70,7 @@
           }
         }
       },
-      "patch": {
+      "put": {
         "tags": [
           "Building MAP operations"
         ],

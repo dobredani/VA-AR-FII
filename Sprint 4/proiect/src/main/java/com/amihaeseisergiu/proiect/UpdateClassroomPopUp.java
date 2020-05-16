@@ -11,12 +11,15 @@ import java.util.List;
 import java.util.Map;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -38,12 +41,14 @@ public class UpdateClassroomPopUp extends Application {
     double x;
     double y;
     DrawingPanel drawingPanel;
+    List<Hallway> hallways;
 
-    public UpdateClassroomPopUp(DrawingPanel drawingPanel, ExtendedShape shape, double x, double y) {
+    public UpdateClassroomPopUp(DrawingPanel drawingPanel, ExtendedShape shape, double x, double y, List<Hallway> hallways) {
         this.shape = (Classroom) shape;
         this.x = x;
         this.y = y;
         this.drawingPanel = drawingPanel;
+        this.hallways = hallways;
     }
 
     public HBox adaugareInputuri() {
@@ -92,11 +97,11 @@ public class UpdateClassroomPopUp extends Application {
         topHBox.setAlignment(Pos.CENTER);
         topHBox.setPadding(new Insets(10, 10, 10, 10));
         topHBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
 
         VBox containerOrar = new VBox();
         Button luniAdd = new Button("Monday");
@@ -179,25 +184,35 @@ public class UpdateClassroomPopUp extends Application {
             listaVboxuri.get(i).setPadding(new Insets(5, 5, 5, 5));
             listaVboxuri.get(i).setSpacing(10);
             listaVboxuri.get(i).setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                    + "-fx-background-color: white;"
+                    + "-fx-background-radius: 5;"
+                    + "-fx-border-width: 1;"
+                    + "-fx-border-style: dashed;"
+                    + "-fx-border-radius: 5;");
             containerOrar.getChildren().add(zi);
 
         }
-
+        List<String> hallwaysNames = new ArrayList<>();
+        for (Hallway h : hallways) {
+            hallwaysNames.add(h.getName());
+        }
+        ObservableList<String> optionsHallways = FXCollections.observableArrayList(hallwaysNames);
+        final ComboBox comboBoxHallways = new ComboBox(optionsHallways);
+        comboBoxHallways.setMaxWidth(100);
+        comboBoxHallways.setStyle("-fx-background-color: transparent;"
+                + "-fx-border-color: #ffff00;"
+                + "-fx-border-width: 3;"
+        );
         Iterator<Map.Entry<Integer, List<InputSchedule>>> iter = shape.mapaInputuri.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry<Integer, List<InputSchedule>> entry = iter.next();
             System.out.println("Key = " + entry.getKey());
             List<InputSchedule> localLista = entry.getValue();
             for (InputSchedule input : localLista) {
-               HBox grupareInputuri = setareInputuri(input.getGrupa(), input.getOraStart(), input.getOraFinal(), input.getMaterie());
+                HBox grupareInputuri = setareInputuri(input.getGrupa(), input.getOraStart(), input.getOraFinal(), input.getMaterie());
                 switch (entry.getKey()) {
                     case 0:
-              
+
                         Button removeLuni = new Button("-");
                         removeLuni.setStyle("-fx-background-color: rgb(240,128,128);");
                         removeLuni.setSkin(new FadeButtonSkin(removeLuni));
@@ -210,7 +225,7 @@ public class UpdateClassroomPopUp extends Application {
                         });
                         break;
                     case 1:
-                        
+
                         Button removeMarti = new Button("-");
                         removeMarti.setStyle("-fx-background-color: rgb(240,128,128);");
                         removeMarti.setSkin(new FadeButtonSkin(removeMarti));
@@ -236,7 +251,7 @@ public class UpdateClassroomPopUp extends Application {
                         });
                         break;
                     case 3:
-                        
+
                         Button removeJoi = new Button("-");
                         removeJoi.setStyle("-fx-background-color: rgb(240,128,128);");
                         removeJoi.setSkin(new FadeButtonSkin(removeJoi));
@@ -248,7 +263,7 @@ public class UpdateClassroomPopUp extends Application {
                             shape.mapaInputuri.put(entry.getKey(), localLista);
                         });
                         break;
-                        
+
                     case 4:
                         Button removeVineri = new Button("-");
                         removeVineri.setStyle("-fx-background-color: rgb(240,128,128);");
@@ -300,7 +315,7 @@ public class UpdateClassroomPopUp extends Application {
             removeLuni.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(0).getChildren());
             });
-            
+
             CustomAnimation.animateInFromRightWithBounceSmall(scene.getWidth(), grupareInputuri);
         });
         martiAdd.setOnAction(event -> {
@@ -313,7 +328,7 @@ public class UpdateClassroomPopUp extends Application {
             removeMarti.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(1).getChildren());
             });
-            
+
             CustomAnimation.animateInFromRightWithBounceSmall(scene.getWidth(), grupareInputuri);
         });
         miercuriAdd.setOnAction(event -> {
@@ -326,7 +341,7 @@ public class UpdateClassroomPopUp extends Application {
             removeMiercuri.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(2).getChildren());
             });
-            
+
             CustomAnimation.animateInFromRightWithBounceSmall(scene.getWidth(), grupareInputuri);
         });
         joiAdd.setOnAction(event -> {
@@ -339,7 +354,7 @@ public class UpdateClassroomPopUp extends Application {
             removeJoi.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(3).getChildren());
             });
-            
+
             CustomAnimation.animateInFromRightWithBounceSmall(scene.getWidth(), grupareInputuri);
         });
         vineriAdd.setOnAction(event -> {
@@ -352,7 +367,7 @@ public class UpdateClassroomPopUp extends Application {
             removeVineri.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(4).getChildren());
             });
-            
+
             CustomAnimation.animateInFromRightWithBounceSmall(scene.getWidth(), grupareInputuri);
         });
         sambataAdd.setOnAction(event -> {
@@ -365,7 +380,7 @@ public class UpdateClassroomPopUp extends Application {
             removeSambata.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(5).getChildren());
             });
-            
+
             CustomAnimation.animateInFromRightWithBounceSmall(scene.getWidth(), grupareInputuri);
         });
         duminicaAdd.setOnAction(event -> {
@@ -378,7 +393,7 @@ public class UpdateClassroomPopUp extends Application {
             removeDuminica.setOnAction(event2 -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), grupareInputuri, listaVboxuri.get(6).getChildren());
             });
-            
+
             CustomAnimation.animateInFromRightWithBounceSmall(scene.getWidth(), grupareInputuri);
         });
         ///////////////////////////////////////////////////////////////////////       
@@ -391,13 +406,17 @@ public class UpdateClassroomPopUp extends Application {
         nameHBox.getChildren().addAll(name, nameField);
         VBox centerVBox = new VBox();
         centerVBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
         
-
+        HBox hallwayHBox = new HBox();
+        Label hallwayLabel = new Label("Opens to ");
+        hallwayHBox.getChildren().addAll(hallwayLabel,comboBoxHallways);
+        hallwayHBox.setAlignment(Pos.CENTER);
+        
         Label widthLabel = new Label("Width: ");
         Label heightLabel = new Label("Height: ");
         TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
@@ -412,8 +431,8 @@ public class UpdateClassroomPopUp extends Application {
         height.getChildren().addAll(heightLabel, heightField);
         width.setAlignment(Pos.CENTER);
         height.setAlignment(Pos.CENTER);
-        
-        centerVBox.getChildren().addAll(nameHBox, width, height, scrollOrar);
+
+        centerVBox.getChildren().addAll(nameHBox, width, height, hallwayHBox, scrollOrar);
         centerVBox.setAlignment(Pos.TOP_CENTER);
         centerVBox.setPadding(new Insets(10, 10, 10, 10));
         centerVBox.setSpacing(10);
@@ -427,67 +446,74 @@ public class UpdateClassroomPopUp extends Application {
         bottomHBox.setSpacing(10);
         bottomHBox.setPadding(new Insets(10, 10, 10, 10));
         bottomHBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
         Button closeBtn = new Button("Save");
         closeBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
         closeBtn.setSkin(new FadeButtonSkin(closeBtn));
-        
+
         bottomHBox.getChildren().addAll(closeBtn);
         int btnCount = bottomHBox.getChildren().size();
         closeBtn.prefWidthProperty().bind(bottomHBox.widthProperty().divide(btnCount));
         closeBtn.setOnAction(event -> {
             stage.close();
             rectangle.setName(nameField.getText());
-           
+            if (comboBoxHallways.getValue() != null) {
+                for (Hallway h : hallways) {
+                    if (h.getName().equals(comboBoxHallways.getValue())) {
+                        ((ExtendedRectangle) shape).setHallway(h);
+                    }
+                }
+            }
             int contor = 0;
-            int schimbare=1;
+            int schimbare = 1;
             for (int i = 0; i <= 6; i++) {
-                schimbare=0;
+                schimbare = 0;
                 List<InputSchedule> localLista = new ArrayList<>();
                 Iterator<Map.Entry<Integer, List<InputSchedule>>> itr = shape.mapaInputuri.entrySet().iterator();
-                            while(itr.hasNext()) {
+                while (itr.hasNext()) {
                     Map.Entry<Integer, List<InputSchedule>> entry = itr.next();
-                    if(entry.getKey()==i)
-                    localLista = entry.getValue();
+                    if (entry.getKey() == i) {
+                        localLista = entry.getValue();
+                    }
                 }
 
                 for (Node child : listaVboxuri.get(i).getChildren()) {
                     String grupa = null;
                     String oraStart = null;
                     String oraFinal = null;
-                    String materie=null;
+                    String materie = null;
 
                     if (child instanceof HBox) {
                         for (Node child1 : ((HBox) child).getChildren()) {
                             if (contor == 0) {
                                 if (child1 instanceof TextField) {
                                     grupa = (((TextField) child1).getText());
-                                   
+
                                     contor++;
-                                  
+
                                 }
                             } else if (contor == 1) {
                                 if (child1 instanceof TextField) {
                                     oraStart = (((TextField) child1).getText());
-                                
+
                                     contor++;
-                                   
+
                                 }
                             } else if (contor == 2) {
                                 if (child1 instanceof TextField) {
                                     oraFinal = (((TextField) child1).getText());
-                                 
+
                                     contor++;
 
                                 }
                             } else if (contor == 3) {
                                 if (child1 instanceof TextField) {
                                     materie = (((TextField) child1).getText());
-                                  
+
                                     InputSchedule grupareInputuri = new InputSchedule(grupa, oraStart, oraFinal, materie);
                                     int ok = 0;
                                     if (!localLista.isEmpty()) {
@@ -502,8 +528,8 @@ public class UpdateClassroomPopUp extends Application {
                                     }
                                     if (ok == 0 || localLista.isEmpty()) {
                                         localLista.add(grupareInputuri);
-                                        schimbare=1;
-                                        
+                                        schimbare = 1;
+
                                     }
                                     contor = 0;
                                 }
@@ -514,14 +540,12 @@ public class UpdateClassroomPopUp extends Application {
 
                     }
                 }
-                if (!localLista.isEmpty() && schimbare==1) {
-                  
+                if (!localLista.isEmpty() && schimbare == 1) {
+
                     System.out.println(i);
                     shape.mapaInputuri.put(i, localLista);
                 }
             }
-
-           
 
             // cod bagat de mine
             drawingPanel.deleteShape(rectangle);
@@ -555,24 +579,21 @@ public class UpdateClassroomPopUp extends Application {
         BorderPane.setMargin(topHBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(centerVBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(bottomHBox, new Insets(5, 5, 5, 5));
-        
+
         scene = new Scene(pane, 600, 600);
-        
+
         CustomAnimation.animateInFromLeftWithBounceSmall(scene.getWidth(), centerVBox);
         CustomAnimation.animateInFromTopWithBounceSmall(scene.getHeight(), topHBox);
         CustomAnimation.animateInFromBottomWithBounceSmall(scene.getHeight(), bottomHBox);
 
         Rectangle2D screenBounds = Screen.getPrimary().getBounds();
-        if(x + 10 + scene.getWidth() > screenBounds.getWidth())
-        {
+        if (x + 10 + scene.getWidth() > screenBounds.getWidth()) {
             x = x - ((x + 10 + scene.getWidth()) - screenBounds.getWidth());
         }
-        if(y + scene.getHeight() / 2 > screenBounds.getHeight())
-        {
+        if (y + scene.getHeight() / 2 > screenBounds.getHeight()) {
             y = screenBounds.getHeight() - (scene.getHeight() / 2) - 70;
         }
-        if(y - scene.getHeight() / 2 < 0)
-        {
+        if (y - scene.getHeight() / 2 < 0) {
             y = scene.getHeight() / 2;
         }
         stage.setX(x + 10);

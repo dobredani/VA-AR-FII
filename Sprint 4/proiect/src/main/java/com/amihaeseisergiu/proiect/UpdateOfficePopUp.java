@@ -13,11 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -41,12 +44,14 @@ public class UpdateOfficePopUp extends Application {
     List<TextField> profsFields = new ArrayList<>();
     List<Label> profsLabels = new ArrayList<>();
     List<Button> delButtons = new ArrayList<>();
+    List<Hallway> hallways;
 
-    public UpdateOfficePopUp(DrawingPanel drawingPanel, ExtendedShape shape, double x, double y) {
+    public UpdateOfficePopUp(DrawingPanel drawingPanel, ExtendedShape shape, double x, double y, List<Hallway> hallways) {
         this.shape = shape;
         this.x = x;
         this.y = y;
         this.drawingPanel = drawingPanel;
+        this.hallways = hallways;
     }
 
     @Override
@@ -64,11 +69,11 @@ public class UpdateOfficePopUp extends Application {
         topHBox.setAlignment(Pos.CENTER);
         topHBox.setPadding(new Insets(10, 10, 10, 10));
         topHBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
 
         Label name = new Label("Name:");
         TextField nameField = new TextField(rectangle.getName());
@@ -81,18 +86,35 @@ public class UpdateOfficePopUp extends Application {
         centerVBox.getChildren().addAll(nameHBox);
         centerVBox.setAlignment(Pos.TOP_CENTER);
         centerVBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
+
+        List<String> hallwaysNames = new ArrayList<>();
+        for (Hallway h : hallways) {
+            hallwaysNames.add(h.getName());
+        }
+        ObservableList<String> optionsHallways = FXCollections.observableArrayList(hallwaysNames);
+        final ComboBox comboBoxHallways = new ComboBox(optionsHallways);
+        comboBoxHallways.setMaxWidth(Double.MAX_VALUE);
+        comboBoxHallways.setStyle("-fx-background-color: transparent;"
+                + "-fx-border-color: #ffff00;"
+                + "-fx-border-width: 3;"
+        );
 
         //
+        HBox hallwayHBox = new HBox();
+        Label hallwayLabel = new Label("Opens to ");
+        hallwayHBox.getChildren().addAll(hallwayLabel,comboBoxHallways);
+        hallwayHBox.setAlignment(Pos.CENTER);
+        
         Label widthLabel = new Label("Width: ");
         Label heightLabel = new Label("Height: ");
-        TextField widthField = new TextField(String.valueOf(((ExtendedRectangle)shape).getWidth()));
+        TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
         widthField.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
-        TextField heightField = new TextField(String.valueOf(((ExtendedRectangle)shape).getLength()));
+        TextField heightField = new TextField(String.valueOf(((ExtendedRectangle) shape).getLength()));
         heightField.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
         HBox width = new HBox();
         width.setAlignment(Pos.CENTER);
@@ -102,23 +124,23 @@ public class UpdateOfficePopUp extends Application {
         height.setAlignment(Pos.CENTER);
         height.setSpacing(10);
         height.getChildren().addAll(heightLabel, heightField);
-        centerVBox.getChildren().addAll(width, height);
+        centerVBox.getChildren().addAll(width, height, hallwayHBox);
         centerVBox.setPadding(new Insets(10, 10, 10, 10));
         centerVBox.setSpacing(10);
         centerVBox.setAlignment(Pos.TOP_CENTER);
         width.setAlignment(Pos.CENTER);
         height.setAlignment(Pos.CENTER);
-        
+
         VBox centerScrollPaneVBox = new VBox();
         centerScrollPaneVBox.setPadding(new Insets(5, 5, 5, 5));
         centerScrollPaneVBox.setSpacing(10);
         centerScrollPaneVBox.setAlignment(Pos.TOP_CENTER);
         centerScrollPaneVBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
         ScrollPane centerScrollPane = new ScrollPane(centerScrollPaneVBox);
         centerScrollPane.setFitToWidth(true);
         centerScrollPane.setPadding(new Insets(10, 10, 10, 10));
@@ -137,7 +159,7 @@ public class UpdateOfficePopUp extends Application {
         Button addProf = new Button("Add Professor");
         addProf.setStyle("-fx-background-color: #ffff00;");
         addProf.setSkin(new FadeButtonSkin(addProf));
-        addProf.setMaxWidth(Double.MAX_VALUE);
+        addProf.setMaxWidth(100);
         centerScrollPaneVBox.getChildren().add(addProf);
         for (String s : ((Office) shape).getProfessors()) {
             Label profName = new Label("Prof. Name: ");
@@ -153,7 +175,7 @@ public class UpdateOfficePopUp extends Application {
             centerScrollPaneVBox.getChildren().add(1, hbox);
             del.setOnAction(e -> {
                 ((Office) shape).getProfessors().remove(s);
-                
+
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), hbox, centerScrollPaneVBox.getChildren());
             });
         }
@@ -167,11 +189,11 @@ public class UpdateOfficePopUp extends Application {
         bottomHBox.setSpacing(10);
         bottomHBox.setPadding(new Insets(10, 10, 10, 10));
         bottomHBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
         Button closeBtn = new Button("Save");
         closeBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
         closeBtn.setSkin(new FadeButtonSkin(closeBtn));
@@ -188,6 +210,13 @@ public class UpdateOfficePopUp extends Application {
                     ((Office) shape).getProfessors().add(t.getText());
                 }
             }
+            if (comboBoxHallways.getValue() != null) {
+                for (Hallway h : hallways) {
+                    if (h.getName().equals(comboBoxHallways.getValue())) {
+                        ((ExtendedRectangle) shape).setHallway(h);
+                    }
+                }
+            }
 
             //
             drawingPanel.deleteShape(rectangle);
@@ -195,11 +224,11 @@ public class UpdateOfficePopUp extends Application {
             double initialHeight = rectangle.getLength();
             rectangle.setLength(Double.valueOf(heightField.getText()));
             rectangle.setWidth(Double.valueOf(widthField.getText()));
-            rectangle.getRectangle().setSize((int)rectangle.getWidth(), (int)rectangle.getLength());
-            if(drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
+            rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
+            if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
                 rectangle.setLength(initialHeight);
                 rectangle.setWidth(initialWidth);
-                rectangle.getRectangle().setSize((int)rectangle.getWidth(), (int)rectangle.getLength());
+                rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
                 drawingPanel.drawAll();
             } else {
                 drawingPanel.deleteShapeFromGraph(rectangle);
@@ -210,7 +239,7 @@ public class UpdateOfficePopUp extends Application {
                 drawingPanel.getIds().add(rectangle.getId());
             }
             rectangle.setStartPoint(new Point(rectangle.getCenterPoint().getX() + rectangle.getWidth() / 2, rectangle.getCenterPoint().getY() + rectangle.getLength() / 2));
-            rectangle.getRectangle().setBounds((int)rectangle.getCenterPoint().getX(), (int)rectangle.getCenterPoint().getY(), (int)rectangle.getWidth(), (int)rectangle.getLength());
+            rectangle.getRectangle().setBounds((int) rectangle.getCenterPoint().getX(), (int) rectangle.getCenterPoint().getY(), (int) rectangle.getWidth(), (int) rectangle.getLength());
             //
         });
 
@@ -231,7 +260,7 @@ public class UpdateOfficePopUp extends Application {
             del.setOnAction(ev -> {
                 CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), hbox, centerScrollPaneVBox.getChildren());
             });
-            
+
             CustomAnimation.animateInFromRightWithBounceSmall(scene.getWidth(), hbox);
         });
         pane.setTop(topHBox);
@@ -247,18 +276,15 @@ public class UpdateOfficePopUp extends Application {
         CustomAnimation.animateInFromLeftWithBounceSmall(scene.getWidth(), centerVBox);
         CustomAnimation.animateInFromTopWithBounceSmall(scene.getHeight(), topHBox);
         CustomAnimation.animateInFromBottomWithBounceSmall(scene.getHeight(), bottomHBox);
-        
+
         Rectangle2D screenBoundsTest = Screen.getPrimary().getBounds();
-        if(x + 10 + scene.getWidth() > screenBoundsTest.getWidth())
-        {
+        if (x + 10 + scene.getWidth() > screenBoundsTest.getWidth()) {
             x = x - ((x + 10 + scene.getWidth()) - screenBoundsTest.getWidth());
         }
-        if(y + scene.getHeight() / 2 > screenBoundsTest.getHeight())
-        {
+        if (y + scene.getHeight() / 2 > screenBoundsTest.getHeight()) {
             y = screenBoundsTest.getHeight() - (scene.getHeight() / 2) - 50;
         }
-        if(y - scene.getHeight() / 2 < 0)
-        {
+        if (y - scene.getHeight() / 2 < 0) {
             y = scene.getHeight() / 2;
         }
         stage.setX(x + 10);

@@ -24,6 +24,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 public class ControlPanel extends VBox {
 
@@ -69,18 +70,42 @@ public class ControlPanel extends VBox {
                 + "-fx-border-style: dashed;"
                 + "-fx-border-radius: 5;");
 
-        comboBox.setItems(FXCollections.observableArrayList(new String[]{"Class Room", "Hall Way", "Office", "Bathroom", "Stairs", "Elevator"}));
+        comboBox.setItems(FXCollections.observableArrayList(new String[]{"Class Room", "Hall Way", "Bathroom", "Office", "Stairs", "Elevator"}));
         comboBox.getSelectionModel().select(0);
         comboBox.setMaxWidth(Double.MAX_VALUE);
         eraserBtn.setMaxWidth(Double.MAX_VALUE);
 
-        this.getChildren().addAll(eraserBtn, comboBox, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
+        Button undo = new Button("Undo");
+        undo.setSkin(new FadeButtonSkin(undo));
+        undo.setStyle("-fx-background-color: #ffff00;");
+        undo.setMaxWidth(Double.MAX_VALUE);
+        undo.setOnAction(e -> {
+            if (frame.drawingPanel.getLastActions().size() != 0) {
+                Pair<String, ExtendedShape> pair = frame.drawingPanel.getLastActions().get(frame.drawingPanel.getLastActions().size() - 1);
+                if (pair.getKey().equals("Add")) {
+                    frame.drawingPanel.getShapes().remove(pair.getValue());
+                    frame.drawingPanel.deleteShapeFromGraph(((ExtendedRectangle)pair.getValue()));
+                    frame.drawingPanel.setOrder();
+                } else {
+                    if (frame.drawingPanel.checkCollision(((ExtendedRectangle) pair.getValue()), 0) == false) {
+                        frame.drawingPanel.getShapes().add(pair.getValue());
+                        frame.drawingPanel.addShapeToGraph(((ExtendedRectangle)pair.getValue()));
+                        frame.drawingPanel.setId((ExtendedRectangle) pair.getValue());
+                        frame.drawingPanel.setOrder();
+                    }
+                }
+                frame.drawingPanel.getLastActions().remove(frame.drawingPanel.getLastActions().size() - 1);
+                frame.drawingPanel.deleteAllShapes();
+                frame.drawingPanel.drawAll();
+            }
+        });
+        this.getChildren().addAll(eraserBtn, undo, comboBox, nrFloorsLabel, addFloorBtn, addFloorScrollPane);
         this.setAlignment(Pos.TOP_CENTER);
         this.setPadding(new Insets(10, 10, 10, 10));
         this.setSpacing(10);
 
         addFloorBtn.setOnAction(event -> {
-            
+
             int level = 0;
             while (existingFloors.contains(level)) {
                 level++;
@@ -120,7 +145,7 @@ public class ControlPanel extends VBox {
                     int size = addFloorVBox.getChildren().size() - 1;
                     CustomAnimation.animateOutToLeftAndRemove(frame.scene.getWidth(), newFloorBtn, addFloorVBox.getChildren());
                     frame.building.getFloors().remove(index);
-                    existingFloors.remove((Integer)index);
+                    existingFloors.remove((Integer) index);
                     nrFloorsLabel.setText("Floors: " + size);
                     if (existingFloors.size() > 0) {
                         int nrFloor = existingFloors.get(0);
@@ -130,23 +155,19 @@ public class ControlPanel extends VBox {
                         frame.drawingPanel.setShapes(f.getShapes());
                         frame.drawingPanel.deleteAllShapes();
                         frame.drawingPanel.drawAll();
-                    }
-                    else
-                    {
+                    } else {
                         frame.drawingPanel.deleteAllShapes();
                     }
 
-                    if(frame.building.getFloors().size() >= 1)
-                    {
+                    if (frame.building.getFloors().size() >= 1) {
                         Platform.runLater(() -> {
                             frame.drawingPanel.getCanvas().setVisible(true);
                             frame.drawingPanel.setStyle("-fx-background-color: white");
                         });
-                        
+
                     }
 
-                    if(size == 0)
-                    {
+                    if (size == 0) {
                         addFloorScrollPane.setVisible(false);
                         Platform.runLater(() -> {
                             frame.savePanel.editingFloorLabel.setText("");
@@ -210,7 +231,7 @@ public class ControlPanel extends VBox {
                             int size = addFloorVBox.getChildren().size() - 1;
                             CustomAnimation.animateOutToLeftAndRemove(frame.scene.getWidth(), newFloorBtn, addFloorVBox.getChildren());
                             frame.building.getFloors().remove(index);
-                            existingFloors.remove((Integer)index);
+                            existingFloors.remove((Integer) index);
                             nrFloorsLabel.setText("Floors: " + size);
                             if (existingFloors.size() > 0) {
                                 int nrFloor = existingFloors.get(0);
@@ -220,14 +241,11 @@ public class ControlPanel extends VBox {
                                 frame.drawingPanel.setShapes(f.getShapes());
                                 frame.drawingPanel.deleteAllShapes();
                                 frame.drawingPanel.drawAll();
-                            }
-                            else
-                            {
+                            } else {
                                 frame.drawingPanel.deleteAllShapes();
                             }
 
-                            if(frame.building.getFloors().size() >= 1)
-                            {
+                            if (frame.building.getFloors().size() >= 1) {
                                 Platform.runLater(() -> {
                                     frame.drawingPanel.getCanvas().setVisible(true);
                                     frame.drawingPanel.setStyle("-fx-background-color: white");
@@ -235,8 +253,7 @@ public class ControlPanel extends VBox {
 
                             }
 
-                            if(size == 0)
-                            {
+                            if (size == 0) {
                                 addFloorScrollPane.setVisible(false);
                                 Platform.runLater(() -> {
                                     frame.savePanel.editingFloorLabel.setText("");

@@ -5,12 +5,17 @@
  */
 package com.amihaeseisergiu.proiect;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -30,12 +35,14 @@ public class UpdateElevatorPopUp extends Application {
     double x;
     double y;
     DrawingPanel drawingPanel;
+    List<Hallway> hallways;
 
-    public UpdateElevatorPopUp(DrawingPanel drawingPanel, ExtendedShape shape, double x, double y) {
+    public UpdateElevatorPopUp(DrawingPanel drawingPanel, ExtendedShape shape, double x, double y, List<Hallway> hallways) {
         this.shape = shape;
         this.x = x;
         this.y = y;
         this.drawingPanel = drawingPanel;
+        this.hallways = hallways;
     }
 
     @Override
@@ -53,11 +60,11 @@ public class UpdateElevatorPopUp extends Application {
         topHBox.setAlignment(Pos.CENTER);
         topHBox.setPadding(new Insets(10, 10, 10, 10));
         topHBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
 
         Label name = new Label("Name:");
         TextField nameField = new TextField(rectangle.getName());
@@ -68,13 +75,28 @@ public class UpdateElevatorPopUp extends Application {
         nameHBox.getChildren().addAll(name, nameField);
         VBox centerVBox = new VBox();
         centerVBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
         centerVBox.getChildren().addAll(nameHBox);
-
+        List<String> hallwaysNames = new ArrayList<>();
+        for (Hallway h : hallways) {
+            hallwaysNames.add(h.getName());
+        }
+        ObservableList<String> optionsHallways = FXCollections.observableArrayList(hallwaysNames);
+        final ComboBox comboBoxHallways = new ComboBox(optionsHallways);
+        comboBoxHallways.setMaxWidth(100);
+        comboBoxHallways.setStyle("-fx-background-color: transparent;"
+                + "-fx-border-color: #ffff00;"
+                + "-fx-border-width: 3;"
+        );
+        HBox hallwayHBox = new HBox();
+        Label hallwayLabel = new Label("Opens to ");
+        hallwayHBox.getChildren().addAll(hallwayLabel,comboBoxHallways);
+        hallwayHBox.setAlignment(Pos.CENTER);
+        
         Label widthLabel = new Label("Width: ");
         Label heightLabel = new Label("Height: ");
         TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
@@ -89,7 +111,7 @@ public class UpdateElevatorPopUp extends Application {
         height.setAlignment(Pos.CENTER);
         height.setSpacing(10);
         height.getChildren().addAll(heightLabel, heightField);
-        centerVBox.getChildren().addAll(width, height);
+        centerVBox.getChildren().addAll(width, height, hallwayHBox);
         width.setAlignment(Pos.CENTER);
         height.setAlignment(Pos.CENTER);
 
@@ -106,11 +128,11 @@ public class UpdateElevatorPopUp extends Application {
         bottomHBox.setSpacing(10);
         bottomHBox.setPadding(new Insets(10, 10, 10, 10));
         bottomHBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
         Button closeBtn = new Button("Save");
         closeBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
         closeBtn.setSkin(new FadeButtonSkin(closeBtn));
@@ -121,7 +143,13 @@ public class UpdateElevatorPopUp extends Application {
         closeBtn.setOnAction(event -> {
             stage.close();
             rectangle.setName(nameField.getText());
-
+            if (comboBoxHallways.getValue() != null) {
+                for (Hallway h : hallways) {
+                    if (h.getName().equals(comboBoxHallways.getValue())) {
+                        ((ExtendedRectangle) shape).setHallway(h);
+                    }
+                }
+            }
             drawingPanel.deleteShape(rectangle);
             double initialWidth = rectangle.getWidth();
             double initialHeight = rectangle.getLength();
@@ -131,7 +159,7 @@ public class UpdateElevatorPopUp extends Application {
             if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
                 rectangle.setLength(initialHeight);
                 rectangle.setWidth(initialWidth);
-                rectangle.getRectangle().setSize((int)rectangle.getWidth(), (int)rectangle.getLength());
+                rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
                 drawingPanel.drawAll();
             } else {
                 drawingPanel.deleteShapeFromGraph(rectangle);
@@ -149,28 +177,25 @@ public class UpdateElevatorPopUp extends Application {
         pane.setTop(topHBox);
         pane.setCenter(centerVBox);
         pane.setBottom(bottomHBox);
-        
+
         BorderPane.setMargin(topHBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(centerVBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(bottomHBox, new Insets(5, 5, 5, 5));
 
         scene = new Scene(pane, 300, 300);
-        
+
         CustomAnimation.animateInFromLeftWithBounceSmall(scene.getWidth(), centerVBox);
         CustomAnimation.animateInFromTopWithBounceSmall(scene.getHeight(), topHBox);
         CustomAnimation.animateInFromBottomWithBounceSmall(scene.getHeight(), bottomHBox);
 
         Rectangle2D screenBoundsTest = Screen.getPrimary().getBounds();
-        if(x + 10 + scene.getWidth() > screenBoundsTest.getWidth())
-        {
+        if (x + 10 + scene.getWidth() > screenBoundsTest.getWidth()) {
             x = x - ((x + 10 + scene.getWidth()) - screenBoundsTest.getWidth());
         }
-        if(y + scene.getHeight() / 2 > screenBoundsTest.getHeight())
-        {
+        if (y + scene.getHeight() / 2 > screenBoundsTest.getHeight()) {
             y = screenBoundsTest.getHeight() - (scene.getHeight() / 2) - 50;
         }
-        if(y - scene.getHeight() / 2 < 0)
-        {
+        if (y - scene.getHeight() / 2 < 0) {
             y = scene.getHeight() / 2;
         }
         stage.setX(x + 10);

@@ -40,13 +40,15 @@ public class UpdateStairsPopUp extends Application {
     double x;
     double y;
     DrawingPanel drawingPanel;
+    List<Hallway> hallways;
 
-    public UpdateStairsPopUp(DrawingPanel drawingPanel, List<ExtendedShape> stairs, ExtendedShape shape, double x, double y) {
+    public UpdateStairsPopUp(DrawingPanel drawingPanel, List<ExtendedShape> stairs, ExtendedShape shape, double x, double y, List<Hallway> hallways) {
         this.shape = shape;
         this.x = x;
         this.y = y;
         this.stairs = stairs;
         this.drawingPanel = drawingPanel;
+        this.hallways = hallways;
     }
 
     @Override
@@ -64,11 +66,11 @@ public class UpdateStairsPopUp extends Application {
         topHBox.setAlignment(Pos.CENTER);
         topHBox.setPadding(new Insets(10, 10, 10, 10));
         topHBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
 
         Label name = new Label("Name:");
         TextField nameField = new TextField(rectangle.getName());
@@ -86,20 +88,39 @@ public class UpdateStairsPopUp extends Application {
             }
         }
 
-        ObservableList<String> options = FXCollections.observableArrayList(stairsNames);
-        final ComboBox comboBox = new ComboBox(options);
-        comboBox.setStyle("-fx-background-color: transparent;"
+        List<String> hallwaysNames = new ArrayList<>();
+        for (Hallway h : hallways) {
+            hallwaysNames.add(h.getName());
+        }
+
+        ObservableList<String> optionsStairs = FXCollections.observableArrayList(stairsNames);
+        ObservableList<String> optionsHallways = FXCollections.observableArrayList(hallwaysNames);
+        final ComboBox comboBoxStairs = new ComboBox(optionsStairs);
+        final ComboBox comboBoxHallways = new ComboBox(optionsHallways);
+        comboBoxStairs.setMaxWidth(100);
+        comboBoxHallways.setMaxWidth(100);
+        comboBoxStairs.setStyle("-fx-background-color: transparent;"
                 + "-fx-border-color: #ffff00;"
                 + "-fx-border-width: 3;"
         );
+        comboBoxHallways.setStyle("-fx-background-color: transparent;"
+                + "-fx-border-color: #ffff00;"
+                + "-fx-border-width: 3;"
+        );
+        
+        HBox hallwayHBox = new HBox();
+        Label hallwayLabel = new Label("Opens to ");
+        hallwayHBox.getChildren().addAll(hallwayLabel, comboBoxHallways);
+        hallwayHBox.setAlignment(Pos.CENTER);
+        
         VBox centerVBox = new VBox();
-        centerVBox.getChildren().addAll(nameHBox, comboBox);
-
+        centerVBox.getChildren().addAll(nameHBox, comboBoxStairs, hallwayHBox);
+        
         Label widthLabel = new Label("Width: ");
         Label heightLabel = new Label("Height: ");
-        TextField widthField = new TextField(String.valueOf(((ExtendedRectangle)shape).getWidth()));
+        TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
         widthField.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
-        TextField heightField = new TextField(String.valueOf(((ExtendedRectangle)shape).getLength()));
+        TextField heightField = new TextField(String.valueOf(((ExtendedRectangle) shape).getLength()));
         heightField.setStyle("-fx-background-color: transparent; -fx-border-color: #0099ff; -fx-border-width: 0 0 1 0;");
         HBox width = new HBox();
         width.setAlignment(Pos.CENTER);
@@ -117,22 +138,22 @@ public class UpdateStairsPopUp extends Application {
         centerVBox.setPadding(new Insets(10, 10, 10, 10));
         centerVBox.setSpacing(10);
         centerVBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
 
         HBox bottomHBox = new HBox();
         bottomHBox.setAlignment(Pos.CENTER);
         bottomHBox.setSpacing(10);
         bottomHBox.setPadding(new Insets(10, 10, 10, 10));
         bottomHBox.setStyle("-fx-border-color: black;"
-            + "-fx-background-color: white;"
-            + "-fx-background-radius: 5;"
-            + "-fx-border-width: 1;"
-            + "-fx-border-style: dashed;"
-            + "-fx-border-radius: 5;");
+                + "-fx-background-color: white;"
+                + "-fx-background-radius: 5;"
+                + "-fx-border-width: 1;"
+                + "-fx-border-style: dashed;"
+                + "-fx-border-radius: 5;");
         Button closeBtn = new Button("Save");
         closeBtn.setStyle("-fx-background-color: rgb(86, 205, 110);");
         closeBtn.setSkin(new FadeButtonSkin(closeBtn));
@@ -142,12 +163,18 @@ public class UpdateStairsPopUp extends Application {
 
         closeBtn.setOnAction(event -> {
             stage.close();
-            if (comboBox.getValue() != null) {
-                rectangle.setName(comboBox.getValue().toString());
+            if (comboBoxStairs.getValue() != null) {
+                rectangle.setName(comboBoxStairs.getValue().toString());
             } else {
                 rectangle.setName(nameField.getText());
             }
-
+            if (comboBoxHallways.getValue() != null) {
+                for (Hallway h : hallways) {
+                    if (h.getName().equals(comboBoxHallways.getValue())) {
+                        ((ExtendedRectangle) shape).setHallway(h);
+                    }
+                }
+            }
             drawingPanel.deleteShape(rectangle);
             double initialWidth = rectangle.getWidth();
             double initialHeight = rectangle.getLength();
@@ -157,7 +184,7 @@ public class UpdateStairsPopUp extends Application {
             if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
                 rectangle.setLength(initialHeight);
                 rectangle.setWidth(initialWidth);
-                rectangle.getRectangle().setSize((int)rectangle.getWidth(), (int)rectangle.getLength());
+                rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
                 drawingPanel.drawAll();
             } else {
                 drawingPanel.deleteShapeFromGraph(rectangle);
@@ -178,24 +205,21 @@ public class UpdateStairsPopUp extends Application {
         BorderPane.setMargin(topHBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(centerVBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(bottomHBox, new Insets(5, 5, 5, 5));
-        
-        scene = new Scene(pane, 300, 300);
-        
+
+        scene = new Scene(pane, 300, 400);
+
         CustomAnimation.animateInFromLeftWithBounceSmall(scene.getWidth(), centerVBox);
         CustomAnimation.animateInFromTopWithBounceSmall(scene.getHeight(), topHBox);
         CustomAnimation.animateInFromBottomWithBounceSmall(scene.getHeight(), bottomHBox);
 
         Rectangle2D screenBoundsTest = Screen.getPrimary().getBounds();
-        if(x + 10 + scene.getWidth() > screenBoundsTest.getWidth())
-        {
+        if (x + 10 + scene.getWidth() > screenBoundsTest.getWidth()) {
             x = x - ((x + 10 + scene.getWidth()) - screenBoundsTest.getWidth());
         }
-        if(y + scene.getHeight() / 2 > screenBoundsTest.getHeight())
-        {
+        if (y + scene.getHeight() / 2 > screenBoundsTest.getHeight()) {
             y = screenBoundsTest.getHeight() - (scene.getHeight() / 2) - 50;
         }
-        if(y - scene.getHeight() / 2 < 0)
-        {
+        if (y - scene.getHeight() / 2 < 0) {
             y = scene.getHeight() / 2;
         }
         stage.setX(x + 10);

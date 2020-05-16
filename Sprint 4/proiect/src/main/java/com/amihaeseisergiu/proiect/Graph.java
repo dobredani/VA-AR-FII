@@ -168,14 +168,21 @@ public class Graph {
                     }
                     ExtendedShape leftNeighbor = findLeftNeighbor(entry.getKey(), directionToHallway, orderToHallway, hallway);
                     ExtendedShape rightNeighbor = findRightNeighbor(entry.getKey(), directionToHallway, orderToHallway, hallway);
-                    ExtendedShape straightNeighbor = findStraightNeighbor(entry.getKey(), directionToHallway, orderToHallway, hallway);
-                    if (neighborGraph.get(straightNeighbor) != null) {
+                    ExtendedShape straightNeighbor = findStraightNeighbor(entry.getKey(), directionToHallway, hallway);
+                    /* if (neighborGraph.get(straightNeighbor) != null) {
                         for (Pair<ExtendedShape, String> pair : neighborGraph.get(straightNeighbor)) {
                             if (pair.getValue().equals("Straight") && pair.getKey() != entry.getKey()) {
                                 straightNeighbor = null;
                             }
                         }
+                  /*      for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry2 : neighborGraph.entrySet()) {
+                            for (Pair<ExtendedShape, String> pair : entry2.getValue()) {
+                                if(pair.getValue().equals("Straight") && pair.getKey() == straightNeighbor) {
+                                    straightNeighbor = null;
+                                }
+                        }
                     }
+                }*/
                     if (leftNeighbor != null && rightNeighbor != null && straightNeighbor != null) {
                         Pair<ExtendedShape, String> p1 = new Pair<>(leftNeighbor, "Left");
                         Pair<ExtendedShape, String> p2 = new Pair<>(rightNeighbor, "Right");
@@ -808,7 +815,7 @@ public class Graph {
         return null;
     }
 
-    private ExtendedShape findStraightNeighbor(ExtendedShape sh, String dth, int otw, Hallway hallway) {
+    private ExtendedShape findStraightNeighbor(ExtendedShape sh, String dth, Hallway hallway) {
         String searchDirection = "";
         if (dth.equals("Left")) {
             searchDirection = "Right";
@@ -819,28 +826,49 @@ public class Graph {
         } else if (dth.equals("Up")) {
             searchDirection = "Down";
         }
-
+        ExtendedRectangle castedShape = (ExtendedRectangle) sh;
         //  double minDistance = Double.MAX_VALUE;
         //  ExtendedShape currentShape = null;
         for (Map.Entry<ExtendedShape, List<Pair<ExtendedShape, String>>> entry : graph.entrySet()) {
             if (entry.getKey() != hallway && entry.getKey() != sh) {
                 String relationToHallway = "";
                 String directionToHallway = "";
-                int orderToHallway = 0;
+                // int orderToHallway = 0;
                 List<Pair<ExtendedShape, String>> list = graph.get(hallway);
                 for (Pair<ExtendedShape, String> pair : list) {
                     if (pair.getKey() == entry.getKey()) {
                         relationToHallway = pair.getValue();
                         directionToHallway = relationToHallway.split(" ")[0];
-                        orderToHallway = Integer.valueOf(relationToHallway.split(" ")[1]);
-                        if (searchDirection.equals(directionToHallway) && orderToHallway == otw) {
+                        //  orderToHallway = Integer.valueOf(relationToHallway.split(" ")[1]);
+                        if (searchDirection.equals(directionToHallway)) {
                             if (entry.getKey() instanceof Hallway) {
-                                ExtendedShape neighbor = findFirstShapeInHallwayFromStraight(entry.getKey(), searchDirection, sh, hallway);
-                                if (neighbor != null) {
-                                    return neighbor;
+                                Hallway hall = (Hallway) entry.getKey();
+                                boolean ok = false;
+                                if (searchDirection.equals("Left") || searchDirection.equals("Right")) {
+                                    if (castedShape.getCenterPoint().getY() + castedShape.getLength() / 2 > hall.getCenterPoint().getY() && castedShape.getCenterPoint().getY() + castedShape.getLength() / 2 < hall.getCenterPoint().getY() + hall.getLength()) {
+                                        ok = true;
+                                    }
+                                } else {
+                                    if (castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2 > hall.getCenterPoint().getX() && castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2 < hall.getCenterPoint().getX() + hall.getWidth()) {
+                                        ok = true;
+                                    }
+                                }
+                                if (ok == true) {
+                                    ExtendedShape neighbor = findFirstShapeInHallwayFromStraight(entry.getKey(), searchDirection, sh);
+                                    if (neighbor != null) {
+                                        return neighbor;
+                                    }
                                 }
                             } else {
-                                return entry.getKey();
+                                double distanceBetweenCenters;
+                                if (searchDirection.equals("Left") || searchDirection.equals("Right")) {
+                                    distanceBetweenCenters = Math.abs((((ExtendedRectangle) pair.getKey()).centerPoint.getY() + ((ExtendedRectangle) pair.getKey()).getLength() / 2) - ((((ExtendedRectangle) sh).getCenterPoint().getY()) + ((ExtendedRectangle) sh).getLength() / 2));
+                                } else {
+                                    distanceBetweenCenters = Math.abs((((ExtendedRectangle) pair.getKey()).centerPoint.getX() + ((ExtendedRectangle) pair.getKey()).getWidth() / 2) - ((((ExtendedRectangle) sh).getCenterPoint().getX()) + ((ExtendedRectangle) sh).getWidth() / 2));
+                                }
+                                if (distanceBetweenCenters < 25) {
+                                    return entry.getKey();
+                                }
                             }
                         }
                         // System.out.println(((ExtendedRectangle)entry.getKey()).getId() + " " + relationToHallway);
@@ -852,6 +880,9 @@ public class Graph {
     }
 
     private Hallway findShapeHallway(ExtendedShape shape) {
+        if (((ExtendedRectangle) shape).getHallway() != null) {
+            return ((ExtendedRectangle) shape).getHallway();
+        }
         for (Pair<ExtendedShape, String> list : graph.get(shape)) {
             if (list.getKey() instanceof Hallway) {
                 return (Hallway) list.getKey();
@@ -1162,7 +1193,7 @@ public class Graph {
                     }
                 }
 
-                if (entry.getKey() != hallway && entry.getKey() != shape && ok == true && !(hallwaysToAvoid.contains(entry.getKey()))) {
+                if (entry.getKey() != hallway && entry.getKey() != shape && ok == true && !(hallwaysToAvoid.contains(entry.getKey())) && !(traversedHallways.contains(entry.getKey()))) {
                     String relationToHallway = "";
                     String directionToHallway = "";
                     int orderToHallway = 0;
@@ -1229,7 +1260,7 @@ public class Graph {
             if (!(downDirections.contains(s))) {
                 if (max != 0) {
                     if (currentShape instanceof Hallway) {
-                       // hallwaysToAvoid.add(hallway);
+                        // hallwaysToAvoid.add(hallway);
                         traversedHallways.add(currentShape);
                         ExtendedShape neighbor = findFirstShapeInHallwayFromRight(currentShape, traversedHallways, currentShapeDirectionToHallway, shape, hallway, hallwaysToAvoid);
                         if (neighbor != null) {
@@ -1258,22 +1289,48 @@ public class Graph {
         return null;
     }
 
-    private ExtendedShape findFirstShapeInHallwayFromStraight(ExtendedShape hallway, String searchDirection, ExtendedShape sh, ExtendedShape hallwayToAvoid) {
-        //  System.out.println(((ExtendedRectangle)hallway).getName() + " " + searchDirection);
+    private ExtendedShape findFirstShapeInHallwayFromStraight(ExtendedShape hallway, String searchDirection, ExtendedShape sh) {
+      //  System.out.println(((ExtendedRectangle) hallway).getName() + " " + searchDirection);
+        ExtendedRectangle castedShape = (ExtendedRectangle) sh;
         List<Pair<ExtendedShape, String>> list = graph.get(hallway);
         if (list != null) {
             for (Pair<ExtendedShape, String> pair : list) {
                 String relationToHallway = pair.getValue();
                 String directionToHallway = relationToHallway.split(" ")[0];
-                int orderToHallway = Integer.valueOf(relationToHallway.split(" ")[1]);
-                if (directionToHallway.equals(searchDirection) && orderToHallway == 1) {
+                //int orderToHallway = Integer.valueOf(relationToHallway.split(" ")[1]);
+                double distanceBetweenCenters;
+                if (searchDirection.equals("Left") || searchDirection.equals("Right")) {
+                    distanceBetweenCenters = Math.abs((((ExtendedRectangle) pair.getKey()).centerPoint.getY() + ((ExtendedRectangle) pair.getKey()).getLength() / 2) - ((((ExtendedRectangle) sh).getCenterPoint().getY()) + ((ExtendedRectangle) sh).getLength() / 2));
+                } else {
+                    distanceBetweenCenters = Math.abs((((ExtendedRectangle) pair.getKey()).centerPoint.getX() + ((ExtendedRectangle) pair.getKey()).getWidth() / 2) - ((((ExtendedRectangle) sh).getCenterPoint().getX()) + ((ExtendedRectangle) sh).getWidth() / 2));
+                }
+                //  System.out.println(distanceBetweenCenters);
+                if (directionToHallway.equals(searchDirection)) {
                     if (pair.getKey() instanceof Hallway) {
-                        ExtendedShape neighbor = findFirstShapeInHallwayFromStraight(pair.getKey(), searchDirection, sh, hallway);
-                        if (neighbor != null) {
-                            return neighbor;
+                        Hallway hall = (Hallway) hallway;
+                        boolean ok = false;
+                        if (searchDirection.equals("Left") || searchDirection.equals("Right")) {
+                            //(((ExtendedRectangle) sh).centerPoint.getY() < ((ExtendedRectangle) pair.getKey()).centerPoint.getY() && ((ExtendedRectangle) sh).centerPoint.getY() + ((ExtendedRectangle) sh).getLength() > ((ExtendedRectangle) pair.getKey()).centerPoint.getY() + ((ExtendedRectangle) pair.getKey()).getLength()) || (((ExtendedRectangle) sh).getCenterPoint().getY() > ((ExtendedRectangle) pair.getKey()).centerPoint.getY() && ((ExtendedRectangle) sh).getCenterPoint().getY() < ((ExtendedRectangle) pair.getKey()).centerPoint.getY() + ((ExtendedRectangle) pair.getKey()).getLength()) || (((ExtendedRectangle) sh).getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() > ((ExtendedRectangle) pair.getKey()).centerPoint.getY() && ((ExtendedRectangle) sh).getCenterPoint().getY() + ((ExtendedRectangle) sh).getLength() < ((ExtendedRectangle) pair.getKey()).centerPoint.getY() + ((ExtendedRectangle) pair.getKey()).getLength())
+                            if (castedShape.getCenterPoint().getY() + castedShape.getLength() / 2 > hall.getCenterPoint().getY() && castedShape.getCenterPoint().getY() + castedShape.getLength() / 2 < hall.getCenterPoint().getY() + hall.getLength()) {
+                                ok = true;
+                            }
+                            //(((ExtendedRectangle) sh).centerPoint.getX() < ((ExtendedRectangle) pair.getKey()).centerPoint.getX() && ((ExtendedRectangle) sh).centerPoint.getX() + ((ExtendedRectangle) sh).getWidth() > ((ExtendedRectangle) pair.getKey()).centerPoint.getX() + ((ExtendedRectangle) pair.getKey()).getWidth()) || (((ExtendedRectangle) sh).getCenterPoint().getX() > ((ExtendedRectangle) pair.getKey()).centerPoint.getX() && ((ExtendedRectangle) sh).getCenterPoint().getX() < ((ExtendedRectangle) pair.getKey()).centerPoint.getX() + ((ExtendedRectangle) pair.getKey()).getWidth()) || (((ExtendedRectangle) sh).getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() > ((ExtendedRectangle) pair.getKey()).centerPoint.getX() && ((ExtendedRectangle) sh).getCenterPoint().getX() + ((ExtendedRectangle) sh).getWidth() < ((ExtendedRectangle) pair.getKey()).centerPoint.getX() + ((ExtendedRectangle) pair.getKey()).getWidth())
+                        } else {
+                            if (castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2 > hall.getCenterPoint().getX() && castedShape.getCenterPoint().getX() + castedShape.getWidth() / 2 < hall.getCenterPoint().getX() + hall.getWidth()) {
+                                ok = true;
+                            }
+                        }
+                        if (ok == true) {
+                            ExtendedShape neighbor = findFirstShapeInHallwayFromStraight(pair.getKey(), searchDirection, sh);
+                            if (neighbor != null) {
+                                return neighbor;
+                            }
                         }
                     } else {
-                        return pair.getKey();
+                        if (distanceBetweenCenters < 25) {
+                         //   System.out.println(distanceBetweenCenters);
+                            return pair.getKey();
+                        }
                     }
                 }
             }

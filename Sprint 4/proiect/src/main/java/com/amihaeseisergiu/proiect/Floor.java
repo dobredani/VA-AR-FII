@@ -73,7 +73,9 @@ public class Floor {
 
             waypointJSON.put("name", ((ExtendedRectangle) entry.getKey()).getName());
             waypointJSON.put("markerId", ((ExtendedRectangle) entry.getKey()).getId());
-            waypointJSON.put("type", ((ExtendedRectangle) entry.getKey()).getType());
+            if (!(entry.getKey() instanceof Bathroom)) {
+                waypointJSON.put("type", ((ExtendedRectangle) entry.getKey()).getType());
+            }
             waypointJSON.put("width", ((ExtendedRectangle) entry.getKey()).getWidth());
             waypointJSON.put("length", ((ExtendedRectangle) entry.getKey()).getLength());
             waypointJSON.put("x", ((ExtendedRectangle) entry.getKey()).getCenterPoint().getX());
@@ -147,12 +149,12 @@ public class Floor {
         floorJSON.put("waypoints", waypointsList);
 
         List<JSONObject> hallwaysList = new ArrayList<>();
+        //  List<JSONObject> bathroomList = new ArrayList<>();
         for (ExtendedShape s : shapes) {
-            
-            if(s instanceof Hallway)
-            {
+
+            if (s instanceof Hallway) {
                 JSONObject hallwayJSON = new JSONObject();
-                
+
                 hallwayJSON.put("name", ((ExtendedRectangle) s).getName());
                 hallwayJSON.put("markerId", ((ExtendedRectangle) s).getId());
                 hallwayJSON.put("shapeType", ((ExtendedRectangle) s).getShapeType());
@@ -161,12 +163,29 @@ public class Floor {
                 hallwayJSON.put("x", ((ExtendedRectangle) s).getCenterPoint().getX());
                 hallwayJSON.put("y", ((ExtendedRectangle) s).getCenterPoint().getY());
                 hallwayJSON.put("color", ((ExtendedRectangle) s).getColor());
-                
+
                 hallwaysList.add(hallwayJSON);
             }
+
+            /*   if(s instanceof Bathroom)
+            {
+                JSONObject bathroomJSON = new JSONObject();
+                
+                bathroomJSON.put("name", ((ExtendedRectangle) s).getName());
+                bathroomJSON.put("markerId", ((ExtendedRectangle) s).getId());
+                bathroomJSON.put("shapeType", ((ExtendedRectangle) s).getShapeType());
+                bathroomJSON.put("width", ((ExtendedRectangle) s).getWidth());
+                bathroomJSON.put("length", ((ExtendedRectangle) s).getLength());
+                bathroomJSON.put("x", ((ExtendedRectangle) s).getCenterPoint().getX());
+                bathroomJSON.put("y", ((ExtendedRectangle) s).getCenterPoint().getY());
+                bathroomJSON.put("color", ((ExtendedRectangle) s).getColor());
+                
+                bathroomList.add(bathroomJSON);
+            }*/
         }
-        
+
         floorJSON.put("hallways", hallwaysList);
+        // floorJSON.put("bathrooms", bathroomList);
 
         return floorJSON;
     }

@@ -5,9 +5,12 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -168,9 +171,11 @@ public class MainMenu {
                 CustomAnimation.animateInFromRightWithBounce(scene.getWidth(), buildingHBox);
 
             }
-        });
+        }
+        );
 
-        selectFolder.setOnAction(e -> {
+        selectFolder.setOnAction(e
+                -> {
             ProgressIndicator progress = new ProgressIndicator();
             progress.setMaxSize(40, 40);
             progress.setStyle("-fx-progress-color: green");
@@ -265,7 +270,9 @@ public class MainMenu {
                                     ((ExtendedRectangle) shape).setWidth(Double.valueOf(((JSONObject) waypoint).get("width").toString()));
                                     ((ExtendedRectangle) shape).setLength(Double.valueOf(((JSONObject) waypoint).get("length").toString()));
                                     ((ExtendedRectangle) shape).setName(((JSONObject) waypoint).get("name").toString());
-                                    ((ExtendedRectangle) shape).setType(((JSONObject) waypoint).get("type").toString());
+                                    if (!(shape instanceof Bathroom)) {
+                                        ((ExtendedRectangle) shape).setType(((JSONObject) waypoint).get("type").toString());
+                                    }
                                     ((ExtendedRectangle) shape).setShapeType(((JSONObject) waypoint).get("shapeType").toString());
                                     ((ExtendedRectangle) shape).setId(Integer.valueOf(((JSONObject) waypoint).get("markerId").toString()));
                                     Rectangle rectangle = new Rectangle();
@@ -308,7 +315,6 @@ public class MainMenu {
                                         graph.setOrder();
                                     }
                                 }
-
                                 build.getFloors().put(floor.getLevel(), floor);
                             }
 
@@ -351,8 +357,13 @@ public class MainMenu {
                                 });
 
                                 deleteBtn.setOnAction(ev -> {
-
-                                    CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), buildingHBox, centerScrollPaneVBox.getChildren());
+                                    try {
+                                        String response = executeDelete("http://localhost:5000/building/" + buildName.getText());
+                                        System.out.println(response);
+                                        CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), buildingHBox, centerScrollPaneVBox.getChildren());
+                                    } catch (Exception ex) {
+                                        Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                 });
 
                                 CustomAnimation.animateInFromRightWithBounce(scene.getWidth(), buildingHBox);
@@ -375,68 +386,44 @@ public class MainMenu {
             /*
             
              */
-        });
+        }
+        );
 
-        BorderPane.setMargin(leftVBox, new Insets(5, 5, 5, 5));
-        BorderPane.setMargin(topHBox, new Insets(5, 5, 5, 5));
-        BorderPane.setMargin(centerVBox, new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(leftVBox,
+                new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(topHBox,
+                new Insets(5, 5, 5, 5));
+        BorderPane.setMargin(centerVBox,
+                new Insets(5, 5, 5, 5));
 
         scene = new Scene(pane, 800, 600);
 
         CustomAnimation.animateInFromLeft(scene.getWidth(), leftVBox);
         CustomAnimation.animateInFromTop(scene.getHeight(), topHBox);
-        CustomAnimation.animateTypeWriterText(topLabel, "Building Creator");
+        CustomAnimation.animateTypeWriterText(topLabel,
+                "Building Creator");
 
         stage.setScene(scene);
-        stage.setTitle("Building Creator");
+
+        stage.setTitle(
+                "Building Creator");
         //stage.setAlwaysOnTop(true);
         //stage.setFullScreen(true);
         stage.show();
     }
 
-    public static String executePost(String targetURL, String urlParameters) {
-        HttpURLConnection connection = null;
-
-        try {
-            //Create connection
-            URL url = new URL(targetURL);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type",
-                    "application/json; utf-8");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Content-Length",
-                    Integer.toString(urlParameters.getBytes().length));
-            connection.setRequestProperty("Content-Language", "en-US");
-
-            connection.setUseCaches(false);
-            connection.setDoOutput(true);
-
-            //Send request
-            DataOutputStream wr = new DataOutputStream(
-                    connection.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.close();
-
-            //Get Response  
-            InputStream is = connection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
-            String line;
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
-            }
-            rd.close();
-            return response.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
+    public static String executeDelete(String urlToRead) throws Exception {
+        StringBuilder result = new StringBuilder();
+        URL url = new URL(urlToRead);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("DELETE");
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        String line;
+        while ((line = rd.readLine()) != null) {
+            result.append(line);
         }
+        rd.close();
+        return result.toString();
     }
 
     public static String executeGet(String urlToRead) throws Exception {

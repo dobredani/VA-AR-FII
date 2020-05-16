@@ -82,13 +82,13 @@ public class SavePanel extends HBox {
 
         saveBtn.setOnAction(e -> {
             try {
-                String buildingNames = executeGet("http://localhost:5000/building");
                 System.out.println(frame.building.toJson().toJSONString());
+                String buildingNames = executeGet("http://localhost:5000/building");
                 String response = "";
                 if (buildingNames.contains(frame.building.name)) {
-                    response = executePut("http://localhost:5000/building/" + frame.building.name, frame.building.toJson().toJSONString());
+                    response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "PUT");
                 } else {
-                    response = executePost("http://localhost:5000/building", frame.building.toJson().toJSONString());
+                    response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "POST");
                 }
                 System.out.println(response);
                 MainMenu menu = new MainMenu(frame.stage);
@@ -98,57 +98,13 @@ public class SavePanel extends HBox {
         });
     }
 
-    public String executePut(String targetURL, String urlParameters) {
+    public String executeHTTPRequest(String targetURL, String urlParameters, String method) {
         HttpURLConnection connection = null;
         try {
             //Create connection
             URL url = new URL(targetURL);
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("PUT");
-            connection.setRequestProperty("Content-Type",
-                    "application/json; utf-8");
-            connection.setRequestProperty("Accept", "application/json");
-            connection.setRequestProperty("Content-Length",
-                    Integer.toString(urlParameters.getBytes().length));
-            connection.setRequestProperty("Content-Language", "en-US");
-
-            connection.setUseCaches(false);
-            connection.setDoOutput(true);
-
-            //Send request
-            DataOutputStream wr = new DataOutputStream(
-                    connection.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.close();
-
-            //Get Response  
-            InputStream is = connection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
-            String line;
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append('\r');
-            }
-            rd.close();
-            return response.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
-    }
-
-    public String executePost(String targetURL, String urlParameters) {
-        HttpURLConnection connection = null;
-        try {
-            //Create connection
-            URL url = new URL(targetURL);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod(method);
             connection.setRequestProperty("Content-Type",
                     "application/json; utf-8");
             connection.setRequestProperty("Accept", "application/json");

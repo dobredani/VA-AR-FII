@@ -12,7 +12,7 @@ import java.awt.Rectangle;
  * @author Alex
  */
 public class ExtendedRectangle extends ExtendedShape {
-    
+
     private double length = 100;
     private double width = 100;
     private String name;
@@ -20,20 +20,21 @@ public class ExtendedRectangle extends ExtendedShape {
     protected String type;
     protected String shapeType;
     private int id;
-    
+    Hallway hallway = null;
+
     public ExtendedRectangle(Point p) {
         super(p);
     }
 
     public Point getCoordinates() {
-      //  Bounds bounds = rectangle.getLayoutBounds();
-      //  Point2D coordinates = rectangle.localToScene(bounds.getMinX(), bounds.getMinY());
-       // int X = (int) coordinates.getX();
-       // int Y = (int) coordinates.getY();
+        //  Bounds bounds = rectangle.getLayoutBounds();
+        //  Point2D coordinates = rectangle.localToScene(bounds.getMinX(), bounds.getMinY());
+        // int X = (int) coordinates.getX();
+        // int Y = (int) coordinates.getY();
         Point p = new Point(250, 250);
         return p;
     }
-    
+
     public Rectangle getRectangle() {
         return rectangle;
     }
@@ -41,7 +42,7 @@ public class ExtendedRectangle extends ExtendedShape {
     public void setRectangle(Rectangle rectangle) {
         this.rectangle = rectangle;
     }
-    
+
     public double getWidth() {
         return width;
     }
@@ -114,7 +115,13 @@ public class ExtendedRectangle extends ExtendedShape {
     public void setShapeType(String shapeType) {
         this.shapeType = shapeType;
     }
-    
-    
-}
 
+    public Hallway getHallway() {
+        return hallway;
+    }
+
+    public void setHallway(Hallway hallway) {
+        this.hallway = hallway;
+    }
+
+}

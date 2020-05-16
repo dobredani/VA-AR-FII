@@ -427,8 +427,6 @@ public class DrawingPanel extends HBox {
         canvas.setWidth(2500);
         canvas.setHeight(1000);
         sp = new ScrollPane();
-        sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        sp.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         sp.setStyle("-fx-background-color: white");
         canvas.setStyle("-fx-background-color: white");
         sp.setContent(canvas);

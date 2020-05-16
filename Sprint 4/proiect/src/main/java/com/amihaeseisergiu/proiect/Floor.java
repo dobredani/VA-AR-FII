@@ -107,8 +107,8 @@ public class Floor {
                 while (iter.hasNext()) {
                     Map.Entry<Integer, List<InputSchedule>> entry1 = iter.next();
                     List<InputSchedule> localLista = entry1.getValue();
-                    JSONObject objectSchedule = new JSONObject();
                     for (InputSchedule input : localLista) {
+                        JSONObject objectSchedule = new JSONObject();
                         objectSchedule.put("group", input.getGrupa());
                         objectSchedule.put("course", input.getMaterie());
                         objectSchedule.put("startTime", input.getOraStart());

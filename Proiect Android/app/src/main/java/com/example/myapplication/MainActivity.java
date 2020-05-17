@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.mainProgressBar);
 
         start.setVisibility(View.GONE);
-        getBuildingData("FII");
+        //getBuildingData("FII");
         getBuildingList();
 
         Button start = findViewById(R.id.startBtn);
@@ -97,9 +97,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("JsonObject", "Building List" + buildingList.toString());
                       
                         for (String buildingName : ApplicationData.getInstance().getBuildings())
-                            if (!buildingName.equals("FII"))
-                                getBuildingData(buildingName);
-                       // applicationData.setCurrentBuilding(allBuildings.get(0));
+                            getBuildingData(buildingName);
+
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -131,9 +130,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         Log.d("JsonObject", "Response: " + response.toString());
                         Building building = JsonParser.parseBuilding(response,buildingName);
-                        ApplicationData.getInstance().getBuildingsData().add(building);
-                        if (buildingName.equals("FII"))
+                        if(ApplicationData.getInstance().getCurrentBuilding()==null)
                             ApplicationData.getInstance().setCurrentBuilding(building);
+                        ApplicationData.getInstance().getBuildingsData().add(building);
                         start.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                     }

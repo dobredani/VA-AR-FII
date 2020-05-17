@@ -121,7 +121,7 @@ public class JsonParser {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject object = jsonArray.getJSONObject(i);
-                if (object.getString("name").equals("Stairs") && check_stairs.equals(false)) {
+                if (object.getString("name").contains("Stairs") && check_stairs.equals(false)) {
                     check_stairs = true;
                     continue;
                 }
@@ -145,17 +145,17 @@ public class JsonParser {
 //                        Add indication to the previous waypoint.
                     Waypoint prevWaypoint = waypointList.get(waypointList.size() - 2);
 
-                    if (object.getString("name").equals("Stairs")) {
+                    if (object.getString("name").contains("Stairs")) {
                         check_stairs = false;
                         int floor = object.getInt("floor");
 
 //                          Previous Waypoint indication = Go {direction}
                         prevWaypoint.addInstruction(", take the stairs to floor " + Integer.toString(floor));
+                        prevWaypoint.addInstruction(", then " + "scan " + "stairs");
                     }
-
-                    prevWaypoint.addInstruction(", then " + "scan " + object.getString("name"));
-
-
+                    else {
+                        prevWaypoint.addInstruction(", then " + "scan " + object.getString("name"));
+                    }
                 }
 
             }

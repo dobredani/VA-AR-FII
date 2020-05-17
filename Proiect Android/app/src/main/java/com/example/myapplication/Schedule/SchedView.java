@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.example.myapplication.ApplicationData;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.problem.Classroom;
 import com.example.myapplication.problem.Lecture;
 import com.example.myapplication.problem.Location;
 import com.example.myapplication.themeUtils;
@@ -41,16 +42,17 @@ public class SchedView extends AppCompatActivity {
         ViewPager viewPager = findViewById(R.id.pagerCalendar);
 
         String room = getIntent().getStringExtra("room");
-        Location location = ApplicationData.getInstance().getCurrentBuilding().getLocation(room);
+        Classroom clasroom = (Classroom) ApplicationData.getInstance().getCurrentBuilding().getLocation(room);
+
 
         // setup tabs
         //TODO pass argument to fragment the data (ArrayList) of the respective weekday
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new SchedViewFragment(location.getDaySchedule(1)), "luni");
-        adapter.addFragment(new SchedViewFragment(location.getDaySchedule(2)), "marti");
-        adapter.addFragment(new SchedViewFragment(location.getDaySchedule(3)), "miercuri");
-        adapter.addFragment(new SchedViewFragment(location.getDaySchedule(4)), "joi");
-        adapter.addFragment(new SchedViewFragment(location.getDaySchedule(5)), "vineri");
+        adapter.addFragment(new SchedViewFragment(clasroom.getDaySchedule(1)), "luni");
+        adapter.addFragment(new SchedViewFragment(clasroom.getDaySchedule(2)), "marti");
+        adapter.addFragment(new SchedViewFragment(clasroom.getDaySchedule(3)), "miercuri");
+        adapter.addFragment(new SchedViewFragment(clasroom.getDaySchedule(4)), "joi");
+        adapter.addFragment(new SchedViewFragment(clasroom.getDaySchedule(5)), "vineri");
         viewPager.setAdapter(adapter);
 
         weekDaysLayout.setupWithViewPager(viewPager);

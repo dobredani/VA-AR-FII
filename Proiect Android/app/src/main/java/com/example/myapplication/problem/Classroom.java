@@ -17,11 +17,11 @@ public class Classroom extends Location {
 
     public Classroom(int id, String name, List<Lecture> schedule) {
         super(id, name);
-        this.schedules = schedule;
-
+        schedules = new ArrayList<>();
+        schedModels = new ArrayList<>();
         for (int xi = 0; xi < 5; xi++) {
             List<SchedModel> lectures = new ArrayList<>();
-            schedModels.add(lectures); // monday - friday
+               schedModels.add(lectures); // monday - friday
         }
 
         for (Lecture lecture : schedule) {

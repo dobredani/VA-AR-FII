@@ -234,7 +234,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/route/";
+        String url = "http://192.168.100.3:5000/route/";
 
         url = url.concat(ApplicationData.getInstance().getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
         System.out.println(url);

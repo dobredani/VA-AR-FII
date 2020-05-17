@@ -1,14 +1,17 @@
-package com.example.myapplication;
+package com.example.myapplication.util;
 
 import android.app.Activity;
 import android.content.Intent;
-public class themeUtils {
 
-    static int cTheme;
-    final static int  Light_Theme= 0;
-    final static int Dark_Theme=1;
+import com.example.myapplication.R;
 
-    static void changeToTheme(Activity activity, int theme) {
+public class ThemeUtils {
+
+    public static int cTheme;
+    public final static int  Light_Theme= 0;
+    public final static int Dark_Theme=1;
+
+    public static void changeToTheme(Activity activity, int theme) {
         cTheme = theme;
         activity.startActivity(activity.getIntent());
         activity.finish();

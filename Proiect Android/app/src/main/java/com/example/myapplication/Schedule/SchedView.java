@@ -1,16 +1,12 @@
 package com.example.myapplication.Schedule;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.ApplicationData;
-import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.problem.Classroom;
-import com.example.myapplication.problem.Lecture;
-import com.example.myapplication.problem.Location;
-import com.example.myapplication.themeUtils;
+import com.example.myapplication.util.ThemeUtils;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -31,7 +27,7 @@ public class SchedView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         a=this;
-        themeUtils.onActivityCreateSetTheme(a);
+        ThemeUtils.onActivityCreateSetTheme(a);
         // show calendar_view layout
         setContentView(R.layout.calendar_view);
 

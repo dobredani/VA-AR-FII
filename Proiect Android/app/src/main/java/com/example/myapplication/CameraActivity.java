@@ -1,27 +1,20 @@
 package com.example.myapplication;
 
 import android.Manifest;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.graphics.drawable.GradientDrawable;
 import android.hardware.Camera;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myapplication.util.DisplayController;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;

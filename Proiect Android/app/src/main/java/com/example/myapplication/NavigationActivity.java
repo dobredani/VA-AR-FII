@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.myapplication.util.DisplayController;
+import com.example.myapplication.util.ThemeUtils;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -35,7 +37,7 @@ public class NavigationActivity extends CameraActivity {
         super.onCreate(savedInstanceState);
 
         a = this;
-        themeUtils.onActivityCreateSetTheme(a);
+        ThemeUtils.onActivityCreateSetTheme(a);
         //hides the action bar
         Objects.requireNonNull(getSupportActionBar()).hide();
         //hides the status bar

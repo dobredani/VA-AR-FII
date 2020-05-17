@@ -4,8 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.example.myapplication.util.AsyncQR;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 

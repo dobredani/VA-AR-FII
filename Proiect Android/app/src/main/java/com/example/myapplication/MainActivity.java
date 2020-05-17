@@ -24,6 +24,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.problem.Building;
+import com.example.myapplication.util.JsonParser;
+import com.example.myapplication.util.ThemeUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,12 +47,12 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences mPrefs = getSharedPreferences("THEME", 0);
         int theme = mPrefs.getInt("theme", 0);
         if (theme==0) {
-            themeUtils.cTheme=themeUtils.Light_Theme;
+            ThemeUtils.cTheme= ThemeUtils.Light_Theme;
         } else {
-            themeUtils.cTheme=themeUtils.Dark_Theme;
+            ThemeUtils.cTheme= ThemeUtils.Dark_Theme;
         }
         super.onCreate(savedInstanceState);
-        themeUtils.onActivityCreateSetTheme(a);
+        ThemeUtils.onActivityCreateSetTheme(a);
 
         setContentView(R.layout.activity_main);
 

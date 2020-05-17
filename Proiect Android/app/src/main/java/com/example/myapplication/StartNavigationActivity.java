@@ -44,8 +44,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.problem.Connector;
 import com.example.myapplication.problem.Location;
-import com.example.myapplication.problem.LocationType;
 import com.example.myapplication.problem.Waypoint;
+import com.example.myapplication.util.JsonParser;
+import com.example.myapplication.util.ThemeUtils;
 import com.google.android.material.navigation.NavigationView;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -76,7 +77,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         a = this;
-        themeUtils.onActivityCreateSetTheme(this);
+        ThemeUtils.onActivityCreateSetTheme(this);
 
         errorDialog = new Dialog(this);
 
@@ -122,7 +123,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 } else {
                     String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
                     Location destination = ApplicationData.getInstance().getCurrentBuilding().getLocation(destinationName);
-                    if (destination == null || destination instanceof Connector) {
+                    if (startName.equals(destinationName) || destination == null || destination instanceof Connector) {
                         makeText(getApplicationContext(), "Invalid Destination", LENGTH_SHORT).show();
                         startNavigation.setEnabled(true);
                     } else {
@@ -175,15 +176,15 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 SharedPreferences.Editor mEditor;
                 switch(which){
                     case 1:
-                        themeUtils.changeToTheme(MainActivity.a, themeUtils.Dark_Theme);
-                        themeUtils.changeToTheme(a, themeUtils.Dark_Theme);
+                        ThemeUtils.changeToTheme(MainActivity.a, ThemeUtils.Dark_Theme);
+                        ThemeUtils.changeToTheme(a, ThemeUtils.Dark_Theme);
                         mPrefs = getSharedPreferences("THEME", 0);
                         mEditor = mPrefs.edit();
                         mEditor.putInt("theme", 1).commit();
                         break;
                     case 0:
-                        themeUtils.changeToTheme(MainActivity.a, themeUtils.Light_Theme);
-                        themeUtils.changeToTheme(a, themeUtils.Light_Theme);
+                        ThemeUtils.changeToTheme(MainActivity.a, ThemeUtils.Light_Theme);
+                        ThemeUtils.changeToTheme(a, ThemeUtils.Light_Theme);
                         mPrefs = getSharedPreferences("THEME", 0);
                         mEditor = mPrefs.edit();
                         mEditor.putInt("theme", 0).commit();

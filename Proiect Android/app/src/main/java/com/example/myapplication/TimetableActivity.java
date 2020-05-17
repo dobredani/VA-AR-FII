@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,22 +19,19 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
-import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.Schedule.SchedView;
 import com.example.myapplication.problem.Classroom;
 import com.example.myapplication.problem.Location;
-import com.example.myapplication.problem.LocationType;
 import com.example.myapplication.problem.Office;
+import com.example.myapplication.util.ThemeUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class TimetableActivity extends AppCompatActivity {
@@ -48,7 +43,7 @@ public class TimetableActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         a=this;
-        themeUtils.onActivityCreateSetTheme(a);
+        ThemeUtils.onActivityCreateSetTheme(a);
         setContentView(R.layout.activity_timetable);
         getSupportActionBar().hide();
         officeDialog = new Dialog(this);

@@ -8,8 +8,8 @@ public class themeUtils {
     public final static int Dark_Theme=1;
     public static void changeToTheme(Activity activity, int theme) {
         cTheme = theme;
+        activity.startActivity(activity.getIntent());
         activity.finish();
-        activity.startActivity(new Intent(activity, activity.getClass()));
     }
     public static void onActivityCreateSetTheme(Activity activity){
         switch(cTheme){

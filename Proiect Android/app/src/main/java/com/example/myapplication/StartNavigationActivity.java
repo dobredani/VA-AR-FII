@@ -42,6 +42,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.problem.Connector;
 import com.example.myapplication.problem.Location;
 import com.example.myapplication.problem.LocationType;
 import com.example.myapplication.problem.Waypoint;
@@ -114,14 +115,14 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 startNavigation.setEnabled(false);
                 String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
                 Location start = ApplicationData.getInstance().getCurrentBuilding().getLocation(startName);
-                if (start == null || start.getLocationType() == LocationType.CONNECTOR) {
+                if (start == null || start instanceof Connector) {
                     makeText(getApplicationContext(), "Invalid Starting Point", LENGTH_SHORT).show();
                     startNavigation.setEnabled(true);
 
                 } else {
                     String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
                     Location destination = ApplicationData.getInstance().getCurrentBuilding().getLocation(destinationName);
-                    if (destination == null || destination.getLocationType() == LocationType.CONNECTOR) {
+                    if (destination == null || destination instanceof Connector) {
                         makeText(getApplicationContext(), "Invalid Destination", LENGTH_SHORT).show();
                         startNavigation.setEnabled(true);
                     } else {
@@ -162,7 +163,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     }
 
     private void showThemes(){
-        final String[] themes ={"Purple Theme", "Blue Theme"};
+        final String[] themes = {"Purple Theme", "Blue Theme"};
 
         AlertDialog.Builder bld=new AlertDialog.Builder(this);
         bld.setTitle("Choose a theme");
@@ -238,7 +239,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         // for emulator use 10.0.0.2:5000/
         // for device, run ipconfig in cmd and get ipv4 address
 
-        String url = "http://192.168.100.3:5000/route/";
+        String url = "http://" + getResources().getString(R.string.ip) + ":" + getResources().getString(R.string.port) + "/route/";
 
         url = url.concat(ApplicationData.getInstance().getCurrentBuilding().getName() + "?start=" + start + "&" + "destination=" + destination);
         System.out.println(url);

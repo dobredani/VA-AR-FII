@@ -37,7 +37,7 @@ public class Building {
     public List<Location> getTopLocations(int howMany) {
         List<Location> topLocations = new ArrayList<>();
         for (Location location:locations) {
-            if (location.getLocationType() != LocationType.CONNECTOR)
+            if (!(location instanceof Connector))
                 topLocations.add(location);
             if (topLocations.size() == howMany)
                 break;

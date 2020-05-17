@@ -24,11 +24,12 @@ public class MainFrame {
     ControlPanel controlPanel;
     SavePanel savePanel;
     Building building;
-
+    BorderPane pane;
+    
     public MainFrame(Stage stage, Building build, boolean state) {
         this.stage = stage;
         this.building = build;
-        BorderPane pane = new BorderPane();
+        pane = new BorderPane();
         pane.setPadding(new Insets(5, 5, 5, 5));
         pane.setStyle("-fx-background-color: linear-gradient(#4facfe, #00f2fe)");
         

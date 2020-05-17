@@ -27,10 +27,6 @@ public class ExtendedRectangle extends ExtendedShape {
     }
 
     public Point getCoordinates() {
-        //  Bounds bounds = rectangle.getLayoutBounds();
-        //  Point2D coordinates = rectangle.localToScene(bounds.getMinX(), bounds.getMinY());
-        // int X = (int) coordinates.getX();
-        // int Y = (int) coordinates.getY();
         Point p = new Point(250, 250);
         return p;
     }

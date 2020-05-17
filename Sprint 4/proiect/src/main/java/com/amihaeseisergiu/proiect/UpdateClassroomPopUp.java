@@ -206,7 +206,6 @@ public class UpdateClassroomPopUp extends Application {
         Iterator<Map.Entry<Integer, List<InputSchedule>>> iter = shape.mapaInputuri.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry<Integer, List<InputSchedule>> entry = iter.next();
-            System.out.println("Key = " + entry.getKey());
             List<InputSchedule> localLista = entry.getValue();
             for (InputSchedule input : localLista) {
                 HBox grupareInputuri = setareInputuri(input.getGrupa(), input.getOraStart(), input.getOraFinal(), input.getMaterie());
@@ -549,8 +548,6 @@ public class UpdateClassroomPopUp extends Application {
                     }
                 }
                 if (!localLista.isEmpty() && schimbare == 1) {
-
-                    System.out.println(i);
                     shape.mapaInputuri.put(i, localLista);
                 }
             }
@@ -561,6 +558,8 @@ public class UpdateClassroomPopUp extends Application {
             double initialHeight = rectangle.getLength();
             rectangle.setLength(Double.valueOf(heightField.getText()));
             rectangle.setWidth(Double.valueOf(widthField.getText()));
+            rectangle.setLength((int)(rectangle.getLength()));
+            rectangle.setWidth((int)(rectangle.getWidth()));
             rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
             if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
                 rectangle.setLength(initialHeight);

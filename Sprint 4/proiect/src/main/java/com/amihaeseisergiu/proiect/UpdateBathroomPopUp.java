@@ -165,6 +165,8 @@ public class UpdateBathroomPopUp extends Application {
             double initialHeight = rectangle.getLength();
             rectangle.setLength(Double.valueOf(heightField.getText()));
             rectangle.setWidth(Double.valueOf(widthField.getText()));
+            rectangle.setLength((int)(rectangle.getLength()));
+            rectangle.setWidth((int)(rectangle.getWidth()));
             rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
             if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
                 rectangle.setLength(initialHeight);
@@ -178,7 +180,6 @@ public class UpdateBathroomPopUp extends Application {
                 drawingPanel.setOrder();
                 drawingPanel.drawAll();
                 drawingPanel.getIds().add(rectangle.getId());
-                // System.out.println(drawingPanel.getGraph());
             }
             rectangle.setStartPoint(new Point(rectangle.getCenterPoint().getX() + rectangle.getWidth() / 2, rectangle.getCenterPoint().getY() + rectangle.getLength() / 2));
             rectangle.getRectangle().setBounds((int) rectangle.getCenterPoint().getX(), (int) rectangle.getCenterPoint().getY(), (int) rectangle.getWidth(), (int) rectangle.getLength());

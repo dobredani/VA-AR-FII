@@ -164,7 +164,15 @@ public class UpdateStairsPopUp extends Application {
         closeBtn.setOnAction(event -> {
             stage.close();
             if (comboBoxStairs.getValue() != null) {
-                rectangle.setName(comboBoxStairs.getValue().toString());
+                boolean ok = true;
+                for (ExtendedShape shape : drawingPanel.getShapes()) {
+                    if (((ExtendedRectangle) shape).getName().equals(comboBoxStairs.getValue().toString())) {
+                        ok = false;
+                    }
+                }
+                if (ok == true) {
+                    rectangle.setName(comboBoxStairs.getValue().toString());
+                }
             } else {
                 boolean ok = true;
                 for (ExtendedShape shape : drawingPanel.getShapes()) {
@@ -188,6 +196,8 @@ public class UpdateStairsPopUp extends Application {
             double initialHeight = rectangle.getLength();
             rectangle.setLength(Double.valueOf(heightField.getText()));
             rectangle.setWidth(Double.valueOf(widthField.getText()));
+            rectangle.setLength((int)(rectangle.getLength()));
+            rectangle.setWidth((int)(rectangle.getWidth()));
             rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
             if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
                 rectangle.setLength(initialHeight);

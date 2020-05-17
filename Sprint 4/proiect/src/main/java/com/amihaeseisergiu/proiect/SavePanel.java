@@ -10,10 +10,12 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -22,8 +24,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -73,27 +78,67 @@ public class SavePanel extends HBox {
 
         saveBtn.setOnAction(e -> {
             try {
-                System.out.println(frame.building.toJson().toJSONString());
                 String buildingNames = executeGet("http://localhost:5000/building");
                 String response = "";
                 JSONParser buildingParser = new JSONParser();
                 boolean ok = false;
                 JSONArray buildings = (JSONArray) buildingParser.parse(buildingNames);
 
+                Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
+                int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
+                int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
+                JSONParser responseParser = new JSONParser();
                 for (Object objct : buildings) {
                     if (objct.toString().equals(frame.building.name)) {
                         ok = true;
                         response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "PUT");
+                        JSONObject obj = (JSONObject) responseParser.parse(response);
+                        int statusCode = Integer.valueOf(obj.get("Code").toString());
+                        String responseText = obj.get("Response").toString();
+                        if (responseText.contains("The building is not connected")) {
+                            ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "The building is not connected");
+                            errorPopUp.start(new Stage());
+                        } else if (statusCode == 200) {
+                            MainMenu menu = new MainMenu(frame.stage);
+                        } else if (statusCode != 200) {
+                            ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "An error has occured");
+                            errorPopUp.start(new Stage());
+                        }
                     }
                 }
                 if (ok == false) {
                     response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "POST");
+                    JSONObject obj = (JSONObject) responseParser.parse(response);
+                    int statusCode = Integer.valueOf(obj.get("Code").toString());
+                    String responseText = obj.get("Response").toString();
+                    if (responseText.contains("The building is not connected")) {
+                        ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "The building is not connected");
+                        errorPopUp.start(new Stage());
+                    } else if (statusCode == 200) {
+                        MainMenu menu = new MainMenu(frame.stage);
+                    } else if (statusCode != 200) {
+                        ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "An error has occured");
+                        errorPopUp.start(new Stage());
+                    }
                 }
-                System.out.println(response);
-                System.out.println("Succes");
-                MainMenu menu = new MainMenu(frame.stage);
+            } catch (ConnectException ex) {
+                Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
+                int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
+                int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
+                ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "Connection to server has failed");
+                errorPopUp.start(new Stage());
+            } catch (ParseException ex) {
+                Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
+                int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
+                int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
+                ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "A parsing error has occured");
+                errorPopUp.start(new Stage());
             } catch (Exception ex) {
-                Logger.getLogger(SavePanel.class.getName()).log(Level.SEVERE, null, ex);
+                Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
+                int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
+                int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
+                ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "An error has occured");
+                errorPopUp.start(new Stage());
             }
         });
     }
@@ -120,18 +165,27 @@ public class SavePanel extends HBox {
                     connection.getOutputStream());
             wr.writeBytes(urlParameters);
             wr.close();
-
-            //Get Response  
-            InputStream is = connection.getInputStream();
+            int statusCode = connection.getResponseCode();
+            InputStream is;
+            if (statusCode > 200 && statusCode <= 500) {
+                is = connection.getErrorStream();
+            } else {
+                is = connection.getInputStream();
+            }
             BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
+            StringBuilder response = new StringBuilder();
             String line;
             while ((line = rd.readLine()) != null) {
                 response.append(line);
                 response.append('\r');
             }
             rd.close();
-            return response.toString();
+            JSONObject jsonResponse = new JSONObject();
+            jsonResponse.put("Code", statusCode);
+            jsonResponse.put("Response", response.toString());
+            return jsonResponse.toString();
+            //Get Response  
+            //return response.toString();
         } catch (Exception e) {
             e.printStackTrace();
             return null;

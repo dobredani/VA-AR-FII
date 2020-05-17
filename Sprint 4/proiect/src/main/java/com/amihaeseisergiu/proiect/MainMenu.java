@@ -8,6 +8,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -358,11 +360,24 @@ public class MainMenu {
 
                                 deleteBtn.setOnAction(ev -> {
                                     try {
-                                        String response = executeDelete("http://localhost:5000/building/" + buildName.getText());
-                                        System.out.println(response);
+                                        String response = executeDelete("http://localhost:5000/building/" + buildName.getText().replace(" ", "%20"));
                                         CustomAnimation.animateOutToLeftAndRemove(scene.getWidth(), buildingHBox, centerScrollPaneVBox.getChildren());
+                                    } catch (ConnectException ex) {
+                                        Platform.runLater(() -> {
+                                            Bounds bounds = pane.localToScreen(pane.getBoundsInLocal());
+                                            int x = (int) bounds.getMinX() + (int) pane.getWidth() / 2;
+                                            int y = (int) bounds.getMinY() + (int) pane.getHeight() / 2;
+                                            ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "Connection to server has failed");
+                                            errorPopUp.start(new Stage());
+                                        });
                                     } catch (Exception ex) {
-                                        Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+                                        Platform.runLater(() -> {
+                                            Bounds bounds = pane.localToScreen(pane.getBoundsInLocal());
+                                            int x = (int) bounds.getMinX() + (int) pane.getWidth() / 2;
+                                            int y = (int) bounds.getMinY() + (int) pane.getHeight() / 2;
+                                            ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "An error has occured");
+                                            errorPopUp.start(new Stage());
+                                        });
                                     }
                                 });
 
@@ -370,8 +385,22 @@ public class MainMenu {
                             });
 
                         }
+                    } catch (ConnectException ex) {
+                        Platform.runLater(() -> {
+                            Bounds bounds = pane.localToScreen(pane.getBoundsInLocal());
+                            int x = (int) bounds.getMinX() + (int) pane.getWidth() / 2;
+                            int y = (int) bounds.getMinY() + (int) pane.getHeight() / 2;
+                            ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "Connection to server has failed");
+                            errorPopUp.start(new Stage());
+                        });
                     } catch (Exception ex) {
-                        Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+                        Platform.runLater(() -> {
+                            Bounds bounds = pane.localToScreen(pane.getBoundsInLocal());
+                            int x = (int) bounds.getMinX() + (int) pane.getWidth() / 2;
+                            int y = (int) bounds.getMinY() + (int) pane.getHeight() / 2;
+                            ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "An error has occured");
+                            errorPopUp.start(new Stage());
+                        });
                     }
 
                     Platform.runLater(new Runnable() {

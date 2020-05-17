@@ -16,10 +16,10 @@ com\amihaeseisergiu\proiect\DrawingPanel.class
 com\amihaeseisergiu\proiect\FadeButtonSkin.class
 com\amihaeseisergiu\proiect\SavePanel.class
 com\amihaeseisergiu\proiect\DrawingPanel$2.class
+com\amihaeseisergiu\proiect\ErrorPopUp.class
 com\amihaeseisergiu\proiect\ExtendedRectangle.class
 com\amihaeseisergiu\proiect\InputSchedule.class
 com\amihaeseisergiu\proiect\SortByY.class
-com\amihaeseisergiu\proiect\UpdateShapePopUp.class
 com\amihaeseisergiu\proiect\UpdateOfficePopUp.class
 com\amihaeseisergiu\proiect\Hallway.class
 com\amihaeseisergiu\proiect\Bathroom.class

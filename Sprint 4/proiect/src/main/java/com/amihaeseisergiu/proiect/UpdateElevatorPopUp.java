@@ -36,13 +36,15 @@ public class UpdateElevatorPopUp extends Application {
     double y;
     DrawingPanel drawingPanel;
     List<Hallway> hallways;
+    List<ExtendedShape> elevators;
 
-    public UpdateElevatorPopUp(DrawingPanel drawingPanel, ExtendedShape shape, double x, double y, List<Hallway> hallways) {
+    public UpdateElevatorPopUp(DrawingPanel drawingPanel, List<ExtendedShape> elevators, ExtendedShape shape, double x, double y, List<Hallway> hallways) {
         this.shape = shape;
         this.x = x;
         this.y = y;
         this.drawingPanel = drawingPanel;
         this.hallways = hallways;
+        this.elevators = elevators;
     }
 
     @Override
@@ -81,22 +83,38 @@ public class UpdateElevatorPopUp extends Application {
                 + "-fx-border-style: dashed;"
                 + "-fx-border-radius: 5;");
         centerVBox.getChildren().addAll(nameHBox);
+
+        List<String> elevatorNames = new ArrayList<>();
+
+        for (ExtendedShape s : elevators) {
+            if (!(elevatorNames.contains(((ExtendedRectangle) s).getName()))) {
+                elevatorNames.add(((ExtendedRectangle) s).getName());
+            }
+        }
+
         List<String> hallwaysNames = new ArrayList<>();
         for (Hallway h : hallways) {
             hallwaysNames.add(h.getName());
         }
         ObservableList<String> optionsHallways = FXCollections.observableArrayList(hallwaysNames);
+        ObservableList<String> optionsElevators = FXCollections.observableArrayList(elevatorNames);
         final ComboBox comboBoxHallways = new ComboBox(optionsHallways);
+        final ComboBox comboBoxElevators = new ComboBox(optionsElevators);
         comboBoxHallways.setMaxWidth(100);
         comboBoxHallways.setStyle("-fx-background-color: transparent;"
                 + "-fx-border-color: #ffff00;"
                 + "-fx-border-width: 3;"
         );
+        comboBoxElevators.setMaxWidth(100);
+        comboBoxElevators.setStyle("-fx-background-color: transparent;"
+                + "-fx-border-color: #ffff00;"
+                + "-fx-border-width: 3;"
+        );
         HBox hallwayHBox = new HBox();
         Label hallwayLabel = new Label("Opens to ");
-        hallwayHBox.getChildren().addAll(hallwayLabel,comboBoxHallways);
+        hallwayHBox.getChildren().addAll(hallwayLabel, comboBoxHallways);
         hallwayHBox.setAlignment(Pos.CENTER);
-        
+
         Label widthLabel = new Label("Width: ");
         Label heightLabel = new Label("Height: ");
         TextField widthField = new TextField(String.valueOf(((ExtendedRectangle) shape).getWidth()));
@@ -111,7 +129,7 @@ public class UpdateElevatorPopUp extends Application {
         height.setAlignment(Pos.CENTER);
         height.setSpacing(10);
         height.getChildren().addAll(heightLabel, heightField);
-        centerVBox.getChildren().addAll(width, height, hallwayHBox);
+        centerVBox.getChildren().addAll(comboBoxElevators, hallwayHBox, width, height);
         width.setAlignment(Pos.CENTER);
         height.setAlignment(Pos.CENTER);
 
@@ -142,14 +160,26 @@ public class UpdateElevatorPopUp extends Application {
 
         closeBtn.setOnAction(event -> {
             stage.close();
-            boolean ok = true;
-            for (ExtendedShape shape : drawingPanel.getShapes()) {
-                if (((ExtendedRectangle) shape).getName().equals(nameField.getText())) {
-                    ok = false;
+            if (comboBoxElevators.getValue() != null) {
+                boolean ok = true;
+                for (ExtendedShape shape : drawingPanel.getShapes()) {
+                    if (((ExtendedRectangle) shape).getName().equals(comboBoxElevators.getValue().toString())) {
+                        ok = false;
+                    }
                 }
-            }
-            if (ok == true) {
-                rectangle.setName(nameField.getText());
+                if (ok == true) {
+                    rectangle.setName(comboBoxElevators.getValue().toString());
+                }
+            } else {
+                boolean ok = true;
+                for (ExtendedShape shape : drawingPanel.getShapes()) {
+                    if (((ExtendedRectangle) shape).getName().equals(nameField.getText())) {
+                        ok = false;
+                    }
+                }
+                if (ok == true) {
+                    rectangle.setName(nameField.getText());
+                }
             }
             if (comboBoxHallways.getValue() != null) {
                 for (Hallway h : hallways) {
@@ -163,6 +193,8 @@ public class UpdateElevatorPopUp extends Application {
             double initialHeight = rectangle.getLength();
             rectangle.setLength(Double.valueOf(heightField.getText()));
             rectangle.setWidth(Double.valueOf(widthField.getText()));
+            rectangle.setLength((int) (rectangle.getLength()));
+            rectangle.setWidth((int) (rectangle.getWidth()));
             rectangle.getRectangle().setSize((int) rectangle.getWidth(), (int) rectangle.getLength());
             if (drawingPanel.checkCollision(rectangle, 0) == true || rectangle.getLength() < 50 || rectangle.getWidth() < 50) {
                 rectangle.setLength(initialHeight);
@@ -176,7 +208,6 @@ public class UpdateElevatorPopUp extends Application {
                 drawingPanel.setOrder();
                 drawingPanel.drawAll();
                 drawingPanel.getIds().add(rectangle.getId());
-                // System.out.println(drawingPanel.getGraph());
             }
             rectangle.setStartPoint(new Point(rectangle.getCenterPoint().getX() + rectangle.getWidth() / 2, rectangle.getCenterPoint().getY() + rectangle.getLength() / 2));
             rectangle.getRectangle().setBounds((int) rectangle.getCenterPoint().getX(), (int) rectangle.getCenterPoint().getY(), (int) rectangle.getWidth(), (int) rectangle.getLength());
@@ -190,7 +221,7 @@ public class UpdateElevatorPopUp extends Application {
         BorderPane.setMargin(centerVBox, new Insets(5, 5, 5, 5));
         BorderPane.setMargin(bottomHBox, new Insets(5, 5, 5, 5));
 
-        scene = new Scene(pane, 300, 300);
+        scene = new Scene(pane, 300, 400);
 
         CustomAnimation.animateInFromLeftWithBounceSmall(scene.getWidth(), centerVBox);
         CustomAnimation.animateInFromTopWithBounceSmall(scene.getHeight(), topHBox);

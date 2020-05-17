@@ -153,7 +153,6 @@ public class DrawingPanel extends HBox {
                         addShapeToGraph(r);
                         setOrder();
                     }
-                    //   System.out.println(graph);
                 }
             }
         }
@@ -380,7 +379,6 @@ public class DrawingPanel extends HBox {
                 gc.fillText(r.getName(), r.getStartPoint().getX() - r.getName().length() * 2 - 3, r.getStartPoint().getY() - 1, r.getWidth() - 2);
                 addShapeToGraph(r);
                 setOrder();
-                //  System.out.println(graph);
             }
         }
     }
@@ -397,7 +395,6 @@ public class DrawingPanel extends HBox {
         shapes.remove(s);
         ids.remove((Integer) (((ExtendedRectangle) s).getId()));
         graph.deleteShapeFromGraph(s);
-        //   System.out.println(graph);
     }
 
     public void delete(double x, double y) {
@@ -434,7 +431,6 @@ public class DrawingPanel extends HBox {
         this.getChildren().add(sp);
         gc = canvas.getGraphicsContext2D();
         // deleteAllShapes();
-        //   System.out.println(shapes);
         canvas.setOnMousePressed(e -> {
             mouseX = e.getX();
             mouseY = e.getY();
@@ -475,7 +471,17 @@ public class DrawingPanel extends HBox {
                                 UpdateHallwayPopUp popUpFrame = new UpdateHallwayPopUp(this, shape, x, y);
                                 popUpFrame.start(new Stage());
                             } else if (((ExtendedRectangle) shape).getShapeType().equals("Elevator")) {
-                                UpdateElevatorPopUp popUpFrame = new UpdateElevatorPopUp(this, shape, x, y, getNeighboringHallways(shape));
+                                List<ExtendedShape> elevators = new ArrayList<>();
+                                mainFrame.building.getFloors().entrySet().forEach((floor) -> {
+                                    if (floor.getValue().getGraph() != graph) {
+                                        for (ExtendedShape s : floor.getValue().getShapes()) {
+                                            if (s instanceof Elevator) {
+                                                elevators.add(s);
+                                            }
+                                        }
+                                    }
+                                });
+                                UpdateElevatorPopUp popUpFrame = new UpdateElevatorPopUp(this, elevators, shape, x, y, getNeighboringHallways(shape));
                                 popUpFrame.start(new Stage());
                             } else if (((ExtendedRectangle) shape).getShapeType().equals("Office")) {
                                 UpdateOfficePopUp popUpFrame = new UpdateOfficePopUp(this, shape, x, y, getNeighboringHallways(shape));
@@ -512,11 +518,11 @@ public class DrawingPanel extends HBox {
                             }
                         }
                     } else {
-                        if (!isMouseInRectangle(draggedShape, event.getX(), event.getY())) {
-                            castedShape = null;
-                        } else {
+                       // if (!isMouseInRectangle(draggedShape, event.getX(), event.getY())) {
+                         //   castedShape = null;
+                        //} else {
                             castedShape = ((ExtendedRectangle) draggedShape);
-                        }
+                       // }
                     }
                     if (castedShape != null) {
                         double beforeHeight = castedShape.getLength();
@@ -568,7 +574,6 @@ public class DrawingPanel extends HBox {
                         setOrder();
                         setId((ExtendedRectangle) draggedShape);
                         drawAll();
-                        //  System.out.println(graph);
                     }
                 } else {
                     /*  if (initialX == 0 && initialY == 0) {
@@ -798,7 +803,6 @@ public class DrawingPanel extends HBox {
     }
 
     public void setId(ExtendedRectangle r) {
-        // System.out.println(ids);
         Collections.sort(ids);
         int i = 1;
         if (ids.isEmpty()) {
@@ -830,7 +834,6 @@ public class DrawingPanel extends HBox {
 
     public void setGraph(Graph graph) {
         this.graph = graph;
-        //   System.out.println(graph);
     }
 
     public void setShapes(List<ExtendedShape> shapes) {
@@ -857,7 +860,6 @@ public class DrawingPanel extends HBox {
         int[] indexes = new int[shapes.size()];
         int contor = 0;
         for (ExtendedShape s : shapes) {
-            System.out.println(((ExtendedRectangle) s).getId());
             indexes[contor++] = ((ExtendedRectangle) s).getId();
         }
         for (int i = 0; i < contor; i++) {

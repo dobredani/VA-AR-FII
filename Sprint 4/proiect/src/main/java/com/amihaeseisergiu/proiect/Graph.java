@@ -372,7 +372,6 @@ public class Graph {
                                     currentShape = entry.getKey();
                                 }
                             }
-                            // System.out.println(((ExtendedRectangle)entry.getKey()).getId() + " " + relationToHallway);
                         }
                     }
                 }
@@ -444,7 +443,6 @@ public class Graph {
                                     currentShape = entry.getKey();
                                 }
                             }
-                            // System.out.println(((ExtendedRectangle)entry.getKey()).getId() + " " + relationToHallway);
                         }
                     }
                 }
@@ -516,7 +514,6 @@ public class Graph {
                                     currentShape = entry.getKey();
                                 }
                             }
-                            // System.out.println(((ExtendedRectangle)entry.getKey()).getId() + " " + relationToHallway);
                         }
                     }
                 }
@@ -541,7 +538,6 @@ public class Graph {
     }
 
     private ExtendedShape findRightNeighbor(ExtendedShape sh, String dth, int otw, Hallway hallway) {
-        // System.out.println(((ExtendedRectangle) sh).getName());
         List<ExtendedShape> hallwaysToAvoid = new ArrayList<>();
         List<ExtendedShape> traversedHallways = new ArrayList<>();
         traversedHallways.add(hallway);
@@ -604,7 +600,6 @@ public class Graph {
                                     }
                                 }
                             }
-                            // System.out.println(((ExtendedRectangle)entry.getKey()).getId() + " " + relationToHallway);
                         }
                     }
                 }
@@ -873,7 +868,6 @@ public class Graph {
                                 }
                             }
                         }
-                        // System.out.println(((ExtendedRectangle)entry.getKey()).getId() + " " + relationToHallway);
                     }
                 }
             }
@@ -1110,7 +1104,6 @@ public class Graph {
     // hallwayToAvoid - holul initial
     // otw - al catalea e holul in care caut fata de holul initial
     private ExtendedShape findFirstShapeInHallwayFromRight(ExtendedShape hallway, List<ExtendedShape> traversedHallways, String dth, ExtendedShape shape, ExtendedShape hallwayToAvoid, List<ExtendedShape> hallwaysToAvoid) {
-        // System.out.println(((ExtendedRectangle) hallway).getName() + " " + ((ExtendedRectangle) shape).getName());
         int otw = 0;
         int otwMin = 0;
         int otwMax = 0;
@@ -1311,7 +1304,6 @@ public class Graph {
     }
 
     private ExtendedShape findFirstShapeInHallwayFromStraight(ExtendedShape hallway, String searchDirection, ExtendedShape sh) {
-        //  System.out.println(((ExtendedRectangle) hallway).getName() + " " + searchDirection);
         ExtendedRectangle castedShape = (ExtendedRectangle) sh;
         List<Pair<ExtendedShape, String>> list = graph.get(hallway);
         if (list != null) {
@@ -1325,7 +1317,6 @@ public class Graph {
                 } else {
                     distanceBetweenCenters = Math.abs((((ExtendedRectangle) pair.getKey()).centerPoint.getX() + ((ExtendedRectangle) pair.getKey()).getWidth() / 2) - ((((ExtendedRectangle) sh).getCenterPoint().getX()) + ((ExtendedRectangle) sh).getWidth() / 2));
                 }
-                //  System.out.println(distanceBetweenCenters);
                 if (directionToHallway.equals(searchDirection)) {
                     if (pair.getKey() instanceof Hallway) {
                         Hallway hall = (Hallway) hallway;
@@ -1349,7 +1340,6 @@ public class Graph {
                         }
                     } else {
                         if (distanceBetweenCenters < 25) {
-                            //   System.out.println(distanceBetweenCenters);
                             return pair.getKey();
                         }
                     }

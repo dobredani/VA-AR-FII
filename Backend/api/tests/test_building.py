@@ -60,19 +60,19 @@ def test_api_delete(client):
     assert res.status_code == 200
 
 
-def test_api_patch(client):
+def test_api_put(client):
     """BuildingView:patch"""
     global mock_building
-    res = client.patch("/building",
-                       data=mock_building,
-                       headers={'content-type': 'application/json'})
+    res = client.put("/building",
+                     data=mock_building,
+                     headers={'content-type': 'application/json'})
     assert res.status_code == 404
     client.post("/building",
                 data=mock_building,
                 headers={'content-type': 'application/json'})
-    res = client.patch("/building",
-                       data=mock_building,
-                       headers={'content-type': 'application/json'})
+    res = client.put("/building",
+                     data=mock_building,
+                     headers={'content-type': 'application/json'})
     assert res.status_code == 200
     assert res.json["name"] == json.loads(mock_building)["name"]
 

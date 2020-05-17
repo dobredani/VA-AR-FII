@@ -125,7 +125,7 @@ class BuildingView(FlaskView):
     def checkBuilding(self, buildingName):
         [[count]], meta = db.cypher_query(
             f"CALL algo.scc('match (w:Waypoint) where w.buildingName = \"{buildingName}\" return id(w) as id','MATCH (w1:Waypoint)-[:GOES_TO]->(w2:Waypoint) RETURN id(w1) as source,id(w2) as target', {{write:true,partitionProperty:'partition', graph:'cypher'}}) YIELD setCount",
-        resolve_objects = True)
+            resolve_objects=True)
         if count > 1:
             raise Exception('The building is not connected')
 
@@ -150,8 +150,11 @@ class BuildingView(FlaskView):
                                         length=waypoint.get("length"), x=waypoint.get("x"),
                                         y=waypoint.get("y")).save()
                                     for schedule in waypoint["schedule"]:
-                                        group = Group(
-                                            name=schedule["group"], buildingName=building.get("name")).save()
+                                        group = Group.nodes.get_or_none(
+                                            name=schedule["group"], buildingName=building.get("name"))
+                                        if group is None:
+                                            group = Group(
+                                                name=schedule["group"], buildingName=building.get("name")).save()
                                         group.classes.connect(classRoom, {'course': schedule["course"],
                                                                           'dayOfWeek': schedule["dayOfWeek"],
                                                                           'startTime': schedule["startTime"],
@@ -165,8 +168,11 @@ class BuildingView(FlaskView):
                                         length=waypoint.get("length"), x=waypoint.get("x"),
                                         y=waypoint.get("y")).save()
                                     for prof in waypoint["professors"]:
-                                        teacher = Teacher(
-                                            name=prof, buildingName=building.get("name")).save()
+                                        teacher = Teacher.nodes.get_or_none(
+                                            name=prof, buildingName=building.get("name"))
+                                        if teacher is None:
+                                            teacher = Teacher(
+                                                name=prof, buildingName=building.get("name")).save()
                                         teacher.office.connect(office)
                                 elif (waypoint.get("type") == WAYPOINT_TYPES["Connector"]):
                                     Connector(

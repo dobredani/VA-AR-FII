@@ -1,7 +1,7 @@
 package com.example.myapplication;
 
-import android.annotation.SuppressLint;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -43,6 +43,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.problem.Location;
+import com.example.myapplication.problem.LocationType;
 import com.example.myapplication.problem.Waypoint;
 import com.google.android.material.navigation.NavigationView;
 import com.karumi.dexter.Dexter;
@@ -64,7 +65,6 @@ import java.util.TimerTask;
 import static android.widget.Toast.*;
 
 public class StartNavigationActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private ActionBar actionBar;
     private Location start, destination;
@@ -74,26 +74,25 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        a=this;
-        themeUtils.onActivityCreateSetTheme(a);
+        a = this;
+        themeUtils.onActivityCreateSetTheme(this);
 
         errorDialog = new Dialog(this);
 
         setContentView(R.layout.start_navigation);
         actionBar = getSupportActionBar();
-        actionBar.setTitle(ApplicationData.getInstance().getCurrentBuilding().getName());
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+        Objects.requireNonNull(actionBar).setTitle(ApplicationData.getInstance().getCurrentBuilding().getName());
+        DrawerLayout mDrawerLayout = findViewById(R.id.drawer);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
         mDrawerLayout.addDrawerListener(mToggle);
         mToggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
+        NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
 
         ImageView scanLocation = findViewById(R.id.cameraBtn);
         scanLocation.setOnClickListener(new View.OnClickListener() {
@@ -114,13 +113,15 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             public void onClick(View v) {
                 startNavigation.setEnabled(false);
                 String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
-                if (ApplicationData.getInstance().getCurrentBuilding().getLocation(startName) == null) {
+                Location start = ApplicationData.getInstance().getCurrentBuilding().getLocation(startName);
+                if (start == null || start.getLocationType() == LocationType.CONNECTOR) {
                     makeText(getApplicationContext(), "Invalid Starting Point", LENGTH_SHORT).show();
                     startNavigation.setEnabled(true);
 
                 } else {
                     String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
-                    if (ApplicationData.getInstance().getCurrentBuilding().getLocation(destinationName) == null) {
+                    Location destination = ApplicationData.getInstance().getCurrentBuilding().getLocation(destinationName);
+                    if (destination == null || destination.getLocationType() == LocationType.CONNECTOR) {
                         makeText(getApplicationContext(), "Invalid Destination", LENGTH_SHORT).show();
                         startNavigation.setEnabled(true);
                     } else {
@@ -134,9 +135,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (mToggle.onOptionsItemSelected(item)) {
+        if (mToggle.onOptionsItemSelected(item))
             return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -167,6 +167,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         AlertDialog.Builder bld=new AlertDialog.Builder(this);
         bld.setTitle("Choose a theme");
         bld.setItems(themes, new DialogInterface.OnClickListener() {
+            @SuppressLint("ApplySharedPref")
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 SharedPreferences mPrefs;
@@ -208,11 +209,11 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         builder.setItems(buildings, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ApplicationData.getInstance().setCurrentBuildingName(buildings[which]);
+               //Z ApplicationData.getInstance().setCurrentBuildingName(buildings[which]);
                 ApplicationData.getInstance().setCurrentBuilding(ApplicationData.getInstance().getBuildingByName(buildings[which]));
                 generateSuggestedPlaces(4);
                 actionBar = getSupportActionBar();
-                actionBar.setTitle(buildings[which]);
+                Objects.requireNonNull(actionBar).setTitle(buildings[which]);
             }
 
         });
@@ -223,9 +224,12 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == 1) {
             String msg = data.getStringExtra("returnedData");
-            Location location = ApplicationData.getInstance().getCurrentBuilding().getLocationById(Integer.parseInt(msg));
-            EditText editText = findViewById(R.id.currentLocation);
-            editText.setText(location.getName());
+            Location location;
+            if (msg != null) {
+                location = ApplicationData.getInstance().getCurrentBuilding().getLocationById(Integer.parseInt(msg));
+                EditText editText = findViewById(R.id.currentLocation);
+                editText.setText(location.getName());
+            }
         }
     }
 
@@ -267,7 +271,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
     }
 
     private void generateSuggestedPlaces(int howMany) {
-        final ListView lv = (ListView) findViewById(R.id.listView);
+        final ListView lv = findViewById(R.id.listView);
         List<Location> topLocations = ApplicationData.getInstance().getCurrentBuilding().getTopLocations(howMany);
 
         String[] locations = new String[topLocations.size()];
@@ -284,17 +288,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 // Get the Item from ListView
-                View view = super.getView(position, convertView, parent);
-
-                // Initialize a TextView for ListView each Item
-                TextView tv = (TextView) view.findViewById(R.id.list_item_text);
-
-                // Set the text color of TextView (ListView Item)
-                //tv.setTextColor(Color.BLACK);
-               // tv.setBackgroundColor(Color.parseColor("#F1F6FB"));
-
-                // Generate ListView Item using TextView
-                return view;
+                //TextView tv = view.findViewById(R.id.list_item_text);
+                return super.getView(position, convertView, parent);
             }
         };
         lv.setAdapter(arrayAdapter);
@@ -303,17 +298,17 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             @Override
             public void onItemClick(AdapterView<?> parent,
                                     View view, int position, long id) {
+                TextView startTextView = findViewById(R.id.currentLocation);
+                TextView destinationTextView = findViewById(R.id.destination);
                 String myLocation = (String) parent.getAdapter().getItem(position);
-                String startName = ((TextView) findViewById(R.id.currentLocation)).getText().toString();
-                String destinationName = ((TextView) findViewById(R.id.destination)).getText().toString();
+                String startName = startTextView.getText().toString();
+                String destinationName = destinationTextView.getText().toString();
                 if (startName.length()==0) {
-                    start = ApplicationData.getInstance().currentBuilding.getLocation(myLocation);
-                    TextView mTextView = (TextView) findViewById(R.id.currentLocation);
-                    mTextView.setText(myLocation);
+                    //start = ApplicationData.getInstance().currentBuilding.getLocation(myLocation);
+                    startTextView.setText(myLocation);
                 } else if (destinationName.length()==0) {
-                    destination = ApplicationData.getInstance().currentBuilding.getLocation(myLocation);
-                    TextView mTextView = (TextView) findViewById(R.id.destination);
-                    mTextView.setText(myLocation);
+                    //destination = ApplicationData.getInstance().currentBuilding.getLocation(myLocation);
+                    destinationTextView.setText(myLocation);
                 } else {
                     makeText(getApplicationContext(), "You already have an input", LENGTH_SHORT).show();
                 }
@@ -321,9 +316,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             }
 
         });
-
     }
-
 
     public void refreshActivity() {
         finish();
@@ -332,9 +325,9 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
 
     public void showPopup() {
         errorDialog.setContentView(R.layout.error_popup);
-        LinearLayout popup = (LinearLayout) errorDialog.findViewById(R.id.errorInfo);
+        LinearLayout popup = errorDialog.findViewById(R.id.errorInfo);
         popup.setVisibility(View.VISIBLE);
-        Button closePopup = (Button) errorDialog.findViewById(R.id.refreshBtn);
+        Button closePopup = errorDialog.findViewById(R.id.refreshBtn);
         closePopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -342,7 +335,7 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                 refreshActivity();
             }
         });
-        errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(errorDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         errorDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         errorDialog.show();
     }
@@ -351,8 +344,8 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
         Intent intent = new Intent(StartNavigationActivity.this, TimetableActivity.class);
         startActivity(intent);
     }
-    public void requestCameraPermission(final String check) {
 
+    public void requestCameraPermission(final String check) {
         Dexter.withActivity(this)
                 .withPermission(Manifest.permission.CAMERA)
                 .withListener(new PermissionListener() {
@@ -383,7 +376,6 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                                     });
                                 }
                             }, 5000);
-
                         }
                     }
 
@@ -407,7 +399,6 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
                         token.continuePermissionRequest();
                     }
                 }).check();
-
     }
 
 
@@ -429,7 +420,6 @@ public class StartNavigationActivity extends AppCompatActivity implements Naviga
             }
         });
         builder.show();
-
     }
 
     private void openSettings() {

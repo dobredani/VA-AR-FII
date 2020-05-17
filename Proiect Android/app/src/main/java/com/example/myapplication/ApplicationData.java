@@ -12,11 +12,10 @@ import java.util.List;
 public class ApplicationData {
     private static ApplicationData instance =  null;
 
-    static List<String> buildings = new ArrayList<>();
-    static Building currentBuilding;
-    static String currentBuildingName;
-    static List<Waypoint> waypoints = new ArrayList<>();
-    static List<Building> buildingsData = new ArrayList<>();
+    private List<String> buildings = new ArrayList<>();
+    Building currentBuilding;
+    private List<Waypoint> waypoints = new ArrayList<>();
+    private List<Building> buildingsData = new ArrayList<>();
 
     private ApplicationData() {
 
@@ -35,12 +34,8 @@ public class ApplicationData {
         return null;
     }
 
-    public static List<Building> getBuildingsData() {
+    public List<Building> getBuildingsData() {
         return buildingsData;
-    }
-
-    public void setBuildingsData(List<Building> buildingsData) {
-        this.buildingsData = buildingsData;
     }
 
     public List<String> getBuildings() {
@@ -59,16 +54,8 @@ public class ApplicationData {
         this.currentBuilding = currentBuilding;
     }
 
-    public List<Waypoint> getWaypoints() {
-        return waypoints;
-    }
-
     public void setWaypoints(List<Waypoint> waypoints) {
         this.waypoints = waypoints;
-    }
-
-    public void setCurrentBuildingName(String currentBuildingName) {
-        this.currentBuildingName = currentBuildingName;
     }
 
     public ArrayList<String> getAllInstructions() {

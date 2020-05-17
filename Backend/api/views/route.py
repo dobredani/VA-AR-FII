@@ -24,10 +24,10 @@ class RouteView(FlaskView):
             nextWaypoint = route[index + 1]
             direction = currWaypoint.neighbors.relationship(
                 nextWaypoint).direction
-            if direction == 'right':
-                direction = 'left'
-            elif direction == 'left':
-                direction = 'right'
+            if direction == 'Right':
+                direction = 'Left'
+            elif direction == 'Left':
+                direction = 'Right'
             if lastDirection != 'straight' or lastDirection != direction or Connector.__name__ in currWaypoint.labels():
                 formattedRoute.append(
                     {'markerId': currWaypoint.markerId, 'name': currWaypoint.name,

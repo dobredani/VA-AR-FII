@@ -436,10 +436,6 @@ public class UpdateClassroomPopUp extends Application {
         centerVBox.setPadding(new Insets(10, 10, 10, 10));
         centerVBox.setSpacing(10);
 
-        nameField.setOnAction(event -> {
-            rectangle.setName(nameField.getText());
-        });
-
         HBox bottomHBox = new HBox();
         bottomHBox.setAlignment(Pos.CENTER);
         bottomHBox.setSpacing(10);
@@ -465,7 +461,7 @@ public class UpdateClassroomPopUp extends Application {
                     ok2 = false;
                 }
             }
-            if (ok2 == true) {
+            if (ok2 == true && !nameField.getText().isBlank()) {
                 rectangle.setName(nameField.getText());
             }
             if (comboBoxHallways.getValue() != null) {

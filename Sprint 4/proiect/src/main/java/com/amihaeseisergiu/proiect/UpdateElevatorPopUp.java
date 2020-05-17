@@ -137,10 +137,6 @@ public class UpdateElevatorPopUp extends Application {
         centerVBox.setPadding(new Insets(10, 10, 10, 10));
         centerVBox.setSpacing(10);
 
-        nameField.setOnAction(event -> {
-            rectangle.setName(nameField.getText());
-        });
-
         HBox bottomHBox = new HBox();
         bottomHBox.setAlignment(Pos.CENTER);
         bottomHBox.setSpacing(10);
@@ -177,7 +173,7 @@ public class UpdateElevatorPopUp extends Application {
                         ok = false;
                     }
                 }
-                if (ok == true) {
+                if (ok == true && !nameField.getText().isBlank()) {
                     rectangle.setName(nameField.getText());
                 }
             }

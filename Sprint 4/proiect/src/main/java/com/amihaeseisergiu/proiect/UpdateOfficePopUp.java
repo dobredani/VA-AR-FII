@@ -180,10 +180,6 @@ public class UpdateOfficePopUp extends Application {
             });
         }
 
-        nameField.setOnAction(event -> {
-            rectangle.setName(nameField.getText());
-        });
-
         HBox bottomHBox = new HBox();
         bottomHBox.setAlignment(Pos.CENTER);
         bottomHBox.setSpacing(10);
@@ -210,7 +206,7 @@ public class UpdateOfficePopUp extends Application {
                     ok = false;
                 }
             }
-            if (ok == true) {
+            if (ok == true && !nameField.getText().isBlank()) {
                 rectangle.setName(nameField.getText());
             }
             for (TextField t : profsFields) {

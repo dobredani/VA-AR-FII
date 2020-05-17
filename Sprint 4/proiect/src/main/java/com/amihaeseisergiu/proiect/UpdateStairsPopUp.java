@@ -180,7 +180,7 @@ public class UpdateStairsPopUp extends Application {
                         ok = false;
                     }
                 }
-                if (ok == true) {
+                if (ok == true && !nameField.getText().isBlank()) {
                     rectangle.setName(nameField.getText());
                 }
             }

@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Bounds;
@@ -25,6 +26,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -77,21 +79,62 @@ public class SavePanel extends HBox {
         });
 
         saveBtn.setOnAction(e -> {
-            try {
-                String buildingNames = executeGet("http://localhost:5000/building");
-                String response = "";
-                JSONParser buildingParser = new JSONParser();
-                boolean ok = false;
-                JSONArray buildings = (JSONArray) buildingParser.parse(buildingNames);
+            boolean isEveryShapeConnected = true;
+            String unconnectedShapeName = null;
+            for (Map.Entry<Integer, Floor> f : frame.building.floors.entrySet()) {
+                for (ExtendedShape shape : f.getValue().getShapes()) {
+                    if (!(shape instanceof Hallway)) {
+                        boolean isShapeConnected = false;
+                        if (((ExtendedRectangle) shape).getHallway() != null) {
+                            isShapeConnected = true;
+                        }
+                        if (f.getValue().getGraph().graph.get(shape) != null) {
+                            for (Pair<ExtendedShape, String> list : f.getValue().getGraph().graph.get(shape)) {
+                                if (list.getKey() instanceof Hallway) {
+                                    isShapeConnected = true;
+                                }
+                            }
+                        }
+                        if (isShapeConnected == false) {
+                            unconnectedShapeName = ((ExtendedRectangle) shape).getName();
+                            isEveryShapeConnected = false;
+                        }
+                    }
+                }
+            }
+            if (isEveryShapeConnected == true) {
+                try {
 
-                Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
-                int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
-                int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
-                JSONParser responseParser = new JSONParser();
-                for (Object objct : buildings) {
-                    if (objct.toString().equals(frame.building.name)) {
-                        ok = true;
-                        response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "PUT");
+                    String buildingNames = executeGet("http://localhost:5000/building");
+                    String response = "";
+                    JSONParser buildingParser = new JSONParser();
+                    boolean ok = false;
+                    JSONArray buildings = (JSONArray) buildingParser.parse(buildingNames);
+
+                    Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
+                    int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
+                    int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
+                    JSONParser responseParser = new JSONParser();
+                    for (Object objct : buildings) {
+                        if (objct.toString().equals(frame.building.name)) {
+                            ok = true;
+                            response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "PUT");
+                            JSONObject obj = (JSONObject) responseParser.parse(response);
+                            int statusCode = Integer.valueOf(obj.get("Code").toString());
+                            String responseText = obj.get("Response").toString();
+                            if (responseText.contains("The building is not connected")) {
+                                ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "The building is not connected");
+                                errorPopUp.start(new Stage());
+                            } else if (statusCode == 200) {
+                                MainMenu menu = new MainMenu(frame.stage);
+                            } else if (statusCode != 200) {
+                                ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "An error has occured");
+                                errorPopUp.start(new Stage());
+                            }
+                        }
+                    }
+                    if (ok == false) {
+                        response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "POST");
                         JSONObject obj = (JSONObject) responseParser.parse(response);
                         int statusCode = Integer.valueOf(obj.get("Code").toString());
                         String responseText = obj.get("Response").toString();
@@ -105,39 +148,30 @@ public class SavePanel extends HBox {
                             errorPopUp.start(new Stage());
                         }
                     }
+                } catch (ConnectException ex) {
+                    Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
+                    int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
+                    int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
+                    ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "Connection to server has failed");
+                    errorPopUp.start(new Stage());
+                } catch (ParseException ex) {
+                    Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
+                    int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
+                    int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
+                    ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "A parsing error has occured");
+                    errorPopUp.start(new Stage());
+                } catch (Exception ex) {
+                    Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
+                    int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
+                    int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
+                    ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "An error has occured");
+                    errorPopUp.start(new Stage());
                 }
-                if (ok == false) {
-                    response = executeHTTPRequest("http://localhost:5000/building", frame.building.toJson().toJSONString(), "POST");
-                    JSONObject obj = (JSONObject) responseParser.parse(response);
-                    int statusCode = Integer.valueOf(obj.get("Code").toString());
-                    String responseText = obj.get("Response").toString();
-                    if (responseText.contains("The building is not connected")) {
-                        ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "The building is not connected");
-                        errorPopUp.start(new Stage());
-                    } else if (statusCode == 200) {
-                        MainMenu menu = new MainMenu(frame.stage);
-                    } else if (statusCode != 200) {
-                        ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "An error has occured");
-                        errorPopUp.start(new Stage());
-                    }
-                }
-            } catch (ConnectException ex) {
+            } else {
                 Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
                 int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
                 int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
-                ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "Connection to server has failed");
-                errorPopUp.start(new Stage());
-            } catch (ParseException ex) {
-                Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
-                int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
-                int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
-                ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "A parsing error has occured");
-                errorPopUp.start(new Stage());
-            } catch (Exception ex) {
-                Bounds bounds = frame.pane.localToScreen(frame.pane.getBoundsInLocal());
-                int x = (int) bounds.getMinX() + (int) frame.pane.getWidth() / 2;
-                int y = (int) bounds.getMinY() + (int) frame.pane.getHeight() / 2;
-                ErrorPopUp errorPopUp = new ErrorPopUp(x, y, "An error has occured");
+                ErrorPopUp errorPopUp = new ErrorPopUp(x, y, unconnectedShapeName + " is not connected to a hallway");
                 errorPopUp.start(new Stage());
             }
         });

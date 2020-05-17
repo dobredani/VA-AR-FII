@@ -1,4 +1,3 @@
-
 # DoD – Backend TEAM - Sprint 4:
 
 1. Salvare date despre cladire/cladirea serializata pentru cei de la Desktop.
@@ -7,10 +6,8 @@
 
 3. Trimiterea de date legate de orar, profesori.
 
-4. Continious integration pe git pentru a afisa ca testele trec.
+4. Documentare completa pe Swagger.
 
-5. Documentare completa pe Swagger.
+5. Modificare metoda la ruta de update building pentru a putea rula Desktop-ul metoda din Java.
 
-6. Modificare metoda la ruta de update building pentru a putea rula Desktop-ul metoda din Java.
-
-7. Modificare structura graf din baza de date pentru a stoca bathrooms.
+6. Modificare structura graf din baza de date pentru a stoca bathrooms.

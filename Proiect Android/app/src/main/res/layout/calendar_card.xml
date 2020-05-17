@@ -27,46 +27,53 @@
             android:padding="10dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".3"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="25dp"
+                    android:orientation="horizontal"
+                    >
 
                     <ImageView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginEnd="5dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:src="@drawable/baseline_schedule_black_18dp" />
+                        android:src="@drawable/baseline_schedule_black_18dp"
+                        android:layout_gravity="center_vertical"/>
 
                     <TextView
                         android:id="@+id/sched_hours"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="interval orar" />
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="interval orar"
+                        android:layout_gravity="center_vertical"
+                        />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="25dp"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="5dp"
-                        android:src="@drawable/baseline_supervisor_account_black_18dp" />
+                        android:src="@drawable/baseline_supervisor_account_black_18dp"
+                        android:layout_gravity="center_vertical"/>
 
                     <TextView
                         android:id="@+id/sched_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="grupa" />
+                        android:text="grupa"
+                        android:layout_gravity="center_vertical"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -77,7 +84,7 @@
                 android:layout_gravity="center"
                 android:layout_weight=".7"
                 android:text="cursul"
-                android:textAlignment="viewEnd"
+                android:gravity="end"
                 android:textSize="16dp" />
 
         </LinearLayout>

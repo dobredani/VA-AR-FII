@@ -30,8 +30,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.example.myapplication.Schedule.SchedView;
+import com.example.myapplication.problem.Classroom;
 import com.example.myapplication.problem.Location;
 import com.example.myapplication.problem.LocationType;
+import com.example.myapplication.problem.Office;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -89,8 +91,8 @@ public class TimetableActivity extends AppCompatActivity {
       
         lookupText = lookupText.toLowerCase();
         for (Location temp:locations)
-            if ((temp.getLocationType() == LocationType.CLASSROOM ||
-                    temp.getLocationType() == LocationType.OFFICE) && temp.getName().toLowerCase().contains(lookupText))
+            if ((temp instanceof Classroom ||
+                    temp instanceof Office) && temp.getName().toLowerCase().contains(lookupText))
                 locationStrings.add(temp.getName());
 
         List<String> locationsList = new ArrayList<String>(locationStrings);
@@ -102,7 +104,7 @@ public class TimetableActivity extends AppCompatActivity {
                 TextView tv = (TextView) view.findViewById(R.id.timetable_list_item_text);
 
                 final Location location = ApplicationData.getInstance().getCurrentBuilding().getLocation(tv.getText().toString());
-                if (location.getLocationType() == LocationType.CLASSROOM) {
+                if (location instanceof Classroom) {
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -113,11 +115,11 @@ public class TimetableActivity extends AppCompatActivity {
                         }
                     });
                 }
-                else if (location.getLocationType() == LocationType.OFFICE) {
+                else if (location instanceof Office) {
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            showOfficeData(location);
+                            showOfficeData((Office)location);
                         }
                     });
                 }
@@ -127,7 +129,7 @@ public class TimetableActivity extends AppCompatActivity {
         gv.setAdapter(arrayAdapter);
     }
 
-    public void showOfficeData(Location location) {
+    public void showOfficeData(Office location) {
         officeDialog.setContentView(R.layout.office_popup);
         LinearLayout popup = (LinearLayout) officeDialog.findViewById(R.id.errorInfo);
         popup.setVisibility(View.VISIBLE);

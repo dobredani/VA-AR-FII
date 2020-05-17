@@ -3,9 +3,12 @@ package com.example.myapplication;
 import android.util.Log;
 
 import com.example.myapplication.problem.Building;
+import com.example.myapplication.problem.Classroom;
+import com.example.myapplication.problem.Connector;
 import com.example.myapplication.problem.Lecture;
 import com.example.myapplication.problem.Location;
 import com.example.myapplication.problem.LocationType;
+import com.example.myapplication.problem.Office;
 import com.example.myapplication.problem.Waypoint;
 
 import org.json.JSONArray;
@@ -66,12 +69,12 @@ public class JsonParser {
                             for (Lecture lecture : schedule)
                                 Log.e("lecture", "This clasroom lecture " + lecture.toString());
 
-                            Location location = new Location(object.getInt("markerId"), object.getString("name"),
-                                    LocationType.CLASSROOM, schedule);
+                            Classroom classroom = new Classroom(object.getInt("markerId"), object.getString("name"),
+                                    schedule);
 
-                            locations.add(location);
+                            locations.add(classroom);
 
-                            Log.e("location", "Parsed Current Building Location " + location.getName());
+                            Log.e("location", "Parsed Current Building Location " + classroom.getName());
 
                         } else if (object.getString("type").equals("office")){
                             List<String> professors = new ArrayList<>();
@@ -80,16 +83,15 @@ public class JsonParser {
                             for(int k=0;k<professorList.length();k++)
                                 professors.add(professorList.getString(k));
 
-                            Location location = new Location(object.getInt("markerId"), object.getString("name"),
-                                    professors, LocationType.OFFICE);
+                            Office office = new Office(object.getInt("markerId"), object.getString("name"),
+                                    professors);
                             
-                            locations.add(location);
-                            Log.e("location", "Parsed Current Building Location " + location.getName());
+                            locations.add(office);
+                            Log.e("location", "Parsed Current Building Location " + office.getName());
                         }else if (object.getString("type").equals("connector")){
-                            Location location = new Location(object.getInt("markerId"), object.getString("name"),
-                                    LocationType.CONNECTOR);
-                            locations.add(location);
-                            Log.e("location", "Parsed Current Building Location " + location.getName());
+                            Connector connector = new Connector(object.getInt("markerId"), object.getString("name"));
+                            locations.add(connector);
+                            Log.e("location", "Parsed Current Building Location " + connector.getName());
                         }
                     } else {
 

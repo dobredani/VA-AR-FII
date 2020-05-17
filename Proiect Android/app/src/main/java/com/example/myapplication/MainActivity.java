@@ -23,14 +23,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.myapplication.Schedule.SchedView;
 import com.example.myapplication.problem.Building;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,9 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //super.onCreate(savedInstanceState);
-
-        a=this;
+        a = this;
         SharedPreferences mPrefs = getSharedPreferences("THEME", 0);
         int theme = mPrefs.getInt("theme", 0);
         if (theme==0) {
@@ -55,14 +52,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         themeUtils.onActivityCreateSetTheme(a);
 
-
         setContentView(R.layout.activity_main);
 
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         errorDialog = new Dialog(this);
 
         start = findViewById(R.id.startBtn);
-        progressBar = (ProgressBar) findViewById(R.id.mainProgressBar);
+        progressBar = findViewById(R.id.mainProgressBar);
 
         start.setVisibility(View.GONE);
         getBuildingData("FII");
@@ -97,15 +93,11 @@ public class MainActivity extends AppCompatActivity {
                         List<String> buildingList = JsonParser.parseBuildingList(response);
                         ApplicationData.getInstance().setBuildings(buildingList);
                         Log.d("JsonObject", "Building List" + buildingList.toString());
-
-                        List<Building> allBuildings = new ArrayList<>();
                       
                         for (String buildingName : ApplicationData.getInstance().getBuildings())
                             if (!buildingName.equals("FII"))
                                 getBuildingData(buildingName);
                        // applicationData.setCurrentBuilding(allBuildings.get(0));
-                      
-
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -142,10 +134,6 @@ public class MainActivity extends AppCompatActivity {
                             ApplicationData.getInstance().setCurrentBuilding(building);
                         start.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
-                        //Log.e("check", applicationData.getCurrentBuilding().getName());
-//                        for ( Location location : applicationData.getCurrentBuilding().getLocations())
-//                            Log.e("location", location.getName());
-                        //System.out.println(applicationData.getCurrentBuilding().getName());
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -167,9 +155,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void showPopup() {
         errorDialog.setContentView(R.layout.error_popup);
-        LinearLayout popup = (LinearLayout) errorDialog.findViewById(R.id.errorInfo);
+        LinearLayout popup =  errorDialog.findViewById(R.id.errorInfo);
         popup.setVisibility(View.VISIBLE);
-        Button closePopup = (Button) errorDialog.findViewById(R.id.refreshBtn);
+        Button closePopup = errorDialog.findViewById(R.id.refreshBtn);
         closePopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 refreshActivity();
             }
         });
-        errorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(errorDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         errorDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         errorDialog.show();
     }

@@ -3,14 +3,19 @@ package com.example.myapplication;
 import android.app.Activity;
 import android.content.Intent;
 public class themeUtils {
-    public static int cTheme;
-    public final static int  Light_Theme= 0;
-    public final static int Dark_Theme=1;
-    public static void changeToTheme(Activity activity, int theme) {
+
+    static int cTheme;
+    final static int  Light_Theme= 0;
+    final static int Dark_Theme=1;
+
+    static void changeToTheme(Activity activity, int theme) {
         cTheme = theme;
+        activity.startActivity(activity.getIntent());
         activity.finish();
-        activity.startActivity(new Intent(activity, activity.getClass()));
+
+        //activity.
     }
+
     public static void onActivityCreateSetTheme(Activity activity){
         switch(cTheme){
             default:

@@ -20,7 +20,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:label="Virtual Navigation"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:launchMode="singleTop">
         <activity android:name=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
 

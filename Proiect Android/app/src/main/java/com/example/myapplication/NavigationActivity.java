@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -17,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.Objects;
 
 public class NavigationActivity extends CameraActivity {
 
@@ -37,7 +37,7 @@ public class NavigationActivity extends CameraActivity {
         a = this;
         themeUtils.onActivityCreateSetTheme(a);
         //hides the action bar
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         //hides the status bar
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -71,15 +71,16 @@ public class NavigationActivity extends CameraActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == 1) {
             final String msg = data.getStringExtra("returnedData");
-            int codeScanned;
+            int codeScanned = -1;
             try {
-                codeScanned = Integer.parseInt(msg);
+                if (msg != null)
+                    codeScanned = Integer.parseInt(msg);
             } catch (NumberFormatException e) {
-                displayController.addSnackBar(snackbar, "Wrong turn, if you are lost press Restart Navigation.");
+                displayController.addSnackBar(snackbar, "Wrong turn, if you are lost press the X button in the upper right corner.");
                 codeScanned = -1;
             }
             if (codeScanned != codesToScan.get(currentIndex))
-                displayController.addSnackBar(snackbar, "Wrong turn, if you are lost press Restart Navigation.");
+                displayController.addSnackBar(snackbar, "Wrong turn, if you are lost press the X button in the upper right corner.");
             else {
                 currentIndex++;
                 if (currentIndex == instructions.size()) {
@@ -100,9 +101,9 @@ public class NavigationActivity extends CameraActivity {
 
     public void showEndNavigationMessage(){
         helpDialog.setContentView(R.layout.end_navigation_popup);
-        popup = (LinearLayout) helpDialog.findViewById(R.id.endNavInfo);
+        popup = helpDialog.findViewById(R.id.endNavInfo);
         popup.setVisibility(View.VISIBLE);
-        closePopup = (Button) helpDialog.findViewById(R.id.goBackBtn);
+        closePopup = helpDialog.findViewById(R.id.goBackBtn);
         closePopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,39 +111,39 @@ public class NavigationActivity extends CameraActivity {
                 finish();
             }
         });
-        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(helpDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         helpDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         helpDialog.show();
 
     }
     public void showHelp(View view) {
         helpDialog.setContentView(R.layout.help_popup);
-        popup = (LinearLayout) helpDialog.findViewById(R.id.helpInfo);
+        popup = helpDialog.findViewById(R.id.helpInfo);
         popup.setVisibility(View.VISIBLE);
-        closePopup = (Button) helpDialog.findViewById(R.id.closePopup);
+        closePopup = helpDialog.findViewById(R.id.closePopup);
         closePopup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 helpDialog.dismiss();
             }
         });
-        helpDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        Objects.requireNonNull(helpDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         helpDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         helpDialog.show();
     }
     public void getNextInstruction(View view) {
-        if(currentIndex<instructions.size()) {
-            currentInstruction = instructions.get(currentIndex);
+        if (currentIndex < instructions.size()) {
             currentIndex++;
+            currentInstruction = instructions.get(currentIndex - 1);
             final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
             displayController.addOverlay(helloTextView, currentInstruction);
         }
     }
 
     public void getPreviousInstruction(View view) {
-        if(currentIndex>0 && currentIndex<=instructions.size()) {
-            currentInstruction = instructions.get(currentIndex - 1);
+        if (currentIndex > 1 && currentIndex <= instructions.size() + 1) {
             currentIndex--;
+            currentInstruction = instructions.get(currentIndex - 1);
             final TextView helloTextView = addTextViewOverlay(R.id.text_view_id);
             displayController.addOverlay(helloTextView, currentInstruction);
         }

@@ -1,507 +1,399 @@
 {
-    "openapi": "3.0.0",
-    "info": {
-      "description": "An application developed during IP classes, at the Faculty of Computer Science, from UAIC Iasi, in collaboration with prof. dr. Mihai-Alex Moruz. Please force refresh your browser to visualise your Swagger file - CTRL+F5 on Windows, Apple + R or command + R on Mac, F5 on Linux.",
-      "version": "1.0.0",
-      "title": "Mobile application to orient in a building (with Desktop interface to edit the maps)",
-      "license": {
-        "name": "MIT GitHub license",
-        "url": "https://opensource.org/licenses/MIT"
-      }
-    },
-    "servers": [
-      {
-        "url": "/"
-      }
-    ],
-    "tags": [
-      {
-        "name": "View Request",
-        "description": "Example API for requesting and returning building requests."
-      }
-    ],
-    "paths": {
-      "/building": {
-        "get": {
-          "tags": [
-            "View Request"
-          ],
-          "summary": "Returns buildings' names stored in database",
-          "responses": {
-            "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/components/schemas/Buildings"
-              }
-            },
-            "204": {
-              "description": "The server successfully processed the request and is not returning any content.",
-              "schema": {
-                "$ref": "#/components/schemas/Buildings"
-             }
-            }
-          }
-        },
-        "post": {
-          "tags": [
-            "Building MAP operations"
-          ],
-          "summary": "Insert a new building MAP in database",
-          "requestBody": {
-            "description": "There is a mock building JSON structure in the repository.",
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BuildingRequestPostBody"
-                }
-              }
+  "openapi": "3.0.0",
+  "info": {
+    "description": "An application developed during IP classes, at the Faculty of Computer Science, from UAIC Iasi, in collaboration with prof. dr. Mihai-Alex Moruz. Please force refresh your browser to visualise your Swagger file - CTRL+F5 on Windows, Apple + R or command + R on Mac, F5 on Linux.",
+    "version": "1.0.0",
+    "title": "Mobile application to orient in a building (with Desktop interface to edit the maps)",
+    "license": {
+      "name": "MIT GitHub license",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "View Request",
+      "description": "Example API for requesting and returning building requests."
+    }
+  ],
+  "paths": {
+    "/building": {
+      "get": {
+        "tags": [
+          "View Request"
+        ],
+        "summary": "Returns buildings' names stored in database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/Buildings"
             }
           },
-          "responses": {
-            "201": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/components/schemas/BuildingRequestPostBody"
-              }
-            },
-            "400": {
-              "description": "Failed. Bad post data."
-            }
-          }
-        },
-        "patch": {
-          "tags": [
-            "Building MAP operations"
-          ],
-          "summary": "Update an existing building MAP in database",
-          "requestBody": {
-            "description": "There is a mock building JSON structure in the repository.",
-            "required": true,
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/BuildingRequestPostBody"
-                }
-              }
-            }
-          },
-          "responses": {
-            "201": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/components/schemas/BuildingRequestPostBody"
-              }
-            },
-            "400": {
-              "description": "Failed. Bad post data."
+          "204": {
+            "description": "The server successfully processed the request and is not returning any content.",
+            "schema": {
+              "$ref": "#/components/schemas/Buildings"
             }
           }
         }
       },
-      "/rest/building": {
-        "get": {
-            "tags": [
-              "View Request"
-            ],
-            "summary": "Returns buildings' names and UIDs stored in database",
-            "responses": {
-              "200": {
-                "description": "OK",
-                "schema": {
-                  "$ref": "#/components/schemas/BuildingNames"
-                }
-              },
-            "204": {
-              "description": "The server successfully processed the request and is not returning any content.",
+      "post": {
+        "tags": [
+          "Building MAP operations"
+        ],
+        "summary": "Insert a new building MAP in database",
+        "requestBody": {
+          "description": "There is a mock building JSON structure in the repository.",
+          "required": true,
+          "content": {
+            "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BuildingNames"
-                }
+                "$ref": "#/components/schemas/BuildingRequestPostBody"
               }
             }
           }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/BuildingRequestPostBody"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post data."
+          }
+        }
       },
-      "/rest/connector": {
-        "get": {
-            "tags": [
-              "View Request"
-            ],
-            "summary": "Returns connectors' names stored in database",
-            "responses": {
-              "200": {
-                "description": "OK",
-                "schema": {
-                  "$ref": "#/components/schemas/Connectors"
-                }
-              },
-              "204": {
-                "description": "The server successfully processed the request and is not returning any content.",
-                "schema": {
-                  "$ref": "#/components/schemas/Connectors"
-                  }
-                }
+      "put": {
+        "tags": [
+          "Building MAP operations"
+        ],
+        "summary": "Update an existing building MAP in database",
+        "requestBody": {
+          "description": "There is a mock building JSON structure in the repository.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuildingRequestPostBody"
+              }
             }
           }
-      },
-      "/rest/floor": {
-        "get": {
-            "tags": [
-              "View Request"
-            ],
-            "summary": "Returns floors' buildingNamed, levels and UIDs stored in database",
-            "responses": {
-              "200": {
-                "description": "OK",
-                "schema": {
-                  "$ref": "#/components/schemas/Floors"
-                }
-              },
-              "204": {
-                "description": "The server successfully processed the request and is not returning any content.",
-                "schema": {
-                  "$ref": "#/components/schemas/Floors"
-                  }
-                }
+        },
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/BuildingRequestPostBody"
             }
+          },
+          "400": {
+            "description": "Failed. Bad post data."
           }
-      },
-      "/rest/group": {
-        "get": {
-            "tags": [
-              "View Request"
-            ],
-            "summary": "Returns groups' names stored in database",
-            "responses": {
-              "200": {
-                "description": "OK",
-                "schema": {
-                  "$ref": "#/components/schemas/Groups"
-                }
-              },
-              "204": {
-                "description": "The server successfully processed the request and is not returning any content.",
-                "schema": {
-                  "$ref": "#/components/schemas/Groups"
-                  }
-                }
-            }
-          }
-      },
-      "/rest/teacher": {
-        "get": {
-            "tags": [
-              "View Request"
-            ],
-            "summary": "Returns teachers' names and their office buildingName stored in database",
-            "responses": {
-              "200": {
-                "description": "OK",
-                "schema": {
-                  "$ref": "#/components/schemas/Teachers"
-                }
-              },
-              "204": {
-                "description": "The server successfully processed the request and is not returning any content.",
-                "schema": {
-                  "$ref": "#/components/schemas/Teachers"
-                  }
-                }
-            }
-          }
-      },
-      "/rest/building?name={buildingName}": {
+        }
+      }
+    },
+    "/building/{name}": {
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "Get the entire building that is stored in database",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "View Request with parameter"
+        ],
+        "summary": "Get entire building info with given name",
         "parameters": [
           {
-            "name": "buildingName",
             "in": "path",
+            "name": "name",
             "required": true,
-            "description": "Name of the building that is stored in database",
+            "description": "Get the entire building that is stored in database",
             "type": "string"
           }
         ],
-        "get": {
-          "tags": [
-            "View Request with parameter"
-          ],
-          "summary": "Get building info with given name",
-          "parameters": [
-            {
-              "in": "path",
-              "name": "buildingName",
-              "required": true,
-              "description": "Building name",
-              "type":"string"
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "OK",
-              "schema": {
-                "$ref": "#/components/schemas/BuildingName"
-              }
-            },
-            "400": {
-              "description": "Failed. Misunderstood Request."
-            },
-            "404": {
-              "description": "Failed. Building request not found."
-                }
-            }
-          }
-        },
-        "/building/{name}": {
-          "parameters": [
-            {
-              "name": "name",
-              "in": "path",
-              "required": true,
-              "description": "Get the entire building that is stored in database",
-              "type": "string"
-            }
-          ],
-          "get": {
-            "tags": [
-              "View Request with parameter"
-            ],
-            "summary": "Get entire building info with given name",
-            "parameters": [
-              {
-                "in": "path",
-                "name": "name",
-                "required": true,
-                "description": "Get the entire building that is stored in database",
-                "type": "string"
-              }
-            ],
-            "responses": {
-              "200": {
-                "description": "OK",
-                "schema": {
-                  "$ref": "#/components/schemas/EntireBuilding"
-                }
-              },
-              "400": {
-                "description": "Failed. Misunderstood Request."
-              },
-              "404": {
-                "description": "Failed. Building request not found."
-                  }
-              }
-            },
-            "delete": {
-              "tags": [
-                "Building MAP operations"
-              ],
-              "summary": "Delete entire building MAP with given name",
-              "parameters": [
-                {
-                  "in": "path",
-                  "name": "name",
-                  "required": true,
-                  "description": "Delete entire building MAP with given name",
-                  "type": "string"
-                }
-              ],
-              "responses": {
-                "200": {
-                  "description": "OK",
-                  "schema": {
-                    "$ref": "#/components/schemas/EntireBuilding"
-                  }
-                },
-                "400": {
-                  "description": "Failed. Misunderstood Request."
-                },
-                "404": {
-                  "description": "Failed. Building request not found."
-                    }
-                }
-              }
-        },
-        "/route/{name}?start={id1}&destination={id2}": {
-          "parameters": [
-            {
-              "name": "name",
-              "in": "path",
-              "required": true,
-              "description": "Get a route in the building between two points' IDs",
-              "type": "string"
-            },
-            {
-                "name": "id1",
-                "in": "path",
-                "required": true,
-                "description": "Starting point ID.",
-                "type": "string"
-            },
-            {
-                "name": "id2",
-                "in": "path",
-                "required": true,
-                "description": "Ending point ID.",
-                "type": "string"
-            }
-          ],
-          "get": {
-            "tags": [
-              "View Request with parameter"
-            ],
-            "summary": "Get a route in the building between two points' IDs",
-            "parameters": [
-              {
-                "name": "name",
-                "in": "path",
-                "required": true,
-                "description": "Get a route in the building between two points' IDs",
-                "type": "string"
-              },
-              {
-                  "name": "id1",
-                  "in": "path",
-                  "required": true,
-                  "description": "Starting point ID.",
-                  "type": "string"
-              },
-              {
-                  "name": "id2",
-                  "in": "path",
-                  "required": true,
-                  "description": "Ending point ID.",
-                  "type": "string"
-              }
-            ],
-            "responses": {
-              "200": {
-                "description": "OK",
-                "schema": {
-                  "$ref": "#/components/schemas/EntireBuilding"
-                }
-              },
-              "400": {
-                "description": "Failed. Misunderstood Request."
-              },
-              "404": {
-                "description": "Failed. Building request not found."
-                  }
-              }
-            }
-        }
-    },
-    "components": {
-      "schemas": {
-        "Buildings": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "format": "string"
-            },
-            "uid": {
-              "type": "string",
-              "format": "string"
-            }
-          }
-        },
-        "BuildingNames": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "format": "string"
-            }
-          }
-        },
-        "Connectors": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "format": "string"
-            },
-            "buildingName": {
-              "type": "string",
-              "format": "string"
-            },
-            "uid": {
-              "type": "string",
-              "format": "string"
-            }
-          }
-        },
-        "Floors": {
-          "type": "object",
-          "properties": {
-            "buildingName": {
-              "type": "string",
-              "format": "string"
-            },
-            "level": {
-              "type": "integer",
-              "format": "integer"
-            },
-            "uid": {
-              "type": "string",
-              "format": "string"
-            }
-          }
-        },
-        "Groups": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "format": "string"
-            },
-            "buildingName": {
-              "type": "string",
-              "format": "string"
-            },
-            "uid": {
-              "type": "string",
-              "format": "string"
-            }
-          }
-        },
-        "Teachers": {
-          "type": "object",
-          "properties": {
-            "name": {
-              "type": "string",
-              "format": "string"
-            },
-            "buildingName": {
-              "type": "string",
-              "format": "string"
-            },
-            "uid": {
-              "type": "string",
-              "format": "string"
-            }
-          }
-        },
-        "BuildingName": {
-          "type": "object",
-          "properties": {
-            "buildingName": {
-              "type": "string",
-              "format": "string"
-            }
-          }
-        },
-        "BuildingRequestPostBody": {
-          "type": "object",
-          "properties": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/EntireBuilding"
             }
           },
-        "EntireBuilding": {
-          "type": "object",
-          "properties": {
-            "buildingName": {
-              "type": "string",
-              "format": "string"
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Building request not found."
+          }
+        }
+      },
+
+
+
+
+
+      
+      "delete": {
+        "tags": [
+          "Building MAP operations"
+        ],
+        "summary": "Delete entire building MAP with given name",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "description": "Delete entire building MAP with given name",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/EntireBuilding"
             }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Building request not found."
+          }
+        }
+      }
+    },
+    "building/{buildingName}/waypoints":{
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "Get the schedule of each waypoint",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "View Request with parameter"
+        ],
+        "summary": "Get the schedule of each waypoint",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "name",
+            "required": true,
+            "description": "Get the entire building that is stored in database",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/EntireBuilding"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Building request not found."
+          }
+        }
+      }
+
+    },
+    "/route/{name}?start={id1}&destination={id2}": {
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true,
+          "description": "Get a route in the building between two points' IDs",
+          "type": "string"
+        },
+        {
+          "name": "id1",
+          "in": "path",
+          "required": true,
+          "description": "Starting point ID.",
+          "type": "string"
+        },
+        {
+          "name": "id2",
+          "in": "path",
+          "required": true,
+          "description": "Ending point ID.",
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "View Request with parameter"
+        ],
+        "summary": "Get a route in the building between two points' IDs",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "description": "Get a route in the building between two points' IDs",
+            "type": "string"
+          },
+          {
+            "name": "id1",
+            "in": "path",
+            "required": true,
+            "description": "Starting point ID.",
+            "type": "string"
+          },
+          {
+            "name": "id2",
+            "in": "path",
+            "required": true,
+            "description": "Ending point ID.",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/components/schemas/EntireBuilding"
+            }
+          },
+          "400": {
+            "description": "Failed. Misunderstood Request."
+          },
+          "404": {
+            "description": "Failed. Building request not found."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BuildingNames": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "BuildingName": {
+        "type": "object",
+        "properties": {
+          "buildingName": {
+            "type": "string",
+            "format": "string"
+          }
+        }
+      },
+      "BuildingRequestPostBody": {
+        "type": "object",
+        "properties": {
+          "buildingName": {
+            "type": "string",
+            "format": "string"
+          },
+          "floors": {
+            "type": "array",
+            "items": {
+              "properties": {
+                "level": {
+                  "type": "integer",
+                  "format": "integer"
+                },
+                "waypoints": {
+                  "type": "array",
+                  "items": {
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "format": "string"
+                      },
+                      "markedID": {
+                        "type": "integer",
+                        "format": "integer"
+                      },
+                      "tip": {
+                        "type": "string",
+                        "format": "string"
+                      },
+                      "neighbors": {
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "format": "string"
+                            },
+                            "direction": {
+                              "type": "string",
+                              "format": "string"
+                            }
+                          }
+                        }
+                      },
+                      "schedule": {
+                        "type": "array",
+                        "items": {
+                          "properties": {
+                            "group": {
+                              "type": "string",
+                              "format": "string"
+                            },
+                            "course": {
+                              "type": "string",
+                              "format": "string"
+                            },
+                            "dayOfWeek": {
+                              "type": "string",
+                              "format": "string"
+                            },
+                            "startTime": {
+                              "type": "string",
+                              "format": "string"
+                            },
+                            "finishTime": {
+                              "type": "string",
+                              "format": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "EntireBuilding": {
+        "type": "object",
+        "properties": {
+          "buildingName": {
+            "type": "string",
+            "format": "string"
           }
         }
       }
     }
   }
+}

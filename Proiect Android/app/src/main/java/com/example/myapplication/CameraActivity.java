@@ -69,30 +69,6 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private boolean arePermissionsDenied() {
-        for (int i = 0; i < PERMISSIONS_COUNT; i++) {
-            if (checkSelfPermission(PERMISSIONS[i]) != PackageManager.PERMISSION_GRANTED) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_PERMISSIONS && grantResults.length > 0) {
-            if (arePermissionsDenied()) {
-                ((ActivityManager) (this.getSystemService(ACTIVITY_SERVICE))).clearApplicationUserData();
-                recreate();
-            } else {
-                onResume();
-            }
-        }
-    }
-
     public TextView addTextViewOverlay(int id) {
         final TextView t = findViewById(id);
         return t;
@@ -101,10 +77,6 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && arePermissionsDenied()) {
-            requestPermissions(PERMISSIONS, REQUEST_PERMISSIONS);
-            return;
-        }
         if (!isCameraInitialized) {
             mCamera = Camera.open();
             mPreview = new CameraPreview(this, mCamera);

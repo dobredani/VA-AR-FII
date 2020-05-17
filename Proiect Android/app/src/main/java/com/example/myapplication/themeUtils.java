@@ -12,8 +12,6 @@ public class themeUtils {
         cTheme = theme;
         activity.startActivity(activity.getIntent());
         activity.finish();
-
-        //activity.
     }
 
     public static void onActivityCreateSetTheme(Activity activity){

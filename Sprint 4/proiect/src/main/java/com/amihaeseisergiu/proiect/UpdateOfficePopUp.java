@@ -218,6 +218,7 @@ public class UpdateOfficePopUp extends Application {
                 for (Hallway h : hallways) {
                     if (h.getName().equals(comboBoxHallways.getValue())) {
                         ((ExtendedRectangle) shape).setHallway(h);
+                        drawingPanel.setOrder();
                     }
                 }
             }

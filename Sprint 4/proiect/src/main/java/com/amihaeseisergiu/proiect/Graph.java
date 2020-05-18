@@ -877,7 +877,17 @@ public class Graph {
 
     private Hallway findShapeHallway(ExtendedShape shape) {
         if (((ExtendedRectangle) shape).getHallway() != null) {
-            return ((ExtendedRectangle) shape).getHallway();
+            boolean ok = false;
+            if (graph.get(shape) != null) {
+                for (Pair<ExtendedShape, String> list : graph.get(shape)) {
+                    if (list.getKey() instanceof Hallway && list.getKey() == ((ExtendedRectangle) shape).getHallway()) {
+                        ok = true;
+                    }
+                }
+            }
+            if (ok == true) {
+                return ((ExtendedRectangle) shape).getHallway();
+            }
         }
         for (Pair<ExtendedShape, String> list : graph.get(shape)) {
             if (list.getKey() instanceof Hallway) {
@@ -897,13 +907,13 @@ public class Graph {
         int otwMin = 0;
         int otwMax = 0;
         String dth2 = "";
-        if(dth.equals("Down")) {
+        if (dth.equals("Down")) {
             dth2 = "Up";
-        } else if(dth.equals("Up")) {
+        } else if (dth.equals("Up")) {
             dth2 = "Down";
-        } else if(dth.equals("Left")) {
+        } else if (dth.equals("Left")) {
             dth2 = "Right";
-        } else if(dth.equals("Right")) {
+        } else if (dth.equals("Right")) {
             dth2 = "Left";
         }
         for (Pair<ExtendedShape, String> pair : graph.get(hallway)) {
@@ -1108,13 +1118,13 @@ public class Graph {
         int otwMin = 0;
         int otwMax = 0;
         String dth2 = "";
-        if(dth.equals("Down")) {
+        if (dth.equals("Down")) {
             dth2 = "Up";
-        } else if(dth.equals("Up")) {
+        } else if (dth.equals("Up")) {
             dth2 = "Down";
-        } else if(dth.equals("Left")) {
+        } else if (dth.equals("Left")) {
             dth2 = "Right";
-        } else if(dth.equals("Right")) {
+        } else if (dth.equals("Right")) {
             dth2 = "Left";
         }
         for (Pair<ExtendedShape, String> pair : graph.get(hallway)) {

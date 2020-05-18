@@ -33,20 +33,23 @@ import com.example.myapplication.util.ThemeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TimetableActivity extends AppCompatActivity {
     Activity a;
     Dialog officeDialog;
+    Dialog errorDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        a=this;
+        a = this;
         ThemeUtils.onActivityCreateSetTheme(a);
         setContentView(R.layout.activity_timetable);
         getSupportActionBar().hide();
         officeDialog = new Dialog(this);
+        errorDialog = new Dialog(this);
 
         SearchView searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -103,10 +106,15 @@ public class TimetableActivity extends AppCompatActivity {
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent intent = new Intent(TimetableActivity.this, SchedView.class);
-                            intent.putExtra("room", ((TextView) v).getText());
-                            startActivity(intent);
-                            System.out.println(((TextView) v).getText());
+                            Classroom classroom = (Classroom)location;
+                            if (classroom.getSchedules().size() == 0) {
+                                showErrorPopup();
+                            }
+                            else {
+                                Intent intent = new Intent(TimetableActivity.this, SchedView.class);
+                                intent.putExtra("room", ((TextView) v).getText());
+                                startActivity(intent);
+                            }
                         }
                     });
                 }
@@ -126,14 +134,19 @@ public class TimetableActivity extends AppCompatActivity {
 
     public void showOfficeData(Office location) {
         officeDialog.setContentView(R.layout.office_popup);
-        LinearLayout popup = (LinearLayout) officeDialog.findViewById(R.id.errorInfo);
+        LinearLayout popup = officeDialog.findViewById(R.id.errorInfo);
         popup.setVisibility(View.VISIBLE);
-        TextView infoTextView = (TextView) officeDialog.findViewById(R.id.officeInfo);
+        TextView infoTextView = officeDialog.findViewById(R.id.officeInfo);
         String officeText = "Teachers: ";
-        for (String professorName:location.getProfessors()) {
-            officeText += professorName + ", ";
+        if (location.getProfessors().size() == 0) {
+            officeText += "No teachers here yet.";
         }
-        officeText = officeText.substring(0, officeText.length() - 2) + '.';
+        else {
+            for (String professorName : location.getProfessors()) {
+                officeText += professorName + ", ";
+            }
+            officeText = officeText.substring(0, officeText.length() - 2) + '.';
+        }
         infoTextView.setText(officeText);
         Button closePopup = (Button) officeDialog.findViewById(R.id.refreshBtn);
         closePopup.setOnClickListener(new View.OnClickListener() {
@@ -145,5 +158,21 @@ public class TimetableActivity extends AppCompatActivity {
         officeDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         officeDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         officeDialog.show();
+    }
+
+    public void showErrorPopup() {
+        errorDialog.setContentView(R.layout.no_timetable_popup);
+        LinearLayout popup =  errorDialog.findViewById(R.id.errorInfo);
+        popup.setVisibility(View.VISIBLE);
+        Button closePopup = errorDialog.findViewById(R.id.refreshBtn);
+        closePopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                errorDialog.dismiss();
+            }
+        });
+        Objects.requireNonNull(errorDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        errorDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+        errorDialog.show();
     }
 }

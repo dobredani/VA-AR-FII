@@ -42,7 +42,6 @@ public class JsonParser {
     public static Building parseBuilding(JSONArray jsonObject,String buildingName) {
         List<Location> locations = new ArrayList<>();
 
-
         try {
             for (int i = 0; i < jsonObject.length(); i++) {
                 JSONObject floor = jsonObject.getJSONObject(i);
@@ -121,7 +120,8 @@ public class JsonParser {
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject object = jsonArray.getJSONObject(i);
-                if (object.getString("name").contains("Stairs") && check_stairs.equals(false)) {
+                if ((object.getString("name").contains("Stairs") || object.getString("name").contains("Elevator")) &&
+                        check_stairs.equals(false)) {
                     check_stairs = true;
                     continue;
                 }
@@ -152,6 +152,12 @@ public class JsonParser {
 //                          Previous Waypoint indication = Go {direction}
                         prevWaypoint.addInstruction(", take the stairs to floor " + Integer.toString(floor));
                         prevWaypoint.addInstruction(", then " + "scan " + "stairs");
+                    }
+                    else if (object.getString("name").contains("Elevator")) {
+                        check_stairs = false;
+                        int floor = object.getInt("floor");
+                        prevWaypoint.addInstruction(", take the elevator to floor " + Integer.toString(floor));
+                        prevWaypoint.addInstruction(", then " + "scan " + "elevator");
                     }
                     else {
                         prevWaypoint.addInstruction(", then " + "scan " + object.getString("name"));

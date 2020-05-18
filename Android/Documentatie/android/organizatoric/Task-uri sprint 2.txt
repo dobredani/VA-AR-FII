@@ -1,0 +1,4 @@
+Interfata grafica: Octavian Iacob si Simona Sirbu
+Overlays: Ana Ifrose si Raluca Bibire
+Comunicare cu backend-ul: Eduard Bejan si Sebastian Stoleru
+Recunoastere Fiducial Markers: Dani Dobre si Stefan Aursulesei

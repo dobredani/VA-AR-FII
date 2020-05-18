@@ -1,0 +1,17 @@
+Diagrama de clase:
+- Dobre Daniel
+- Iacob Octavian
+- Stoleru Sebastian
+- Bejan Eduard (contribuție, în loc de diagrama de cod din C4 a ajutat la denumirea funcțiilor din diagrama de clase)
+
+Diagramele Use Case:
+- Bibire Raluca
+- Ifrose Ana
+- Sîrbu Simona
+
+Diagrama C4 (diagrama de module):
+- Bejan Eduard
+- Aursulesei Ștefan
+
+Scrum Master:
+- Vasiliu Ana

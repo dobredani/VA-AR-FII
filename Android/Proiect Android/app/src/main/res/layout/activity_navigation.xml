@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lay"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/camera_preview"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            tools:ignore="UselessParent">
+
+            <TextView
+                android:id="@+id/text_view_id"
+                android:layout_width="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:textSize="20dp"
+                android:gravity="center_horizontal"
+                android:textColor="#000"
+                android:background="@drawable/instruction_background"
+                android:layout_gravity="bottom"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <Button
+                android:id="@+id/flash"
+                android:layout_width="30dp"
+                android:layout_toStartOf="@id/help"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_icon_flash"
+                android:padding="8dp" />
+
+            <Button
+                android:id="@+id/help"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_toStartOf="@id/restartNavigation"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_icon_help"
+                android:gravity="center"
+                android:onClick="showHelp"
+                android:padding="8dp" />
+
+            <Button
+                android:id="@+id/restartNavigation"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_close"
+                android:onClick="restartNavigation" />
+
+
+            <Button
+                android:id="@+id/arrowBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_above="@id/text_view_id"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_arrow_back"
+                android:onClick="getPreviousInstruction"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="12dp" />
+
+            <Button
+                android:id="@+id/arrowForward"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/arrowBack"
+                android:layout_above="@id/text_view_id"
+                android:layout_margin="10dp"
+                android:background="@drawable/flash_button"
+                android:drawableStart="@drawable/ic_arrow_forward"
+                android:gravity="center"
+                android:onClick="getNextInstruction"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="12dp" />
+
+            <Button
+                android:id="@+id/scanWaypointButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/text_view_id"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="10dp"
+                android:background="@drawable/waypoint_button"
+                android:drawableStart="@drawable/ic_scan"
+                android:gravity="center"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:onClick="scanWaypoint"
+                android:padding="11dp" />
+        </RelativeLayout>
+
+
+</LinearLayout>

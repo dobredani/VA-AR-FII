@@ -1,0 +1,218 @@
+{
+  "name": "FII",
+  "floors": [
+    {
+      "level": 0,
+      "waypoints": [
+        {
+          "name": "Stairs",
+          "markerId": 1,
+          "type": "connector",
+          "neighbors": [
+            {
+              "name": "C210",
+              "direction": "Left"
+            },
+            {
+              "name": "Elevator",
+              "direction": "Right"
+            }
+          ]
+        },
+        {
+          "name": "C210",
+          "markerId": 2,
+          "type": "classRoom",
+          "schedule": [
+            {
+              "group": "IIA3",
+              "course": "Ingineria programarii",
+              "dayOfWeek": "Luni",
+              "startTime": "12:00",
+              "finishTime": "14:00"
+            },
+            {
+              "group": "IIA7",
+              "course": "Programare avansata",
+              "dayOfWeek": "Miercuri",
+              "startTime": "16:00",
+              "finishTime": "20:00"
+            }
+          ],
+          "neighbors": [
+            {
+              "name": "Stairs",
+              "direction": "Right"
+            },
+            {
+              "name": "exit",
+              "direction": "Left"
+            }
+          ]
+        },
+        {
+          "name": "C209",
+          "markerId": 3,
+          "type": "office",
+          "professors": ["Lacramioara Leonte", "Daniela Piriu"],
+          "neighbors": [
+            {
+              "name": "exit",
+              "direction": "Right"
+            },
+            {
+              "name": "Elevator",
+              "direction": "Left"
+            }
+          ]
+        },
+        {
+          "name": "exit",
+          "markerId": 4,
+          "neighbors": [
+            {
+              "name": "C209",
+              "direction": "Left"
+            },
+            {
+              "name": "C210",
+              "direction": "Right"
+            }
+          ]
+        },
+        {
+          "name": "Elevator",
+          "markerId": 5,
+          "type": "connector",
+          "neighbors": [
+            {
+              "name": "Stairs",
+              "direction": "Left"
+            },
+            {
+              "name": "C209",
+              "direction": "Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "level": 1,
+      "waypoints": [
+        {
+          "name": "Stairs",
+          "markerId": 6,
+          "type": "connector",
+          "neighbors": [
+            {
+              "name": "C306",
+              "direction": "Right"
+            },
+            {
+              "name": "C307",
+              "direction": "Left"
+            }
+          ]
+        },
+        {
+          "name": "C306",
+          "markerId": 7,
+          "type": "office",
+          "professors": ["Florin Iacob", "Adrian Zalinescu"],
+          "neighbors": [
+            {
+              "name": "Elevator",
+              "direction": "Right"
+            },
+            {
+              "name": "Stairs",
+              "direction": "Left"
+            }
+          ]
+        },
+        {
+          "name": "C307",
+          "markerId": 8,
+          "type": "office",
+          "professors": ["Ferucio Laurentiu Tiplea", "Ana-Maria Nica"],
+          "neighbors": [
+            {
+              "name": "Stairs",
+              "direction": "Right"
+            },
+            {
+              "name": "C308",
+              "direction": "Left"
+            }
+          ]
+        },
+        {
+          "name": "Elevator",
+          "markerId": 9,
+          "type": "connector",
+          "neighbors": [
+            {
+              "name": "C306",
+              "direction": "Left"
+            }
+          ]
+        },
+        {
+          "name": "C308",
+          "markerId": 10,
+          "type": "classRoom",
+          "schedule": [
+            {
+              "group": "IA5",
+              "course": "Logica",
+              "dayOfWeek": "Joi",
+              "startTime": "12:00",
+              "finishTime": "14:00"
+            },
+            {
+              "group": "IIIB2",
+              "course": "Machine Learning",
+              "dayOfWeek": "Vineri",
+              "startTime": "10:00",
+              "finishTime": "12:00"
+            }
+          ],
+          "neighbors": [
+            {
+              "name": "C307",
+              "direction": "Right"
+            }
+          ]
+        },
+        {
+          "name": "C310",
+          "markerId": 11,
+          "type": "classRoom",
+          "schedule": [
+            {
+              "group": "IA1",
+              "course": "Matematica",
+              "dayOfWeek": "Luni",
+              "startTime": "8:00",
+              "finishTime": "10:00"
+            },
+            {
+              "group": "IIIB1",
+              "course": "Python",
+              "dayOfWeek": "Marti",
+              "startTime": "18:00",
+              "finishTime": "20:00"
+            }
+          ],
+          "neighbors": [
+            {
+              "name": "C308",
+              "direction": "Right"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

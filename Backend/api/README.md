@@ -101,7 +101,7 @@ python3 -m pytest -p no:warnings tests/
 
 After running the apllication, consult the documentation at https://localhost:PORT/swagger.
 
-![Image of API documentation](https://github.com/dobredani/VA-AR-FII/blob/Backend/Backend/api/SwaggerUI%20API%20documentation.PNG)
+![Image of API documentation](https://github.com/dobredani/VA-AR-FII/blob/master/Backend/api/SwaggerUI%20API%20documentation.PNG)
 
 ## Project structure
 
